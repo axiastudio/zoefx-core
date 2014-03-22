@@ -2,8 +2,6 @@ package com.axiastudio.zoefx.db;
 
 import javafx.beans.property.StringPropertyBase;
 
-import java.lang.reflect.Field;
-import java.lang.reflect.Method;
 
 /**
  * User: tiziano
@@ -12,43 +10,25 @@ import java.lang.reflect.Method;
  */
 public class ItemStringProperty extends StringPropertyBase {
 
-    private Object bean;
-    private String name;
-    private Field field;
-    private Method getter=null;
-    private Method setter=null;
+    private BeanProperty<String> beanProperty;
 
     public ItemStringProperty(Object bean, String name) {
-        this.bean = bean;
-        this.name = name;
-        // field
-        try {
-            this.field = bean.getClass().getField(name);
-        } catch (NoSuchFieldException e) {
-            e.printStackTrace();
-        }
-        // getter
-        // setter
+        this.beanProperty = new BeanProperty<String>(bean, name);
     }
 
     @Override
     public Object getBean() {
-        return bean;
+        return beanProperty.getBean();
     }
 
     @Override
     public String getName() {
-        return name;
+        return beanProperty.getName();
     }
 
     @Override
     public String getValue() {
-        try {
-            return (String) field.get(bean);
-        } catch (IllegalAccessException e) {
-            e.printStackTrace();
-        }
-        return null;
+        return beanProperty.getValue();
     }
 
     @Override

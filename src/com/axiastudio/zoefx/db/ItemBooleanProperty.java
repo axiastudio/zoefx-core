@@ -2,8 +2,6 @@ package com.axiastudio.zoefx.db;
 
 import javafx.beans.property.BooleanPropertyBase;
 
-import java.lang.reflect.Field;
-import java.lang.reflect.Method;
 
 /**
  * User: tiziano
@@ -12,43 +10,25 @@ import java.lang.reflect.Method;
  */
 public class ItemBooleanProperty extends BooleanPropertyBase {
 
-    private Object bean;
-    private String name;
-    private Field field;
-    private Method getter=null;
-    private Method setter=null;
+    private BeanProperty<Boolean> beanProperty;
 
     public ItemBooleanProperty(Object bean, String name) {
-        this.bean = bean;
-        this.name = name;
-        // field
-        try {
-            this.field = bean.getClass().getField(name);
-        } catch (NoSuchFieldException e) {
-            e.printStackTrace();
-        }
-        // getter
-        // setter
+        this.beanProperty = new BeanProperty<Boolean>(bean, name);
     }
 
     @Override
     public Object getBean() {
-        return bean;
+        return beanProperty.getBean();
     }
 
     @Override
     public String getName() {
-        return name;
+        return beanProperty.getName();
     }
 
     @Override
     public Boolean getValue() {
-        try {
-            return (Boolean) field.get(bean);
-        } catch (IllegalAccessException e) {
-            e.printStackTrace();
-        }
-        return null;
+        return beanProperty.getValue();
     }
 
     @Override
