@@ -19,7 +19,7 @@ import java.net.URL;
  */
 public class ZoeSceneBuilder {
 
-    public static Scene buildFromFXMLAndModel(String sUrl, Model model){
+    public static Scene build(String sUrl, Model model){
         URL url = Application.class.getResource(sUrl);
         FXMLLoader loader = new FXMLLoader();
         loader.setLocation(url);
