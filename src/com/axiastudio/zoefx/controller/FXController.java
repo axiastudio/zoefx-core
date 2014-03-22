@@ -7,6 +7,7 @@ import javafx.fxml.Initializable;
 import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.control.CheckBox;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.AnchorPane;
@@ -41,8 +42,10 @@ public class FXController implements Initializable {
             Property property = model.getProperty(name);
             if( node instanceof TextField ){
                 Bindings.bindBidirectional(((TextField) node).textProperty(), property);
-            } else if( node instanceof TextArea){
+            } else if( node instanceof TextArea ){
                 Bindings.bindBidirectional(((TextArea) node).textProperty(), property);
+            } else if( node instanceof CheckBox ){
+                Bindings.bindBidirectional(((CheckBox) node).selectedProperty(), property);
             }
         }
     }

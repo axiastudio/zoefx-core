@@ -1,5 +1,7 @@
 package com.axiastudio.zoefx.db;
 
+import javafx.beans.property.Property;
+
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 import java.util.HashMap;
@@ -13,7 +15,7 @@ import java.util.Map;
 public class Model<T> {
 
     private T entity;
-    private Map<String, ItemStringProperty> properties = new HashMap();
+    private Map<String, Property> properties = new HashMap();
 
     public Model(T entity) {
         this.entity = entity;
@@ -28,6 +30,9 @@ public class Model<T> {
                 if( returnType == String.class ){
                     ItemStringProperty item = new ItemStringProperty(entity, name);
                     properties.put(name, item);
+                } else if( returnType == Boolean.class ){
+                    ItemBooleanProperty item = new ItemBooleanProperty(entity, name);
+                    properties.put(name, item);
                 }
             }
         }
@@ -36,11 +41,14 @@ public class Model<T> {
             if( field.getType() == String.class ){
                 ItemStringProperty item = new ItemStringProperty(entity, name);
                 properties.put(name, item);
+            } else if( field.getType() == Boolean.class ){
+                ItemBooleanProperty item = new ItemBooleanProperty(entity, name);
+                properties.put(name, item);
             }
         }
     }
 
-    public ItemStringProperty getProperty(String name){
+    public Property getProperty(String name){
         return properties.get(name);
     }
 
