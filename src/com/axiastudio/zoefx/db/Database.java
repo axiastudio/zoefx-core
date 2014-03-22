@@ -1,7 +1,5 @@
 package com.axiastudio.zoefx.db;
 
-import java.util.Map;
-
 /**
  * User: tiziano
  * Date: 18/03/14
@@ -10,5 +8,5 @@ import java.util.Map;
 public interface Database {
 
     void open(String persistenceUnit);
-    public <T> Controller<T> createController(Class<T> klass);
+    public <T> Manager<T> createController(Class<T> klass);
 }

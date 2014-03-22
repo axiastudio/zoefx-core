@@ -7,7 +7,7 @@ import java.util.List;
  * Date: 18/03/14
  * Time: 21:49
  */
-public interface Controller<T> {
+public interface Manager<T> {
 
     T commit(T entity);
 

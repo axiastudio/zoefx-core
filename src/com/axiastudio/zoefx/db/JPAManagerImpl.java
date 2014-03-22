@@ -12,12 +12,12 @@ import java.util.List;
  * Date: 18/03/14
  * Time: 20:50
  */
-public class JPAControllerImpl<T> implements Controller<T> {
+public class JPAManagerImpl<T> implements Manager<T> {
 
     private Class entityClass;
     private EntityManager entityManager;
 
-    public JPAControllerImpl(EntityManager em, Class<T> klass) {
+    public JPAManagerImpl(EntityManager em, Class<T> klass) {
         entityClass = klass;
         entityManager = em;
     }
