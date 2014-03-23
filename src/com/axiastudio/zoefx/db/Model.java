@@ -33,6 +33,9 @@ public class Model<T> {
                 } else if( returnType == Boolean.class ){
                     ItemBooleanProperty item = new ItemBooleanProperty(entity, name);
                     properties.put(name, item);
+                } else if( returnType == Enum.class ){
+                    ItemEnumProperty item = new ItemEnumProperty(entity, name);
+                    properties.put(name, item);
                 }
             }
         }
@@ -43,6 +46,9 @@ public class Model<T> {
                 properties.put(name, item);
             } else if( field.getType() == Boolean.class ){
                 ItemBooleanProperty item = new ItemBooleanProperty(entity, name);
+                properties.put(name, item);
+            } else if( field.getType().isEnum() ){
+                ItemEnumProperty item = new ItemEnumProperty(entity, name);
                 properties.put(name, item);
             }
         }

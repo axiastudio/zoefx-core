@@ -13,7 +13,7 @@ public class ItemBooleanProperty extends BooleanPropertyBase {
     private BeanProperty<Boolean> beanProperty;
 
     public ItemBooleanProperty(Object bean, String name) {
-        this.beanProperty = new BeanProperty<Boolean>(bean, name);
+        beanProperty = new BeanProperty(bean, name);
     }
 
     @Override

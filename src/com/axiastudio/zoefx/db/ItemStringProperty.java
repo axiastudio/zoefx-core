@@ -13,7 +13,7 @@ public class ItemStringProperty extends StringPropertyBase {
     private BeanProperty<String> beanProperty;
 
     public ItemStringProperty(Object bean, String name) {
-        this.beanProperty = new BeanProperty<String>(bean, name);
+        beanProperty = new BeanProperty(bean, name);
     }
 
     @Override
