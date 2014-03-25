@@ -8,7 +8,6 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 /**
@@ -16,7 +15,7 @@ import java.util.Map;
  * Date: 20/03/14
  * Time: 23:10
  */
-class ZoeToolBar extends ToolBar {
+public class ZoeToolBar extends ToolBar {
 
     private FXController controller;
     private Map<String, Button> buttons = new HashMap();
@@ -48,10 +47,10 @@ class ZoeToolBar extends ToolBar {
         this.controller = controller;
 
         // handlers
-        //this.buttons.get("first").setOnAction(this.controller.handlerGoFirst);
-        //this.buttons.get("previous").setOnAction(this.controller.handlerGoPrevious);
-        //this.buttons.get("next").setOnAction(this.controller.handlerGoNext);
-        //this.buttons.get("last").setOnAction(this.controller.handlerGoLast);
+        this.buttons.get("first").setOnAction(this.controller.handlerGoFirst);
+        this.buttons.get("previous").setOnAction(this.controller.handlerGoPrevious);
+        this.buttons.get("next").setOnAction(this.controller.handlerGoNext);
+        this.buttons.get("last").setOnAction(this.controller.handlerGoLast);
 
         //this.buttons.get("cancel").setOnAction(this.controller.handlerCancel);
         //this.buttons.get("save").setOnAction(this.controller.handlerSave);
@@ -73,17 +72,17 @@ class ZoeToolBar extends ToolBar {
 
     }
 
-    private void refresh(){
+    public void refresh(){
 
         if( this.controller == null ){
             return;
         }
         //List<Object> store = this.controller.getStore();
 
-        //isOnlyOne.setValue(store.size()==1);
-        //isDirty.setValue(this.controller.isDirty());
-        //isBOF.setValue(this.controller.currentIndex() == 0);
-        //isEOF.setValue(this.controller.currentIndex() == store.size()-1);
+        isOnlyOne.setValue(controller.getContext().size()==1);
+        isDirty.setValue(controller.getContext().isDirty());
+        isBOF.setValue(controller.getContext().getCurrentIndex() == 0);
+        isEOF.setValue(controller.getContext().getCurrentIndex() == controller.getContext().size()-1);
 
     }
 }

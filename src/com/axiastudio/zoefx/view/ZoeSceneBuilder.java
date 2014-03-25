@@ -1,7 +1,6 @@
 package com.axiastudio.zoefx.view;
 
 import com.axiastudio.zoefx.controller.FXController;
-import com.axiastudio.zoefx.db.Model;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.JavaFXBuilderFactory;
@@ -19,7 +18,7 @@ import java.net.URL;
  */
 public class ZoeSceneBuilder {
 
-    public static Scene build(String sUrl, Model model){
+    public static Scene build(String sUrl, DataContext context){
         URL url = Application.class.getResource(sUrl);
         FXMLLoader loader = new FXMLLoader();
         loader.setLocation(url);
@@ -35,9 +34,9 @@ public class ZoeSceneBuilder {
         AnchorPane pane = (AnchorPane) root;
         pane.getChildren().add(toolBar);
         FXController controller = loader.getController();
-        //toolBar.setController(controller)
+        toolBar.setController(controller);
         controller.setScene(scene);
-        controller.bindModel(model);
+        controller.bindDataContext(context);
         return scene;
     }
 
