@@ -18,7 +18,7 @@ import java.util.Map;
 public class ZoeToolBar extends ToolBar {
 
     private FXController controller;
-    private Map<String, Button> buttons = new HashMap();
+    private Map<String, Button> buttons = new HashMap<String, Button>();
     private String[] buttonNames = {"first", "previous", "next", "last", "save", "cancel", "add", "delete", "console"};
 
     private SimpleBooleanProperty isOnlyOne = new SimpleBooleanProperty(false);

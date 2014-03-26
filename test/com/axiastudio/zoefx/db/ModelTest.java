@@ -24,6 +24,6 @@ public class ModelTest {
         book.setTitle("Anna Karenina");
         book.setDescription("A very long book...");
 
-        Model<Book> model = new Model(book);
+        Model<Book> model = new Model<Book>(book);
     }
 }
