@@ -1,7 +1,6 @@
 package com.axiastudio.zoefx.view;
 
 import com.axiastudio.zoefx.controller.FXController;
-import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.JavaFXBuilderFactory;
 import javafx.scene.Parent;
@@ -18,8 +17,7 @@ import java.net.URL;
  */
 public class ZoeSceneBuilder {
 
-    public static Scene build(String sUrl, DataContext context){
-        URL url = Application.class.getResource(sUrl);
+    public static Scene build(URL url, DataContext context){
         FXMLLoader loader = new FXMLLoader();
         loader.setLocation(url);
         loader.setBuilderFactory(new JavaFXBuilderFactory());
