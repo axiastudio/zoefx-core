@@ -1,7 +1,9 @@
 package com.axiastudio.zoefx.view;
 
 import com.axiastudio.zoefx.db.Model;
+import javafx.beans.property.Property;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -13,6 +15,8 @@ public class DataContext<T> {
 
     private List<T> store;
     private Integer currentIndex;
+    private List<Property> changes = new ArrayList();
+    private Boolean dirty=Boolean.FALSE;
 
     public DataContext(List<T> store) {
         this.store = store;
@@ -55,6 +59,26 @@ public class DataContext<T> {
     }
 
     public Boolean isDirty() {
-        return Boolean.FALSE;
+        return dirty;
+    }
+
+    public void getDirty() {
+        dirty = Boolean.TRUE;
+    }
+
+    public void addChange(Property property){
+        if( !changes.contains(property) ){
+            changes.add(property);
+            getDirty();
+        }
+    }
+
+    public List<Property> getChanges() {
+        return changes;
+    }
+
+    public void clearChanges() {
+        changes.clear();
+        dirty = Boolean.FALSE;
     }
 }

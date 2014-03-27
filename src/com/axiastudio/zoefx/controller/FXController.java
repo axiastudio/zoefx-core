@@ -6,6 +6,8 @@ import com.axiastudio.zoefx.view.DataContext;
 import com.axiastudio.zoefx.view.ZoeToolBar;
 import javafx.beans.binding.Bindings;
 import javafx.beans.property.Property;
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
@@ -47,7 +49,7 @@ public class FXController implements Initializable {
     public void bindDataContext(DataContext context){
         this.context = context;
         initializeChoices();
-        updateModel();
+        setModel();
     }
 
     private void initializeChoices(){
@@ -65,24 +67,43 @@ public class FXController implements Initializable {
         }
     }
 
-    private void updateModel() {
+    private void unsetModel() {
+        configureModel(false);
+    }
+
+    private void setModel() {
+        configureModel(true);
+    }
+
+    private void configureModel(Boolean isSet) {
         Model model = context.getModel();
         Parent root = this.scene.getRoot();
         AnchorPane pane = (AnchorPane) root;
         for( Node node: pane.getChildren() ){
             String name = node.getId();
-            Property property = model.getProperty(name);
+            Property rightProperty = model.getProperty(name);
+            Property leftProperty = null;
             if( node instanceof TextField){
-                Bindings.bindBidirectional(((TextField) node).textProperty(), property);
+                leftProperty = ((TextField) node).textProperty();
             } else if( node instanceof TextArea){
-                Bindings.bindBidirectional(((TextArea) node).textProperty(), property);
+                leftProperty = ((TextArea) node).textProperty();
             } else if( node instanceof CheckBox){
-                Bindings.bindBidirectional(((CheckBox) node).selectedProperty(), property);
+                leftProperty = ((CheckBox) node).selectedProperty();
             } else if( node instanceof ChoiceBox){
-                Bindings.bindBidirectional(((ChoiceBox) node).valueProperty(), property);
+                leftProperty = ((ChoiceBox) node).valueProperty();
+            }
+            if( leftProperty != null ) {
+                if( isSet ) {
+                    Bindings.bindBidirectional(leftProperty, rightProperty);
+                    leftProperty.addListener(this.changeListener);
+                } else {
+                    Bindings.unbindBidirectional(leftProperty, rightProperty);
+                    leftProperty.removeListener(this.changeListener);
+                }
             }
         }
     }
+
 
     public DataContext getContext() {
         return context;
@@ -103,32 +124,36 @@ public class FXController implements Initializable {
     public EventHandler<ActionEvent> handlerGoFirst = new EventHandler<ActionEvent>() {
         @Override
         public void handle(ActionEvent e) {
+            unsetModel();
             context.goFirst();
-            updateModel();
+            setModel();
             refreshNavBar();
         }
     };
     public EventHandler<ActionEvent> handlerGoPrevious = new EventHandler<ActionEvent>() {
         @Override
         public void handle(ActionEvent e) {
+            unsetModel();
             context.goPrevious();
-            updateModel();
+            setModel();
             refreshNavBar();
         }
     };
     public EventHandler<ActionEvent> handlerGoNext = new EventHandler<ActionEvent>() {
         @Override
         public void handle(ActionEvent e) {
+            unsetModel();
             context.goNext();
-            updateModel();
+            setModel();
             refreshNavBar();
         }
     };
     public EventHandler<ActionEvent> handlerGoLast = new EventHandler<ActionEvent>() {
         @Override
         public void handle(ActionEvent e) {
+            unsetModel();
             context.goLast();
-            updateModel();
+            setModel();
             refreshNavBar();
         }
     };
@@ -149,15 +174,16 @@ public class FXController implements Initializable {
     public EventHandler<ActionEvent> handlerCancel = new EventHandler<ActionEvent>() {
         @Override
         public void handle(ActionEvent e) {
-            /*
-            for( Property property: model.getChanges() ){
-                String fieldName = model.getFieldNameFromProperty(property) // I need this name
-                String capitalizedName = fieldName.substring(0,1).toUpperCase() + fieldName.substring(1)
-                property.setValue(model.getParent()."get${capitalizedName}"())
+            List<Property> changes = context.getChanges();
+            for( Property property: changes ){
+                System.out.println(property);
+                //String fieldName = model.getFieldNameFromProperty(property) // I need this name
+                //String capitalizedName = fieldName.substring(0,1).toUpperCase() + fieldName.substring(1)
+                //property.setValue(model.getParent()."get${capitalizedName}"())
             }
-            model.clearChanges()
-            dirty = false
-            refreshNavBar()*/
+            context.clearChanges();
+
+            refreshNavBar();
         }
     };
     public EventHandler<ActionEvent> handlerConsole = new EventHandler<ActionEvent>() {
@@ -184,5 +210,20 @@ public class FXController implements Initializable {
             }*/
         }
     };
+
+
+    /*
+     *  Listeners
+     */
+
+    public ChangeListener changeListener = new ChangeListener() {
+        @Override
+        public void changed(ObservableValue observable, Object oldValue, Object newValue) {
+            context.addChange((Property) observable);
+            context.getDirty();
+            refreshNavBar();
+        }
+    };
+
 
 }
