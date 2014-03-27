@@ -3,8 +3,9 @@ package com.axiastudio.zoefx.view;
 import com.axiastudio.zoefx.db.Model;
 import javafx.beans.property.Property;
 
-import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  * User: tiziano
@@ -15,7 +16,7 @@ public class DataContext<T> {
 
     private List<T> store;
     private Integer currentIndex;
-    private List<Property> changes = new ArrayList();
+    private Map<Property, Object> changes = new HashMap();
     private Boolean dirty=Boolean.FALSE;
 
     public DataContext(List<T> store) {
@@ -66,18 +67,17 @@ public class DataContext<T> {
         dirty = Boolean.TRUE;
     }
 
-    public void addChange(Property property){
-        if( !changes.contains(property) ){
-            changes.add(property);
+    public void addChange(Property property, Object oldValue, Object newValue){
+        if( !changes.keySet().contains(property) ){
+            changes.put(property, oldValue);
             getDirty();
         }
     }
 
-    public List<Property> getChanges() {
-        return changes;
-    }
-
-    public void clearChanges() {
+    public void revert() {
+        for( Property property: changes.keySet() ){
+            property.setValue(changes.get(property));
+        }
         changes.clear();
         dirty = Boolean.FALSE;
     }

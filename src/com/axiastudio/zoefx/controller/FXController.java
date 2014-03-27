@@ -160,29 +160,13 @@ public class FXController implements Initializable {
     public EventHandler<ActionEvent> handlerSave = new EventHandler<ActionEvent>() {
         @Override
         public void handle(ActionEvent e) {
-            /*
-            for( Property property: model.getChanges() ){
-                String fieldName = model.getFieldNameFromProperty(property) // I need this name
-                String capitalizedName = fieldName.substring(0,1).toUpperCase() + fieldName.substring(1)
-                model.getParent()."set${capitalizedName}"(property.getValue())
-            }
-            model.clearChanges()
-            dirty = false
-            refreshNavBar()*/
+
         }
     };
     public EventHandler<ActionEvent> handlerCancel = new EventHandler<ActionEvent>() {
         @Override
         public void handle(ActionEvent e) {
-            List<Property> changes = context.getChanges();
-            for( Property property: changes ){
-                System.out.println(property);
-                //String fieldName = model.getFieldNameFromProperty(property) // I need this name
-                //String capitalizedName = fieldName.substring(0,1).toUpperCase() + fieldName.substring(1)
-                //property.setValue(model.getParent()."get${capitalizedName}"())
-            }
-            context.clearChanges();
-
+            context.revert();
             refreshNavBar();
         }
     };
@@ -219,8 +203,7 @@ public class FXController implements Initializable {
     public ChangeListener changeListener = new ChangeListener() {
         @Override
         public void changed(ObservableValue observable, Object oldValue, Object newValue) {
-            context.addChange((Property) observable);
-            context.getDirty();
+            context.addChange((Property) observable, oldValue, newValue);
             refreshNavBar();
         }
     };
