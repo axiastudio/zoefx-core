@@ -53,7 +53,7 @@ public class FXController implements Initializable {
     }
 
     private void initializeChoices(){
-        Model model = context.getModel();
+        Model model = context.newModel();
         Parent root = this.scene.getRoot();
         AnchorPane pane = (AnchorPane) root;
         for( Node node: pane.getChildren() ){
@@ -76,7 +76,12 @@ public class FXController implements Initializable {
     }
 
     private void configureModel(Boolean isSet) {
-        Model model = context.getModel();
+        Model model;
+        if( isSet ) {
+            model = context.newModel();
+        } else {
+            model = context.getCurrentModel();
+        }
         Parent root = this.scene.getRoot();
         AnchorPane pane = (AnchorPane) root;
         for( Node node: pane.getChildren() ){
@@ -160,7 +165,8 @@ public class FXController implements Initializable {
     public EventHandler<ActionEvent> handlerSave = new EventHandler<ActionEvent>() {
         @Override
         public void handle(ActionEvent e) {
-
+            context.commit();
+            refreshNavBar();
         }
     };
     public EventHandler<ActionEvent> handlerCancel = new EventHandler<ActionEvent>() {

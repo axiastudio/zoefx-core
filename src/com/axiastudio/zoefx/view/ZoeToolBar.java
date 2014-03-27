@@ -53,7 +53,7 @@ public class ZoeToolBar extends ToolBar {
         this.buttons.get("last").setOnAction(this.controller.handlerGoLast);
 
         this.buttons.get("cancel").setOnAction(this.controller.handlerCancel);
-        //this.buttons.get("save").setOnAction(this.controller.handlerSave);
+        this.buttons.get("save").setOnAction(this.controller.handlerSave);
 
         //this.buttons.get("console").setOnAction(this.controller.handlerConsole);
 

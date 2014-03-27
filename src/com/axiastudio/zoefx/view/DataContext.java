@@ -16,6 +16,7 @@ public class DataContext<T> {
 
     private List<T> store;
     private Integer currentIndex;
+    private Model<T> currentModel=null;
     private Map<Property, Object> changes = new HashMap();
     private Boolean dirty=Boolean.FALSE;
 
@@ -29,10 +30,14 @@ public class DataContext<T> {
         return currentIndex;
     }
 
-    public Model<T> getModel(){
+    public Model<T> newModel() {
         T entity = store.get(currentIndex);
-        Model<T> model = new Model(entity);
-        return model;
+        currentModel = new Model(entity);
+        return currentModel;
+    }
+
+    public Model<T> getCurrentModel() {
+        return currentModel;
     }
 
     public void goFirst() {
@@ -78,6 +83,12 @@ public class DataContext<T> {
         for( Property property: changes.keySet() ){
             property.setValue(changes.get(property));
         }
+        changes.clear();
+        dirty = Boolean.FALSE;
+    }
+
+    public void commit() {
+        // TODO: persistence handler?
         changes.clear();
         dirty = Boolean.FALSE;
     }
