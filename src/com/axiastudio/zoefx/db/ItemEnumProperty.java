@@ -36,8 +36,8 @@ public class ItemEnumProperty extends ObjectPropertyBase {
     }
 
     @Override
-    public void setValue(Object bean) {
-        //super.setValue(s);
+    public void setValue(Object e) {
+        //beanProperty.setValue(e);
     }
 
     public List<Enum> getEnumConstants() {

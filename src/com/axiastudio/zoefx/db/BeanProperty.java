@@ -49,4 +49,12 @@ public class BeanProperty<T> {
         }
         return null;
     }
+
+    public void setValue(Object value) {
+        try {
+            field.set(bean, value);
+        } catch (IllegalAccessException e) {
+            e.printStackTrace();
+        }
+    }
 }

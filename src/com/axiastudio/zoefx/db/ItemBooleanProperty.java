@@ -32,7 +32,7 @@ public class ItemBooleanProperty extends BooleanPropertyBase {
     }
 
     @Override
-    public void setValue(Boolean bean) {
-        //super.setValue(s);
+    public void setValue(Boolean b) {
+        beanProperty.setValue(b);
     }
 }

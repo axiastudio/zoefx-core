@@ -33,6 +33,6 @@ public class ItemStringProperty extends StringPropertyBase {
 
     @Override
     public void setValue(String s) {
-        //super.setValue(s);
+        beanProperty.setValue(s);
     }
 }
