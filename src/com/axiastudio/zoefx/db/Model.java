@@ -25,7 +25,7 @@ public class Model<T> {
     private void initialize(){
         for( Method method: entity.getClass().getMethods() ){
             if( method.getName().startsWith("get") ){
-                String name = method.getName().substring(3);
+                String name = method.getName().substring(3).toLowerCase();
                 Class<?> returnType = method.getReturnType();
                 if( returnType == String.class ){
                     ItemStringProperty item = new ItemStringProperty(entity, name);
