@@ -176,6 +176,20 @@ public class FXController implements Initializable {
             refreshNavBar();
         }
     };
+    public EventHandler<ActionEvent> handlerAdd = new EventHandler<ActionEvent>() {
+        @Override
+        public void handle(ActionEvent e) {
+            context.create();
+            refreshNavBar();
+        }
+    };
+    public EventHandler<ActionEvent> handlerDelete = new EventHandler<ActionEvent>() {
+        @Override
+        public void handle(ActionEvent e) {
+            context.delete();
+            refreshNavBar();
+        }
+    };
     public EventHandler<ActionEvent> handlerConsole = new EventHandler<ActionEvent>() {
         @Override
         public void handle(ActionEvent e) {

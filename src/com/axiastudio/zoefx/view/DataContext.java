@@ -92,4 +92,20 @@ public class DataContext<T> {
         changes.clear();
         dirty = Boolean.FALSE;
     }
+
+    public void create() {
+        try {
+            T entity = (T) store.get(0).getClass().newInstance();
+            store.add(currentIndex+1, entity);
+            goNext();
+        } catch (InstantiationException e) {
+            e.printStackTrace();
+        } catch (IllegalAccessException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public void delete() {
+
+    }
 }
