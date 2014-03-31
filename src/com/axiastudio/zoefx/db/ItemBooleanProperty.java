@@ -27,12 +27,13 @@ public class ItemBooleanProperty extends BooleanPropertyBase {
     }
 
     @Override
-    public Boolean getValue() {
+    public boolean get() {
         return beanProperty.getValue();
     }
 
     @Override
-    public void setValue(Boolean b) {
+    public void set(boolean b) {
         beanProperty.setValue(b);
     }
+
 }

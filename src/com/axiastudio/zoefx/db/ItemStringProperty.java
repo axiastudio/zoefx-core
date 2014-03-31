@@ -27,12 +27,12 @@ public class ItemStringProperty extends StringPropertyBase {
     }
 
     @Override
-    public String getValue() {
+    public String get() {
         return beanProperty.getValue();
     }
 
     @Override
-    public void setValue(String s) {
+    public void set(String s) {
         beanProperty.setValue(s);
     }
 }

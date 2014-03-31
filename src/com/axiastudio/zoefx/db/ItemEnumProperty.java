@@ -31,13 +31,13 @@ public class ItemEnumProperty extends ObjectPropertyBase {
     }
 
     @Override
-    public Object getValue() {
+    public Object get() {
         return beanProperty.getValue();
     }
 
     @Override
-    public void setValue(Object e) {
-        //beanProperty.setValue(e);
+    public void set(Object e) {
+        beanProperty.setValue(e);
     }
 
     public List<Enum> getEnumConstants() {
@@ -47,4 +47,6 @@ public class ItemEnumProperty extends ObjectPropertyBase {
         }
         return enums;
     }
+
+
 }
