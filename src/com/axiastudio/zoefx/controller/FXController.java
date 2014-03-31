@@ -2,6 +2,7 @@ package com.axiastudio.zoefx.controller;
 
 import com.axiastudio.zoefx.db.ItemEnumProperty;
 import com.axiastudio.zoefx.db.Model;
+import com.axiastudio.zoefx.scriptengine.console.ConsoleController;
 import com.axiastudio.zoefx.view.DataContext;
 import com.axiastudio.zoefx.view.ZoeToolBar;
 import javafx.beans.binding.Bindings;
@@ -12,7 +13,9 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
+import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
+import javafx.fxml.JavaFXBuilderFactory;
 import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
@@ -21,7 +24,9 @@ import javafx.scene.control.ChoiceBox;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.AnchorPane;
+import javafx.stage.Stage;
 
+import java.io.IOException;
 import java.net.URL;
 import java.util.List;
 import java.util.ResourceBundle;
@@ -121,6 +126,10 @@ public class FXController implements Initializable {
         ((ZoeToolBar) lookup).refresh();
     }
 
+    private FXController self(){
+        return this;
+    }
+
 
     /*
      *  Navigation Bar
@@ -193,25 +202,24 @@ public class FXController implements Initializable {
     public EventHandler<ActionEvent> handlerConsole = new EventHandler<ActionEvent>() {
         @Override
         public void handle(ActionEvent e) {
-            /*
+            URL url = getClass().getResource("/com/axiastudio/zoefx/scriptengine/console/console.fxml");
+            FXMLLoader loader = new FXMLLoader();
+            loader.setLocation(url);
+            loader.setBuilderFactory(new JavaFXBuilderFactory());
+            Parent root = null;
             try {
-                URL url = getClass().getResource("/com/axiastudio/zoe/view/ui/console.fxml")
-                FXMLLoader loader = new FXMLLoader()
-                loader.setLocation(url)
-                loader.setBuilderFactory(new JavaFXBuilderFactory())
-                Parent root = (Parent) loader.load(url.openStream())
+                root = loader.load(url.openStream());
+            } catch (IOException e1) {
+                e1.printStackTrace();
+            }
 
-                Console console = (Console) loader.getController()
-                console.setController(self())
+            ConsoleController console = loader.getController();
+            console.setController(self());
 
-                Stage stage = new Stage()
-                stage.setTitle("Zoe Groovy Console")
-                stage.setScene(new Scene(root, 450, 450))
-                stage.show()
-
-            } catch (IOException ex) {
-                ex.printStackTrace()
-            }*/
+            Stage stage = new Stage();
+            stage.setTitle("Zoe FX Groovy Console");
+            stage.setScene(new Scene(root, 450, 450));
+            stage.show();
         }
     };
 
