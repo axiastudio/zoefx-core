@@ -5,7 +5,7 @@ import javafx.fxml.FXMLLoader;
 import javafx.fxml.JavaFXBuilderFactory;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
-import javafx.scene.layout.AnchorPane;
+import javafx.scene.layout.Pane;
 
 import java.io.IOException;
 import java.net.URL;
@@ -29,7 +29,7 @@ public class ZoeSceneBuilder {
         }
         Scene scene = new Scene(root, 500, 375);
         ZoeToolBar toolBar = new ZoeToolBar();
-        AnchorPane pane = (AnchorPane) root;
+        Pane pane = (Pane) root;
         pane.getChildren().add(toolBar);
         FXController controller = loader.getController();
         toolBar.setController(controller);

@@ -23,11 +23,12 @@ import javafx.scene.control.CheckBox;
 import javafx.scene.control.ChoiceBox;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
-import javafx.scene.layout.AnchorPane;
+import javafx.scene.layout.Pane;
 import javafx.stage.Stage;
 
 import java.io.IOException;
 import java.net.URL;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.ResourceBundle;
 
@@ -60,7 +61,7 @@ public class FXController implements Initializable {
     private void initializeChoices(){
         Model model = context.newModel();
         Parent root = this.scene.getRoot();
-        AnchorPane pane = (AnchorPane) root;
+        Pane pane = (Pane) root;
         for( Node node: pane.getChildren() ){
             if( node instanceof ChoiceBox){
                 String name = node.getId();
@@ -88,10 +89,14 @@ public class FXController implements Initializable {
             model = context.getCurrentModel();
         }
         Parent root = this.scene.getRoot();
-        AnchorPane pane = (AnchorPane) root;
-        for( Node node: pane.getChildren() ){
+        Pane container = (Pane) root;
+        List<Node> nodes = findNodes(container, new ArrayList<Node>());
+        for( Node node: nodes ){
             String name = node.getId();
             Property rightProperty = model.getProperty(name);
+            if( rightProperty == null ){
+                continue;
+            }
             Property leftProperty = null;
             if( node instanceof TextField){
                 leftProperty = ((TextField) node).textProperty();
@@ -114,6 +119,17 @@ public class FXController implements Initializable {
         }
     }
 
+    private List<Node> findNodes( Pane container, List<Node> nodes ){
+        for( Node node: container.getChildren() ){
+            if( node instanceof Pane ){
+                nodes = findNodes((Pane) node, nodes);
+            } else if( node.getId() != null && node.getId() != "" ){
+                nodes.add(node);
+            }
+        }
+        return nodes;
+    }
+
 
     public DataContext getContext() {
         return context;
@@ -121,7 +137,7 @@ public class FXController implements Initializable {
 
 
     private void refreshNavBar(){
-        AnchorPane pane = (AnchorPane) this.scene.getRoot();
+        Pane pane = (Pane) this.scene.getRoot();
         Node lookup = pane.lookup("#navigationBar");
         ((ZoeToolBar) lookup).refresh();
     }
