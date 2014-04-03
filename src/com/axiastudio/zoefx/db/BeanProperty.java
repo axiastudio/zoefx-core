@@ -1,6 +1,7 @@
 package com.axiastudio.zoefx.db;
 
 import java.lang.reflect.Field;
+import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 
 /**
@@ -12,6 +13,7 @@ public class BeanProperty<T> {
 
     private Object bean;
     private String name;
+    private PropertyAccess accessType;
     private Field field;
     private Method getter=null;
     private Method setter=null;
@@ -23,14 +25,29 @@ public class BeanProperty<T> {
     }
 
     private void inspectBeanProperty(Object bean, String name) {
-        // field
+        // try to access the field
         try {
             this.field = bean.getClass().getField(name);
+            accessType = PropertyAccess.FIELD;
+            return;
         } catch (NoSuchFieldException e) {
-            e.printStackTrace();
+            accessType = PropertyAccess.METHOD;
         }
         // getter
+        String getterName = "get" + name.substring(0, 1).toUpperCase() + name.substring(1);
+        try {
+            this.getter = bean.getClass().getMethod(getterName);
+        } catch (NoSuchMethodException e) {
+            e.printStackTrace();
+        }
         // setter
+        String setterName = "set" + name.substring(0, 1).toUpperCase() + name.substring(1);
+        try {
+            Class<?> returnType = getter.getReturnType();
+            this.setter = bean.getClass().getMethod(setterName, returnType);
+        } catch (NoSuchMethodException e) {
+            e.printStackTrace();
+        }
     }
 
     public Object getBean() {
@@ -42,19 +59,40 @@ public class BeanProperty<T> {
     }
 
     public T getValue() {
-        try {
-            return (T) field.get(bean);
-        } catch (IllegalAccessException e) {
-            e.printStackTrace();
+        if( accessType.equals(PropertyAccess.FIELD) ){
+            try {
+                return (T) field.get(bean);
+            } catch (IllegalAccessException e) {
+                e.printStackTrace();
+            }
+        } else {
+            try {
+                return (T) getter.invoke(bean);
+            } catch (IllegalAccessException e) {
+                e.printStackTrace();
+            } catch (InvocationTargetException e) {
+                e.printStackTrace();
+            }
         }
         return null;
     }
 
     public void setValue(Object value) {
-        try {
-            field.set(bean, value);
-        } catch (IllegalAccessException e) {
-            e.printStackTrace();
+        if( accessType.equals(PropertyAccess.FIELD) ) {
+            try {
+                field.set(bean, value);
+            } catch (IllegalAccessException e) {
+                e.printStackTrace();
+            }
+        } else {
+            try {
+                setter.invoke(bean, value);
+            } catch (IllegalAccessException e) {
+                e.printStackTrace();
+            } catch (InvocationTargetException e) {
+                e.printStackTrace();
+            }
         }
     }
+
 }
