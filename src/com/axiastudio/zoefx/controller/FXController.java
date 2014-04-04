@@ -19,10 +19,7 @@ import javafx.fxml.JavaFXBuilderFactory;
 import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
-import javafx.scene.control.CheckBox;
-import javafx.scene.control.ChoiceBox;
-import javafx.scene.control.TextArea;
-import javafx.scene.control.TextField;
+import javafx.scene.control.*;
 import javafx.scene.layout.Pane;
 import javafx.stage.Stage;
 
@@ -107,6 +104,8 @@ public class FXController implements Initializable {
                 leftProperty = ((CheckBox) node).selectedProperty();
             } else if( node instanceof ChoiceBox){
                 leftProperty = ((ChoiceBox) node).valueProperty();
+            } else if( node instanceof DatePicker){
+                leftProperty = ((DatePicker) node).valueProperty();
             }
             if( leftProperty != null ) {
                 if( isSet ) {
