@@ -33,7 +33,7 @@ public class Model<T> {
                 } else if( returnType == Boolean.class ){
                     ItemBooleanProperty item = new ItemBooleanProperty(entity, name);
                     properties.put(name, item);
-                } else if( returnType == Enum.class ){
+                } else if( returnType.isEnum() ){
                     ItemEnumProperty item = new ItemEnumProperty(entity, name);
                     properties.put(name, item);
                 }
