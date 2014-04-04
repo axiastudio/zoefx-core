@@ -61,8 +61,9 @@ public class FXController implements Initializable {
     private void initializeChoices(){
         Model model = context.newModel();
         Parent root = this.scene.getRoot();
-        Pane pane = (Pane) root;
-        for( Node node: pane.getChildren() ){
+        Pane container = (Pane) root;
+        List<Node> nodes = findNodes(container, new ArrayList<Node>());
+        for( Node node: nodes ){
             if( node instanceof ChoiceBox){
                 String name = node.getId();
                 Property property = model.getProperty(name);
