@@ -31,7 +31,7 @@ public class ZoeSceneBuilder {
         ZoeToolBar toolBar = new ZoeToolBar();
         Pane pane = (Pane) root;
         pane.getChildren().add(toolBar);
-        FXController controller = loader.getController();
+        FXController controller = new FXController();
         toolBar.setController(controller);
         controller.setScene(scene);
         controller.bindDataContext(context);
