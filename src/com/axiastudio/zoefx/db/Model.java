@@ -21,6 +21,7 @@ public class Model<E> {
 
     private E entity;
     private Map<String, Property> properties = new HashMap();
+    private Map<String, PropertyValueFactory> propertyValueFactories = new HashMap();
 
     public Model(E entity) {
         this.entity = entity;
@@ -32,18 +33,35 @@ public class Model<E> {
         for( Method method: entity.getClass().getMethods() ){
             if( method.getName().startsWith("get") ){
                 String name = method.getName().substring(3).toLowerCase();
-                Property item = createProperty(name, method.getReturnType());
+                Class<?> type = method.getReturnType();
+                Property item = createProperty(name, type);
                 if( item != null ){
                     properties.put(name, item);
+                }
+                if( Collection.class.isAssignableFrom(type) ){
+                    // TODO: createPropertyValueFactory ?
                 }
             }
         }
         // fields
         for( Field field: entity.getClass().getFields() ){
             String name = field.getName();
-            Property item = createProperty(name, field.getType());
+            Class<?> type = field.getType();
+            Property item = createProperty(name, type);
             if( item != null ){
                 properties.put(name, item);
+            }
+            if( Collection.class.isAssignableFrom(type) ){
+                ParameterizedType pt = (ParameterizedType) field.getGenericType();
+                Type[] actualTypeArguments = pt.getActualTypeArguments();
+                Class collectionClass = (Class) actualTypeArguments[0];
+                for( Field collectionClassField: collectionClass.getFields() ) {
+                    String columnId = collectionClassField.getName();
+                    PropertyValueFactory propertyValueFactory = createPropertyValueFactory(name, columnId);
+                    if (propertyValueFactory != null) {
+                        propertyValueFactories.put(name + "." + columnId, propertyValueFactory);
+                    }
+                }
             }
         }
     }
@@ -68,7 +86,12 @@ public class Model<E> {
         return properties.get(name);
     }
 
+
     public PropertyValueFactory getPropertyValueFactory(String name, String idColumn) {
+        return propertyValueFactories.get(name+"."+idColumn);
+    }
+
+    private PropertyValueFactory createPropertyValueFactory(String name, String idColumn) {
         try {
             Field field = entity.getClass().getField(name);
             Class klass = classFromCollectionField(field);
@@ -81,15 +104,8 @@ public class Model<E> {
     }
 
     private <T, S> PropertyValueFactory<T, S> createPropertyValueFactory(Class<T> klassE, Class<S> klassS, String name){
-        try {
-            Field field = klassE.getField(name);
-            //Class klass = classFromCollectionField(field);
-            PropertyValueFactory<T, S> propertyValueFactory = new PropertyValueFactory<T, S>(name);
-            return propertyValueFactory;
-        } catch (NoSuchFieldException e) {
-            e.printStackTrace();
-        }
-        return null;
+        PropertyValueFactory<T, S> propertyValueFactory = new PropertyValueFactory<T, S>(name);
+        return propertyValueFactory;
     }
 
     private Class classFromCollectionField(Field field){

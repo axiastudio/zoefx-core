@@ -69,7 +69,9 @@ public class FXController implements Initializable {
                 ObservableList<TableColumn> columns = tableView.getColumns();
                 for( TableColumn column: columns ){
                     String name = node.getId();
-                    PropertyValueFactory propertyValueFactory = model.getPropertyValueFactory("books", "title");
+                    // String columnId = column.getId();
+                    String columnId = column.getText().toLowerCase(); // XXX: wrong!
+                    PropertyValueFactory propertyValueFactory = model.getPropertyValueFactory(name, columnId);
                     column.setCellValueFactory(propertyValueFactory);
                 }
             }
