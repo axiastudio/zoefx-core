@@ -42,7 +42,8 @@ public class Model<E> {
                     properties.put(name, item);
                 }
                 if( Collection.class.isAssignableFrom(type) ){
-                    // TODO: createPropertyValueFactory ?
+                    ParameterizedType pt = (ParameterizedType) method.getGenericReturnType();
+                    createAndRegisterPropertyValueFactory(name, pt);
                 }
             }
         }
@@ -56,15 +57,19 @@ public class Model<E> {
             }
             if( Collection.class.isAssignableFrom(type) ){
                 ParameterizedType pt = (ParameterizedType) field.getGenericType();
-                Type[] actualTypeArguments = pt.getActualTypeArguments();
-                Class collectionClass = (Class) actualTypeArguments[0];
-                for( Field collectionClassField: collectionClass.getFields() ) {
-                    String columnId = collectionClassField.getName();
-                    PropertyValueFactory propertyValueFactory = createPropertyValueFactory(name, columnId);
-                    if (propertyValueFactory != null) {
-                        propertyValueFactories.put(name + "." + columnId, propertyValueFactory);
-                    }
-                }
+                createAndRegisterPropertyValueFactory(name, pt);
+            }
+        }
+    }
+
+    private void createAndRegisterPropertyValueFactory(String name, ParameterizedType pt) {
+        Type[] actualTypeArguments = pt.getActualTypeArguments();
+        Class collectionClass = (Class) actualTypeArguments[0];
+        for( Field collectionClassField: collectionClass.getFields() ) {
+            String columnId = collectionClassField.getName();
+            PropertyValueFactory propertyValueFactory = createPropertyValueFactory(name, columnId);
+            if (propertyValueFactory != null) {
+                propertyValueFactories.put(name + "." + columnId, propertyValueFactory);
             }
         }
     }
@@ -101,7 +106,14 @@ public class Model<E> {
             PropertyValueFactory propertyValueFactory = createPropertyValueFactory(klass, String.class, idColumn);
             return propertyValueFactory;
         } catch (NoSuchFieldException e) {
-            e.printStackTrace();
+            try {
+                Method method = entity.getClass().getMethod("get" + name.substring(0, 1).toUpperCase() + name.substring(1));
+                Class klass = classFromCollectionMethod(method);
+                PropertyValueFactory propertyValueFactory = createPropertyValueFactory(klass, String.class, idColumn);
+                return propertyValueFactory;
+            } catch (NoSuchMethodException e1) {
+                e1.printStackTrace();
+            }
         }
         return null;
     }
@@ -136,7 +148,14 @@ public class Model<E> {
             Callback callback = createCallback(klass, String.class, idColumn);
             return callback;
         } catch (NoSuchFieldException e) {
-            e.printStackTrace();
+            try {
+                Method method = entity.getClass().getMethod("get" + name.substring(0, 1).toUpperCase() + name.substring(1));
+                Class klass = classFromCollectionMethod(method);
+                Callback callback = createCallback(klass, String.class, idColumn);
+                return callback;
+            } catch (NoSuchMethodException e1) {
+                e1.printStackTrace();
+            }
         }
         return null;
     }
