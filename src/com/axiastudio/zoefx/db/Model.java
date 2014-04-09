@@ -17,12 +17,12 @@ import java.util.Map;
  * Date: 21/03/14
  * Time: 13:00
  */
-public class Model<T> {
+public class Model<E> {
 
-    private T entity;
+    private E entity;
     private Map<String, Property> properties = new HashMap();
 
-    public Model(T entity) {
+    public Model(E entity) {
         this.entity = entity;
         initialize();
     }
@@ -80,11 +80,11 @@ public class Model<T> {
         return null;
     }
 
-    private <E, S> PropertyValueFactory<E, S> createPropertyValueFactory(Class<E> klassE, Class<S> klassS, String name){
+    private <T, S> PropertyValueFactory<T, S> createPropertyValueFactory(Class<T> klassE, Class<S> klassS, String name){
         try {
             Field field = klassE.getField(name);
             //Class klass = classFromCollectionField(field);
-            PropertyValueFactory<E, S> propertyValueFactory = new PropertyValueFactory<E, S>(name);
+            PropertyValueFactory<T, S> propertyValueFactory = new PropertyValueFactory<T, S>(name);
             return propertyValueFactory;
         } catch (NoSuchFieldException e) {
             e.printStackTrace();
