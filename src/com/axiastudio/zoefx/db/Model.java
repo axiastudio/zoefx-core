@@ -103,8 +103,8 @@ public class Model<E> {
         return null;
     }
 
-    private <T, S> PropertyValueFactory<T, S> createPropertyValueFactory(Class<T> klassE, Class<S> klassS, String name){
-        PropertyValueFactory<T, S> propertyValueFactory = new PropertyValueFactory<T, S>(name);
+    private <S, T> PropertyValueFactory<S, T> createPropertyValueFactory(Class<S> klassE, Class<T> klassS, String name){
+        PropertyValueFactory<S, T> propertyValueFactory = new PropertyValueFactory<S, T>(name);
         return propertyValueFactory;
     }
 
