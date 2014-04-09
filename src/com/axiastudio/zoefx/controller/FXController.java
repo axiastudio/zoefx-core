@@ -20,9 +20,9 @@ import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
-import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.Pane;
 import javafx.stage.Stage;
+import javafx.util.Callback;
 
 import java.io.IOException;
 import java.net.URL;
@@ -71,8 +71,8 @@ public class FXController implements Initializable {
                     String name = node.getId();
                     // String columnId = column.getId();
                     String columnId = column.getText().toLowerCase(); // XXX: wrong!
-                    PropertyValueFactory propertyValueFactory = model.getPropertyValueFactory(name, columnId);
-                    column.setCellValueFactory(propertyValueFactory);
+                    Callback callback = model.getCallback(name, columnId);
+                    column.setCellValueFactory(callback);
                 }
             }
         }

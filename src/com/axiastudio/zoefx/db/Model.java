@@ -1,7 +1,10 @@
 package com.axiastudio.zoefx.db;
 
 import javafx.beans.property.Property;
+import javafx.beans.value.ObservableValue;
+import javafx.scene.control.TableColumn;
 import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.util.Callback;
 
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
@@ -103,7 +106,7 @@ public class Model<E> {
         return null;
     }
 
-    private <S, T> PropertyValueFactory<S, T> createPropertyValueFactory(Class<S> klassE, Class<T> klassS, String name){
+    private <S, T> PropertyValueFactory<S, T> createPropertyValueFactory(Class<S> sClass, Class<T> tClass, String name){
         PropertyValueFactory<S, T> propertyValueFactory = new PropertyValueFactory<S, T>(name);
         return propertyValueFactory;
     }
@@ -122,5 +125,37 @@ public class Model<E> {
     }
 
 
+    public Callback getCallback(String name, String columnId) {
+        return createCallback(name, columnId);
+    }
+
+    private <P, R> Callback<TableColumn.CellDataFeatures<P, R>, ObservableValue<R>> createCallback(String name, String idColumn){
+        try {
+            Field field = entity.getClass().getField(name);
+            Class klass = classFromCollectionField(field);
+            Callback callback = createCallback(klass, String.class, idColumn);
+            return callback;
+        } catch (NoSuchFieldException e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
+    private <P, T> Callback<TableColumn.CellDataFeatures<P, T>, ObservableValue<T>> createCallback(Class<P> pClass, Class<T> tClass, String idColumn){
+
+        Callback<TableColumn.CellDataFeatures<P, T>, ObservableValue<T>> callback = new Callback<TableColumn.CellDataFeatures<P, T>, ObservableValue<T>>() {
+
+            @Override
+            public ObservableValue<T> call(TableColumn.CellDataFeatures<P, T> prCellDataFeatures) {
+                P bean = prCellDataFeatures.getValue();
+                ObservableValue<T> property=null;
+                if( tClass == String.class ) {
+                    property = (ObservableValue<T>) new ItemStringProperty(bean, idColumn);
+                }
+                return property;
+            }
+        };
+        return callback;
+    }
 
 }
