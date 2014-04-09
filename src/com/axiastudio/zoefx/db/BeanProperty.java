@@ -25,29 +25,37 @@ public class BeanProperty<T> {
     }
 
     private void inspectBeanProperty(Object bean, String name) {
+        Boolean getterOk=Boolean.FALSE;
+
+        // getter
+        String getterName = "get" + name.substring(0, 1).toUpperCase() + name.substring(1);
+        try {
+            this.getter = bean.getClass().getMethod(getterName);
+            getterOk = Boolean.TRUE;
+        } catch (NoSuchMethodException e) {
+
+        }
+        // setter
+        String setterName = "set" + name.substring(0, 1).toUpperCase() + name.substring(1);
+        if( getterOk ) {
+            try {
+                Class<?> returnType = getter.getReturnType();
+                this.setter = bean.getClass().getMethod(setterName, returnType);
+                accessType = PropertyAccess.METHOD;
+                return;
+            } catch (NoSuchMethodException e) {
+                e.printStackTrace();
+            }
+        }
         // try to access the field
         try {
             this.field = bean.getClass().getField(name);
             accessType = PropertyAccess.FIELD;
             return;
         } catch (NoSuchFieldException e) {
-            accessType = PropertyAccess.METHOD;
+
         }
-        // getter
-        String getterName = "get" + name.substring(0, 1).toUpperCase() + name.substring(1);
-        try {
-            this.getter = bean.getClass().getMethod(getterName);
-        } catch (NoSuchMethodException e) {
-            e.printStackTrace();
-        }
-        // setter
-        String setterName = "set" + name.substring(0, 1).toUpperCase() + name.substring(1);
-        try {
-            Class<?> returnType = getter.getReturnType();
-            this.setter = bean.getClass().getMethod(setterName, returnType);
-        } catch (NoSuchMethodException e) {
-            e.printStackTrace();
-        }
+
     }
 
     public Object getBean() {

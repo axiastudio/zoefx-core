@@ -20,6 +20,7 @@ import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
+import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.Pane;
 import javafx.stage.Stage;
 
@@ -52,7 +53,27 @@ public class FXController implements Initializable {
     public void bindDataContext(DataContext context){
         this.context = context;
         initializeChoices();
+        initializeColumns();
         setModel();
+    }
+
+
+    private void initializeColumns(){
+        Model model = context.newModel();
+        Parent root = this.scene.getRoot();
+        Pane container = (Pane) root;
+        List<Node> nodes = findNodes(container, new ArrayList<Node>());
+        for( Node node: nodes ){
+            if( node instanceof TableView){
+                TableView tableView = (TableView) node;
+                ObservableList<TableColumn> columns = tableView.getColumns();
+                for( TableColumn column: columns ){
+                    String name = node.getId();
+                    PropertyValueFactory propertyValueFactory = model.getPropertyValueFactory("books", "title");
+                    column.setCellValueFactory(propertyValueFactory);
+                }
+            }
+        }
     }
 
     private void initializeChoices(){
@@ -96,16 +117,28 @@ public class FXController implements Initializable {
                 continue;
             }
             Property leftProperty = null;
-            if( node instanceof TextField){
+            if( node instanceof TextField ){
                 leftProperty = ((TextField) node).textProperty();
-            } else if( node instanceof TextArea){
+            } else if( node instanceof TextArea ){
                 leftProperty = ((TextArea) node).textProperty();
-            } else if( node instanceof CheckBox){
+            } else if( node instanceof CheckBox ){
                 leftProperty = ((CheckBox) node).selectedProperty();
-            } else if( node instanceof ChoiceBox){
+            } else if( node instanceof ChoiceBox ){
                 leftProperty = ((ChoiceBox) node).valueProperty();
-            } else if( node instanceof DatePicker){
+            } else if( node instanceof DatePicker ){
                 leftProperty = ((DatePicker) node).valueProperty();
+            } else if( node instanceof TableView ){
+                TableView tableView = (TableView) node;
+                leftProperty = tableView.itemsProperty();
+                /*
+                ObservableList columns = tableView.getColumns();
+                for( Object obj: columns){
+                    TableColumn column = (TableColumn) obj;
+                    String columnId = column.getId();
+                    if( columnId != null ) {
+                        column.setCellValueFactory(model.getPropertyValueFactory(name, columnId));
+                    }
+                }*/
             }
             if( leftProperty != null ) {
                 if( isSet ) {

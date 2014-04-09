@@ -1,9 +1,13 @@
 package com.axiastudio.zoefx.db;
 
 import javafx.beans.property.Property;
+import javafx.scene.control.cell.PropertyValueFactory;
 
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
+import java.lang.reflect.ParameterizedType;
+import java.lang.reflect.Type;
+import java.util.Collection;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
@@ -54,6 +58,8 @@ public class Model<T> {
             item = new ItemDateProperty(entity, name);
         } else if( returnType.isEnum() ){
             item = new ItemEnumProperty(entity, name);
+        } else if( returnType == Collection.class ){
+            item = new ItemListProperty(entity, name);
         }
         return item;
     }
@@ -61,5 +67,44 @@ public class Model<T> {
     public Property getProperty(String name){
         return properties.get(name);
     }
+
+    public PropertyValueFactory getPropertyValueFactory(String name, String idColumn) {
+        try {
+            Field field = entity.getClass().getField(name);
+            Class klass = classFromCollectionField(field);
+            PropertyValueFactory propertyValueFactory = createPropertyValueFactory(klass, String.class, idColumn);
+            return propertyValueFactory;
+        } catch (NoSuchFieldException e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
+    private <E, S> PropertyValueFactory<E, S> createPropertyValueFactory(Class<E> klassE, Class<S> klassS, String name){
+        try {
+            Field field = klassE.getField(name);
+            //Class klass = classFromCollectionField(field);
+            PropertyValueFactory<E, S> propertyValueFactory = new PropertyValueFactory<E, S>(name);
+            return propertyValueFactory;
+        } catch (NoSuchFieldException e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
+    private Class classFromCollectionField(Field field){
+        Type type = field.getGenericType();
+        ParameterizedType parameterizedType = (ParameterizedType) type;
+        Type[] actualTypeArguments = parameterizedType.getActualTypeArguments();
+        return (Class) actualTypeArguments[0];
+    }
+
+    public static Class classFromCollectionMethod(Method method){
+        ParameterizedType pt = (ParameterizedType) method.getGenericReturnType();
+        Type[] actualTypeArguments = pt.getActualTypeArguments();
+        return (Class) actualTypeArguments[0];
+    }
+
+
 
 }
