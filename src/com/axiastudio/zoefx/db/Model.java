@@ -35,7 +35,7 @@ public class Model<E> {
         // methods
         for( Method method: entity.getClass().getMethods() ){
             if( method.getName().startsWith("get") ){
-                String name = method.getName().substring(3).toLowerCase();
+                String name = method.getName().substring(3, 4).toLowerCase() + method.getName().substring(4);
                 Class<?> type = method.getReturnType();
                 Property item = createProperty(name, type);
                 if( item != null ){
@@ -65,8 +65,15 @@ public class Model<E> {
     private void createAndRegisterPropertyValueFactory(String name, ParameterizedType pt) {
         Type[] actualTypeArguments = pt.getActualTypeArguments();
         Class collectionClass = (Class) actualTypeArguments[0];
-        for( Field collectionClassField: collectionClass.getFields() ) {
-            String columnId = collectionClassField.getName();
+        for( Field field: collectionClass.getFields() ) {
+            String columnId = field.getName();
+            PropertyValueFactory propertyValueFactory = createPropertyValueFactory(name, columnId);
+            if (propertyValueFactory != null) {
+                propertyValueFactories.put(name + "." + columnId, propertyValueFactory);
+            }
+        }
+        for( Method method: collectionClass.getMethods() ) {
+            String columnId = method.getName().substring(3, 4).toLowerCase() + method.getName().substring(4);
             PropertyValueFactory propertyValueFactory = createPropertyValueFactory(name, columnId);
             if (propertyValueFactory != null) {
                 propertyValueFactories.put(name + "." + columnId, propertyValueFactory);
@@ -170,7 +177,9 @@ public class Model<E> {
                 ObservableValue<T> property=null;
                 if( tClass == String.class ) {
                     property = (ObservableValue<T>) new ItemStringProperty(bean, idColumn);
-                }
+                } else if( tClass == Boolean.class ) {
+                    property = (ObservableValue<T>) new ItemBooleanProperty(bean, idColumn);
+                } // TODO: others...
                 return property;
             }
         };
