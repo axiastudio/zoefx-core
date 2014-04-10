@@ -1,6 +1,6 @@
 package com.axiastudio.zoefx.controller;
 
-import com.axiastudio.zoefx.db.ItemEnumProperty;
+import com.axiastudio.zoefx.beans.property.ItemEnumProperty;
 import com.axiastudio.zoefx.db.Model;
 import com.axiastudio.zoefx.scriptengine.console.ConsoleController;
 import com.axiastudio.zoefx.view.DataContext;
