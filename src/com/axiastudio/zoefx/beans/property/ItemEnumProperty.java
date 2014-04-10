@@ -1,5 +1,6 @@
-package com.axiastudio.zoefx.db;
+package com.axiastudio.zoefx.beans.property;
 
+import com.axiastudio.zoefx.beans.BeanAccess;
 import javafx.beans.property.ObjectPropertyBase;
 
 import java.util.ArrayList;
@@ -13,36 +14,40 @@ import java.util.List;
  */
 public class ItemEnumProperty extends ObjectPropertyBase {
 
-    private BeanProperty<Enum> beanProperty;
+    private BeanAccess<Enum> beanAccess;
+
+    public ItemEnumProperty(BeanAccess beanAccess){
+        this.beanAccess = beanAccess;
+    }
 
     public ItemEnumProperty(Object bean, String name) {
-        beanProperty = new BeanProperty(bean, name);
+        beanAccess = new BeanAccess(bean, name);
 
     }
 
     @Override
     public Object getBean() {
-        return beanProperty.getBean();
+        return beanAccess.getBean();
     }
 
     @Override
     public String getName() {
-        return beanProperty.getName();
+        return beanAccess.getName();
     }
 
     @Override
     public Object get() {
-        return beanProperty.getValue();
+        return beanAccess.getValue();
     }
 
     @Override
     public void set(Object e) {
-        beanProperty.setValue(e);
+        beanAccess.setValue(e);
     }
 
     public List<Enum> getEnumConstants() {
         List<Enum> enums = new ArrayList();
-        for( Object obj: beanProperty.getValue().getDeclaringClass().getEnumConstants() ){
+        for( Object obj: beanAccess.getValue().getDeclaringClass().getEnumConstants() ){
             enums.add((Enum) obj);
         }
         return enums;

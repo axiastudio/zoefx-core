@@ -1,5 +1,6 @@
-package com.axiastudio.zoefx.db;
+package com.axiastudio.zoefx.beans.property;
 
+import com.axiastudio.zoefx.beans.BeanAccess;
 import javafx.beans.property.ObjectPropertyBase;
 
 import java.time.Instant;
@@ -16,26 +17,30 @@ import java.util.Date;
  */
 public class ItemDateProperty extends ObjectPropertyBase {
 
-    private BeanProperty<Date> beanProperty;
+    private BeanAccess<Date> beanAccess;
+
+    public ItemDateProperty(BeanAccess beanAccess){
+        this.beanAccess = beanAccess;
+    }
 
     public ItemDateProperty(Object bean, String name) {
-        beanProperty = new BeanProperty(bean, name);
+        beanAccess = new BeanAccess(bean, name);
 
     }
 
     @Override
     public Object getBean() {
-        return beanProperty.getBean();
+        return beanAccess.getBean();
     }
 
     @Override
     public String getName() {
-        return beanProperty.getName();
+        return beanAccess.getName();
     }
 
     @Override
     public Object get() {
-        Date date = beanProperty.getValue();
+        Date date = beanAccess.getValue();
         if( date == null ){
             return null;
         }
@@ -47,12 +52,12 @@ public class ItemDateProperty extends ObjectPropertyBase {
     @Override
     public void set(Object localDate) {
         if( localDate == null ){
-            beanProperty.setValue(null);
+            beanAccess.setValue(null);
             return;
         }
         Instant instant = ((LocalDate) localDate).atStartOfDay().atZone(ZoneId.systemDefault()).toInstant();
         Date date = Date.from(instant);
-        beanProperty.setValue(date);
+        beanAccess.setValue(date);
     }
 
 }

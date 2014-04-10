@@ -1,12 +1,11 @@
-package com.axiastudio.zoefx.db;
+package com.axiastudio.zoefx.beans.property;
 
+import com.axiastudio.zoefx.beans.BeanAccess;
 import javafx.beans.property.ListPropertyBase;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
-import javafx.scene.control.TableColumn;
 
 import java.util.Collection;
-import java.util.List;
 
 /**
  * User: tiziano
@@ -15,25 +14,29 @@ import java.util.List;
  */
 public class ItemListProperty<E> extends ListPropertyBase<E> {
 
-    private BeanProperty<E> beanProperty;
+    private BeanAccess<E> beanAccess;
+
+    public ItemListProperty(BeanAccess beanAccess){
+        this.beanAccess = beanAccess;
+    }
 
     public ItemListProperty(E bean, String name) {
-        beanProperty = new BeanProperty(bean, name);
+        beanAccess = new BeanAccess(bean, name);
     }
 
     @Override
     public Object getBean() {
-        return beanProperty.getBean();
+        return beanAccess.getBean();
     }
 
     @Override
     public String getName() {
-        return beanProperty.getName();
+        return beanAccess.getName();
     }
 
     @Override
     public ObservableList get() {
-        return FXCollections.observableArrayList((Collection) beanProperty.getValue());
+        return FXCollections.observableArrayList((Collection) beanAccess.getValue());
     }
 
     @Override

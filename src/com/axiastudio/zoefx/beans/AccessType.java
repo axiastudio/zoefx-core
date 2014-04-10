@@ -1,10 +1,10 @@
-package com.axiastudio.zoefx.db;
+package com.axiastudio.zoefx.beans;
 
 /**
  * User: tiziano
  * Date: 03/04/14
  * Time: 12:48
  */
-public enum PropertyAccess {
+public enum AccessType {
     FIELD, METHOD
 }

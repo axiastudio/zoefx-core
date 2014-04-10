@@ -1,5 +1,6 @@
-package com.axiastudio.zoefx.db;
+package com.axiastudio.zoefx.beans.property;
 
+import com.axiastudio.zoefx.beans.BeanAccess;
 import javafx.beans.property.BooleanPropertyBase;
 
 
@@ -10,30 +11,34 @@ import javafx.beans.property.BooleanPropertyBase;
  */
 public class ItemBooleanProperty extends BooleanPropertyBase {
 
-    private BeanProperty<Boolean> beanProperty;
+    private BeanAccess<Boolean> beanAccess;
+
+    public ItemBooleanProperty(BeanAccess beanAccess){
+        this.beanAccess = beanAccess;
+    }
 
     public ItemBooleanProperty(Object bean, String name) {
-        beanProperty = new BeanProperty(bean, name);
+        beanAccess = new BeanAccess(bean, name);
     }
 
     @Override
     public Object getBean() {
-        return beanProperty.getBean();
+        return beanAccess.getBean();
     }
 
     @Override
     public String getName() {
-        return beanProperty.getName();
+        return beanAccess.getName();
     }
 
     @Override
     public boolean get() {
-        return beanProperty.getValue();
+        return beanAccess.getValue();
     }
 
     @Override
     public void set(boolean b) {
-        beanProperty.setValue(b);
+        beanAccess.setValue(b);
     }
 
 }

@@ -1,5 +1,6 @@
-package com.axiastudio.zoefx.db;
+package com.axiastudio.zoefx.beans.property;
 
+import com.axiastudio.zoefx.beans.BeanAccess;
 import javafx.beans.property.StringPropertyBase;
 
 
@@ -10,29 +11,33 @@ import javafx.beans.property.StringPropertyBase;
  */
 public class ItemStringProperty extends StringPropertyBase {
 
-    private BeanProperty<String> beanProperty;
+    private BeanAccess<String> beanAccess;
+
+    public ItemStringProperty(BeanAccess beanAccess){
+        this.beanAccess = beanAccess;
+    }
 
     public ItemStringProperty(Object bean, String name) {
-        beanProperty = new BeanProperty(bean, name);
+        beanAccess = new BeanAccess(bean, name);
     }
 
     @Override
     public Object getBean() {
-        return beanProperty.getBean();
+        return beanAccess.getBean();
     }
 
     @Override
     public String getName() {
-        return beanProperty.getName();
+        return beanAccess.getName();
     }
 
     @Override
     public String get() {
-        return beanProperty.getValue();
+        return beanAccess.getValue();
     }
 
     @Override
     public void set(String s) {
-        beanProperty.setValue(s);
+        beanAccess.setValue(s);
     }
 }
