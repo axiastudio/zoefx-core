@@ -1,7 +1,5 @@
 package com.axiastudio.zoefx.beans;
 
-import com.axiastudio.zoefx.db.PropertyAccess;
-
 import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
@@ -15,7 +13,7 @@ public class BeanAccess<T> {
 
     private Object bean;
     private String name;
-    private PropertyAccess accessType;
+    private AccessType accessType;
     private Field field;
     private Method getter=null;
     private Method setter=null;
@@ -44,7 +42,7 @@ public class BeanAccess<T> {
         if( getterOk ) {
             try {
                 setter = bean.getClass().getMethod(setterName, type);
-                accessType = PropertyAccess.METHOD;
+                accessType = AccessType.METHOD;
                 return;
             } catch (NoSuchMethodException e) {
                 e.printStackTrace();
@@ -54,7 +52,7 @@ public class BeanAccess<T> {
         try {
             field = bean.getClass().getField(name);
             type = field.getType();
-            accessType = PropertyAccess.FIELD;
+            accessType = AccessType.FIELD;
             return;
         } catch (NoSuchFieldException e) {
 
@@ -74,8 +72,12 @@ public class BeanAccess<T> {
         return type;
     }
 
+    public AccessType getAccessType() {
+        return accessType;
+    }
+
     public T getValue() {
-        if( accessType.equals(PropertyAccess.FIELD) ){
+        if( accessType.equals(AccessType.FIELD) ){
             try {
                 return (T) field.get(bean);
             } catch (IllegalAccessException e) {
@@ -94,7 +96,7 @@ public class BeanAccess<T> {
     }
 
     public void setValue(Object value) {
-        if( accessType.equals(PropertyAccess.FIELD) ) {
+        if( accessType.equals(AccessType.FIELD) ) {
             try {
                 field.set(bean, value);
             } catch (IllegalAccessException e) {
