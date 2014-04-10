@@ -12,15 +12,15 @@ import java.util.Map;
  * Date: 25/03/14
  * Time: 16:52
  */
-public class DataContext<T> {
+public class DataContext<E> {
 
-    private List<T> store;
+    private List<E> store;
     private Integer currentIndex;
-    private Model<T> currentModel=null;
+    private Model<E> currentModel=null;
     private Map<Property, Object> changes = new HashMap();
     private Boolean dirty=Boolean.FALSE;
 
-    public DataContext(List<T> store) {
+    public DataContext(List<E> store) {
         this.store = store;
         goFirst();
 
@@ -30,13 +30,13 @@ public class DataContext<T> {
         return currentIndex;
     }
 
-    public Model<T> newModel() {
-        T entity = store.get(currentIndex);
+    public Model<E> newModel() {
+        E entity = store.get(currentIndex);
         currentModel = new Model(entity);
         return currentModel;
     }
 
-    public Model<T> getCurrentModel() {
+    public Model<E> getCurrentModel() {
         return currentModel;
     }
 
@@ -95,7 +95,7 @@ public class DataContext<T> {
 
     public void create() {
         try {
-            T entity = (T) store.get(0).getClass().newInstance();
+            E entity = (E) store.get(0).getClass().newInstance();
             store.add(currentIndex+1, entity);
             goNext();
         } catch (InstantiationException e) {

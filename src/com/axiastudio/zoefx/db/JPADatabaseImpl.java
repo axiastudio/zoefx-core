@@ -34,8 +34,8 @@ public class JPADatabaseImpl implements Database {
      *
      */
     @Override
-    public <T> Manager<T> createManager(Class<T> klass){
-        JPAManagerImpl<T> manager = new JPAManagerImpl(getEntityManagerFactory().createEntityManager(), klass);
+    public <E> Manager<E> createManager(Class<E> klass){
+        JPAManagerImpl<E> manager = new JPAManagerImpl(getEntityManagerFactory().createEntityManager(), klass);
         return manager;
     }
 }

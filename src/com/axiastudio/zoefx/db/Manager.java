@@ -7,16 +7,16 @@ import java.util.List;
  * Date: 18/03/14
  * Time: 21:49
  */
-public interface Manager<T> {
+public interface Manager<E> {
 
-    T commit(T entity);
+    E commit(E entity);
 
-    void delete(T entity);
+    void delete(E entity);
 
     void truncate();
 
-    T get(Long id);
+    E get(Long id);
 
-    List<T> getAll();
+    List<E> getAll();
 
 }

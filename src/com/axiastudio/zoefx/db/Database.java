@@ -8,5 +8,5 @@ package com.axiastudio.zoefx.db;
 public interface Database {
 
     void open(String persistenceUnit);
-    public <T> Manager<T> createManager(Class<T> klass);
+    public <E> Manager<E> createManager(Class<E> klass);
 }

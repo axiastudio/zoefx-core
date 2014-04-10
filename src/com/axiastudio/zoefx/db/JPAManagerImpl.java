@@ -12,27 +12,27 @@ import java.util.List;
  * Date: 18/03/14
  * Time: 20:50
  */
-public class JPAManagerImpl<T> implements Manager<T> {
+public class JPAManagerImpl<E> implements Manager<E> {
 
     private Class entityClass;
     private EntityManager entityManager;
 
-    public JPAManagerImpl(EntityManager em, Class<T> klass) {
+    public JPAManagerImpl(EntityManager em, Class<E> klass) {
         entityClass = klass;
         entityManager = em;
     }
 
     @Override
-    public T commit(T entity) {
+    public E commit(E entity) {
         EntityManager em = getEntityManager();
         em.getTransaction().begin();
-        T merged = em.merge(entity);
+        E merged = em.merge(entity);
         em.getTransaction().commit();
         return merged;
     }
 
     @Override
-    public void delete(T entity) {
+    public void delete(E entity) {
 
     }
 
@@ -46,19 +46,19 @@ public class JPAManagerImpl<T> implements Manager<T> {
     }
 
     @Override
-    public T get(Long id) {
+    public E get(Long id) {
         return null;
     }
 
     @Override
-    public List<T> getAll() {
+    public List<E> getAll() {
         EntityManager em = getEntityManager();
         CriteriaBuilder cb = em.getCriteriaBuilder();
-        CriteriaQuery<T> cq = cb.createQuery(entityClass);
-        Root<T> root = cq.from(entityClass);
+        CriteriaQuery<E> cq = cb.createQuery(entityClass);
+        Root<E> root = cq.from(entityClass);
         cq.select(root);
-        TypedQuery<T> query = em.createQuery(cq);
-        List<T> store = query.getResultList();
+        TypedQuery<E> query = em.createQuery(cq);
+        List<E> store = query.getResultList();
         return store;
     }
 
