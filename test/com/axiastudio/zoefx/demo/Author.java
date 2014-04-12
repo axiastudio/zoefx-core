@@ -13,9 +13,7 @@ import java.util.Collection;
  * Time: 09:23
  */
 public class Author {
-    public Long id;
     public String name;
     public String surname;
     public Collection<Book> books = new ArrayList<Book>();
-
 }
