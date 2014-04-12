@@ -53,6 +53,25 @@ public class StartDemo extends Application{
         lev.books.add(wnp);
         marquez.books.add(yearsofsolitude);
 
+        Person tiziano = new Person();
+        tiziano.name = "Tiziano";
+        tiziano.surname = "Lattisi";
+        Loan loanKarenina = new Loan();
+        loanKarenina.book = karenina;
+        loanKarenina.person = tiziano;
+        loanKarenina.note = "To return. ;-)";
+        tiziano.loans.add(loanKarenina);
+
+        List<Person> persons = new ArrayList<Person>();
+        persons.add(tiziano);
+        DataContext<Person> personDataContext = new DataContext<Person>(persons);
+        URL personsFxmlUrl = this.getClass().getResource("/com/axiastudio/zoefx/demo/persons.fxml");
+        Scene personsScene = ZoeSceneBuilder.build(personsFxmlUrl, personDataContext);
+        Stage personsStage = new Stage();
+        personsStage.setTitle("Zoe FX Framework - Authors");
+        personsStage.setScene(personsScene);
+        personsStage.show();
+
         List<Book> books = new ArrayList<Book>();
         books.add(karenina);
         books.add(wnp);
@@ -70,10 +89,10 @@ public class StartDemo extends Application{
         DataContext<Author> authorDataContext = new DataContext<>(authors);
         URL authorsFxmlUrl = this.getClass().getResource("/com/axiastudio/zoefx/demo/authors.fxml");
         Scene authorsScene = ZoeSceneBuilder.build(authorsFxmlUrl, authorDataContext);
-        Stage stage = new Stage();
-        stage.setTitle("Zoe FX Framework - Authors");
-        stage.setScene(authorsScene);
-        stage.show();
+        Stage authorsStage = new Stage();
+        authorsStage.setTitle("Zoe FX Framework - Authors");
+        authorsStage.setScene(authorsScene);
+        authorsStage.show();
 
 
     }
