@@ -132,15 +132,6 @@ public class FXController implements Initializable {
             } else if( node instanceof TableView ){
                 TableView tableView = (TableView) node;
                 leftProperty = tableView.itemsProperty();
-                /*
-                ObservableList columns = tableView.getColumns();
-                for( Object obj: columns){
-                    TableColumn column = (TableColumn) obj;
-                    String columnId = column.getId();
-                    if( columnId != null ) {
-                        column.setCellValueFactory(model.getPropertyValueFactory(name, columnId));
-                    }
-                }*/
             }
             if( leftProperty != null ) {
                 if( isSet ) {
