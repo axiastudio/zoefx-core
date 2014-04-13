@@ -25,7 +25,7 @@ public class ItemPropertyBuilder {
 
     public ItemPropertyBuilder bean(Object bean){
         this.bean = bean;
-        return  this;
+        return this;
     }
 
     public ItemPropertyBuilder property(String name){
@@ -36,6 +36,9 @@ public class ItemPropertyBuilder {
     public Property build(){
         BeanAccess beanAccess = new BeanAccess(bean, propertyName);
         Class type = beanAccess.getReturnType();
+        if( type == null ){
+            return null;
+        }
         Property item=null;
         if( type == String.class ){
             item = new ItemStringProperty(beanAccess);
@@ -45,7 +48,7 @@ public class ItemPropertyBuilder {
             item = new ItemDateProperty(beanAccess);
         } else if( type != null && type.isEnum() ){
             item = new ItemEnumProperty(beanAccess);
-        } else if( type == Collection.class ){
+        } else if( Collection.class.isAssignableFrom(type) ){
             item = new ItemListProperty(beanAccess);
         }
         return item;
