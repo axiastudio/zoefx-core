@@ -69,8 +69,9 @@ public class FXController implements Initializable {
                 ObservableList<TableColumn> columns = tableView.getColumns();
                 for( TableColumn column: columns ){
                     String name = node.getId();
-                    // String columnId = column.getId();
-                    String columnId = column.getText().toLowerCase(); // XXX: wrong!
+                    //String columnId = column.getId();
+                    String columnId = column.getText().toLowerCase(); // XXX: RT-36633 JavaXFX issue
+                    // https://javafx-jira.kenai.com/browse/RT-36633
                     Callback callback = model.getCallback(name, columnId);
                     column.setCellValueFactory(callback);
                 }
