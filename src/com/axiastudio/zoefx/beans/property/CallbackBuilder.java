@@ -2,6 +2,7 @@ package com.axiastudio.zoefx.beans.property;
 
 import com.axiastudio.zoefx.beans.AccessType;
 import com.axiastudio.zoefx.beans.BeanAccess;
+import com.axiastudio.zoefx.beans.BeanClassAccess;
 import javafx.beans.value.ObservableValue;
 import javafx.scene.control.TableColumn;
 import javafx.util.Callback;
@@ -43,10 +44,10 @@ public class CallbackBuilder {
     }
 
     public Callback build(){
-        BeanAccess beanAccess = new BeanAccess(bean, collectionName);
+        BeanClassAccess beanClassAccess = new BeanAccess(bean, collectionName);
         Class pClass=null; // generic class of the collection
         Class tClass=null; // class of the property
-        if( beanAccess.getAccessType().equals(AccessType.FIELD) ){
+        if( beanClassAccess.getAccessType().equals(AccessType.FIELD) ){
             Field field = null;
             try {
                 field = bean.getClass().getField(collectionName);
@@ -57,7 +58,7 @@ public class CallbackBuilder {
             ParameterizedType parameterizedType = (ParameterizedType) type;
             Type[] actualTypeArguments = parameterizedType.getActualTypeArguments();
             pClass = (Class) actualTypeArguments[0];
-        } else if(beanAccess.getAccessType().equals(AccessType.METHOD) ){
+        } else if(beanClassAccess.getAccessType().equals(AccessType.METHOD) ){
             try {
                 Method method = bean.getClass().getMethod("get" + collectionName.substring(0, 1).toUpperCase() + collectionName.substring(1));
                 ParameterizedType pt = (ParameterizedType) method.getGenericReturnType();

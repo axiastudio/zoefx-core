@@ -35,7 +35,7 @@ public class ItemPropertyBuilder {
 
     public Property build(){
         BeanAccess beanAccess = new BeanAccess(bean, propertyName);
-        Class type = beanAccess.getType();
+        Class type = beanAccess.getReturnType();
         Property item=null;
         if( type == String.class ){
             item = new ItemStringProperty(beanAccess);
