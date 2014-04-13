@@ -44,31 +44,10 @@ public class CallbackBuilder {
     }
 
     public Callback build(){
-        BeanClassAccess beanClassAccess = new BeanAccess(bean, collectionName);
-        Class pClass=null; // generic class of the collection
-        Class tClass=null; // class of the property
-        if( beanClassAccess.getAccessType().equals(AccessType.FIELD) ){
-            Field field = null;
-            try {
-                field = bean.getClass().getField(collectionName);
-            } catch (NoSuchFieldException e) {
-                e.printStackTrace();
-            }
-            Type type = field.getGenericType();
-            ParameterizedType parameterizedType = (ParameterizedType) type;
-            Type[] actualTypeArguments = parameterizedType.getActualTypeArguments();
-            pClass = (Class) actualTypeArguments[0];
-        } else if(beanClassAccess.getAccessType().equals(AccessType.METHOD) ){
-            try {
-                Method method = bean.getClass().getMethod("get" + collectionName.substring(0, 1).toUpperCase() + collectionName.substring(1));
-                ParameterizedType pt = (ParameterizedType) method.getGenericReturnType();
-                Type[] actualTypeArguments = pt.getActualTypeArguments();
-                pClass = (Class) actualTypeArguments[0];
-            } catch (NoSuchMethodException e) {
-                e.printStackTrace();
-            }
-        }
-        tClass = String.class; // XXX: wrong
+        BeanClassAccess beanClassAccess = new BeanClassAccess(bean.getClass(), collectionName);
+        Class<?> pClass = beanClassAccess.getGenericReturnType();
+        BeanClassAccess beanPropertyClassAccess = new BeanClassAccess(pClass, propertyName);
+        Class<?> tClass = beanPropertyClassAccess.getReturnType();
         return createCallback(pClass, tClass, propertyName);
     }
 
