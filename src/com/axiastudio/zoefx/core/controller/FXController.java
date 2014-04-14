@@ -1,7 +1,7 @@
 package com.axiastudio.zoefx.core.controller;
 
 import com.axiastudio.zoefx.core.beans.property.ItemEnumProperty;
-import com.axiastudio.zoefx.core.db.Model;
+import com.axiastudio.zoefx.core.view.Model;
 import com.axiastudio.zoefx.core.console.ConsoleController;
 import com.axiastudio.zoefx.core.view.DataContext;
 import com.axiastudio.zoefx.core.view.ZoeToolBar;

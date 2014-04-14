@@ -1,4 +1,4 @@
-package com.axiastudio.zoefx.core.db;
+package com.axiastudio.zoefx.core.view;
 
 import com.axiastudio.zoefx.core.beans.property.*;
 import javafx.beans.property.Property;

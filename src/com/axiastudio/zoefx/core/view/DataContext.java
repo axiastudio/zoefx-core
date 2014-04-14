@@ -1,6 +1,5 @@
 package com.axiastudio.zoefx.core.view;
 
-import com.axiastudio.zoefx.core.db.Model;
 import javafx.beans.property.Property;
 
 import java.util.HashMap;
