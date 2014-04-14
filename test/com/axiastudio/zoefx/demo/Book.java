@@ -1,9 +1,5 @@
 package com.axiastudio.zoefx.demo;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.ManyToOne;
 
 /**
  * User: tiziano
