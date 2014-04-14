@@ -1,7 +1,7 @@
 package com.axiastudio.zoefx.demo;
 
-import com.axiastudio.zoefx.view.DataContext;
-import com.axiastudio.zoefx.view.ZoeSceneBuilder;
+import com.axiastudio.zoefx.core.view.DataContext;
+import com.axiastudio.zoefx.core.view.ZoeSceneBuilder;
 import javafx.application.Application;
 import javafx.scene.Scene;
 import javafx.stage.Stage;

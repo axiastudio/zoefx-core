@@ -1,7 +1,8 @@
 package com.axiastudio.zoefx;
 
-import com.axiastudio.zoefx.db.Database;
-import com.axiastudio.zoefx.db.JPADatabaseImpl;
+import com.axiastudio.zoefx.core.Utilities;
+import com.axiastudio.zoefx.core.db.Database;
+import com.axiastudio.zoefx.core.db.JPADatabaseImpl;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
