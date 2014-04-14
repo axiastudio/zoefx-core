@@ -1,8 +1,9 @@
 package com.axiastudio.zoefx.core.console;
 
+import com.axiastudio.zoefx.core.Utilities;
 import com.axiastudio.zoefx.core.controller.FXController;
-import groovy.lang.Binding;
-import groovy.lang.GroovyShell;
+import com.axiastudio.zoefx.core.script.ScriptEngine;
+import com.axiastudio.zoefx.core.script.JSEngineImpl;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
@@ -13,9 +14,6 @@ import javafx.scene.control.ToolBar;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 
-import java.io.ByteArrayOutputStream;
-import java.io.IOException;
-import java.io.PrintStream;
 import java.net.URL;
 import java.util.ResourceBundle;
 
@@ -51,27 +49,15 @@ public class ConsoleController implements Initializable {
         @Override
         public void handle(ActionEvent e) {
 
-            // redirect System.out
-            PrintStream originalOut = System.out;
-            ByteArrayOutputStream newOut = new ByteArrayOutputStream();
-            System.setOut(new PrintStream(newOut));
-
-            // binding locals and evaluate script
-            Binding binding = new Binding();
-            binding.setVariable("controller", controller);
-            GroovyShell shell = new GroovyShell(binding);
-            String groovySource = source.getText();
-            shell.evaluate(groovySource);
-            try {
-                newOut.flush();
-            } catch (IOException e1) {
-                e1.printStackTrace();
+            // there's a script engine?
+            ScriptEngine engine = Utilities.queryUtility(ScriptEngine.class);
+            if( engine == null ){
+                engine = new JSEngineImpl();
             }
-            String groovyOutput = newOut.toString();
-            output.appendText(groovyOutput);
 
-            // restore original System.out
-            System.setOut(originalOut);
+            String sourceText = source.getText();
+            Object eval = engine.eval(sourceText);
+            ConsoleController.this.output.appendText(eval.toString() + "\n");
         }
     };
 }
