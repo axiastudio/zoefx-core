@@ -68,7 +68,7 @@ public class StartDemo extends Application{
         URL personsFxmlUrl = this.getClass().getResource("/com/axiastudio/zoefx/demo/persons.fxml");
         Scene personsScene = ZoeSceneBuilder.build(personsFxmlUrl, personDataContext);
         Stage personsStage = new Stage();
-        personsStage.setTitle("Zoe FX Framework - Authors");
+        personsStage.setTitle("Zoe FX Framework - Persons");
         personsStage.setScene(personsScene);
         personsStage.show();
 
