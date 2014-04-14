@@ -260,7 +260,7 @@ public class FXController implements Initializable {
             console.setController(self());
 
             Stage stage = new Stage();
-            stage.setTitle("Zoe FX Groovy Console");
+            stage.setTitle("Zoe FX SCript Console");
             stage.setScene(new Scene(root, 450, 450));
             stage.show();
         }
