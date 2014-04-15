@@ -31,9 +31,9 @@ public class ItemPropertyBuilderTest {
 
         titleProperty.bindBidirectional(simpleStringProperty);
 
-        titleProperty.setValue("Anna Karenina");
+        simpleStringProperty.set("Anna Karenina");
 
-        assert aString.equals(book.title);
+        assert simpleStringProperty.get().equals(titleProperty.getValue());
 
     }
 }
