@@ -1,10 +1,16 @@
 package com.axiastudio.zoefx.core.controller;
 
 import com.axiastudio.zoefx.core.beans.property.ItemEnumProperty;
+import com.axiastudio.zoefx.core.listeners.TextFieldListener;
+import com.axiastudio.zoefx.core.validators.Validator;
+import com.axiastudio.zoefx.core.validators.ValidatorBuilder;
+import com.axiastudio.zoefx.core.validators.ValidatorType;
 import com.axiastudio.zoefx.core.view.Model;
 import com.axiastudio.zoefx.core.console.ConsoleController;
 import com.axiastudio.zoefx.core.view.DataContext;
 import com.axiastudio.zoefx.core.view.ZoeToolBar;
+import javafx.beans.InvalidationListener;
+import javafx.beans.Observable;
 import javafx.beans.binding.Bindings;
 import javafx.beans.property.Property;
 import javafx.beans.value.ChangeListener;
@@ -122,6 +128,8 @@ public class FXController implements Initializable {
             Property leftProperty = null;
             if( node instanceof TextField ){
                 leftProperty = ((TextField) node).textProperty();
+                Validator validator = ValidatorBuilder.create().minLength(2).maxLength(5).build();
+                leftProperty.addListener(new TextFieldListener(validator));
             } else if( node instanceof TextArea ){
                 leftProperty = ((TextArea) node).textProperty();
             } else if( node instanceof CheckBox ){
@@ -137,10 +145,10 @@ public class FXController implements Initializable {
             if( leftProperty != null ) {
                 if( isSet ) {
                     Bindings.bindBidirectional(leftProperty, rightProperty);
-                    leftProperty.addListener(this.changeListener);
+                    leftProperty.addListener(changeListener);
                 } else {
                     Bindings.unbindBidirectional(leftProperty, rightProperty);
-                    leftProperty.removeListener(this.changeListener);
+                    leftProperty.removeListener(changeListener);
                 }
             }
         }
