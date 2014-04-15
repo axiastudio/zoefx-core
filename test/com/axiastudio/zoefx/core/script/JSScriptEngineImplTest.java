@@ -20,7 +20,7 @@ public class JSScriptEngineImplTest {
     @Test
     public void testEval() throws Exception {
         ScriptEngine engine = Utilities.queryUtility(ScriptEngine.class);
-        String script = "function test(){ return \"ciao\"; } test()";
+        String script = "return \"ciao\";";
         Object eval = engine.eval(script);
         assert eval.toString().equals("ciao");
     }
