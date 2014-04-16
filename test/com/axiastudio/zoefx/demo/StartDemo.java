@@ -1,5 +1,6 @@
 package com.axiastudio.zoefx.demo;
 
+import com.axiastudio.zoefx.core.beans.EntityBuilder;
 import com.axiastudio.zoefx.core.validators.ValidatorBuilder;
 import com.axiastudio.zoefx.core.validators.Validators;
 import com.axiastudio.zoefx.core.view.DataContext;
@@ -22,42 +23,24 @@ public class StartDemo extends Application{
     @Override
     public void start(Stage primaryStage) throws Exception{
 
-        Author lev = new Author();
-        lev.name = "Lev";
-        lev.surname = "Tolstoj";
+        Author lev = EntityBuilder.create(Author.class).set("name", "Lev").set("surname", "Tolstoj").build();
+        Author marquez = EntityBuilder.create(Author.class).set("name", "Gabriel García").set("surname", "Márquez").build();
 
-        Author marquez = new Author();
-        marquez.name = "Gabriel García";
-        marquez.surname = "Márquez";
+        Book karenina = EntityBuilder.create(Book.class).set("title", "Anna Karenina").set("finished", true)
+                .set("description", "A very long book...").set("genre", Genre.ROMANCE).set("author", lev).build();
 
-        Book karenina = new Book();
-        karenina.title = "Anna Karenina";
-        karenina.description = "A very long book...";
-        karenina.finished = true;
-        karenina.genre = Genre.ROMANCE;
-        karenina.author = lev;
+        Book wnp = EntityBuilder.create(Book.class).set("title", "War and peace").set("finished", false)
+                .set("description", "Another long book...").set("genre", Genre.HISTORIC).set("author", lev).build();
 
-        Book wnp = new Book();
-        wnp.title = "War and peace";
-        wnp.description = "Another long book...";
-        wnp.finished = false;
-        wnp.genre = Genre.HISTORIC;
-        wnp.author = lev;
+        Book yos = EntityBuilder.create(Book.class).set("title", "100 years of solitude").set("finished", false)
+                .set("description", "A beautiful book.").set("genre", Genre.ROMANCE).set("author", marquez).build();
 
-        Book yearsofsolitude = new Book();
-        yearsofsolitude.title = "100 years of solitude";
-        yearsofsolitude.description = "A beautiful book.";
-        yearsofsolitude.finished = false;
-        yearsofsolitude.genre = Genre.ROMANCE;
-        yearsofsolitude.author = marquez;
-
+        // beacause we don't have a db...
         lev.books.add(karenina);
         lev.books.add(wnp);
-        marquez.books.add(yearsofsolitude);
+        marquez.books.add(yos);
 
-        Person tiziano = new Person();
-        tiziano.name = "Tiziano";
-        tiziano.surname = "Lattisi";
+        Person tiziano = EntityBuilder.create(Person.class).set("name", "Tiziano").set("surname", "Lattisi").build();
         Loan loanKarenina = new Loan();
         loanKarenina.book = karenina;
         loanKarenina.person = tiziano;
@@ -79,7 +62,7 @@ public class StartDemo extends Application{
         List<Book> books = new ArrayList<Book>();
         books.add(karenina);
         books.add(wnp);
-        books.add(yearsofsolitude);
+        books.add(yos);
         DataContext<Book> bookDataContext = new DataContext<Book>(books);
         URL booksFxmlUrl = this.getClass().getResource("/com/axiastudio/zoefx/demo/books.fxml");
         Scene booksScene = ZoeSceneBuilder.build(booksFxmlUrl, bookDataContext);
