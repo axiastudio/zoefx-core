@@ -41,11 +41,9 @@ public class StartDemo extends Application{
         marquez.books.add(yos);
 
         Person tiziano = EntityBuilder.create(Person.class).set("name", "Tiziano").set("surname", "Lattisi").build();
-        Loan loanKarenina = new Loan();
-        loanKarenina.book = karenina;
-        loanKarenina.person = tiziano;
-        loanKarenina.note = "To return. ;-)";
-        tiziano.loans.add(loanKarenina);
+        Loan loan = EntityBuilder.create(Loan.class).set("book", karenina).set("person", tiziano)
+                .set("note", "To return- ;-)").build();
+        tiziano.loans.add(loan);
 
         Validators.bindValidator(Book.class, "title", ValidatorBuilder.create().minLength(2).maxLength(5).build());
 
