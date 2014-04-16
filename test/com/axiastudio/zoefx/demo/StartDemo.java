@@ -1,5 +1,7 @@
 package com.axiastudio.zoefx.demo;
 
+import com.axiastudio.zoefx.core.validators.ValidatorBuilder;
+import com.axiastudio.zoefx.core.validators.Validators;
 import com.axiastudio.zoefx.core.view.DataContext;
 import com.axiastudio.zoefx.core.view.ZoeSceneBuilder;
 import javafx.application.Application;
@@ -61,6 +63,8 @@ public class StartDemo extends Application{
         loanKarenina.person = tiziano;
         loanKarenina.note = "To return. ;-)";
         tiziano.loans.add(loanKarenina);
+
+        Validators.bindValidator(Book.class, "title", ValidatorBuilder.create().minLength(2).maxLength(5).build());
 
         List<Person> persons = new ArrayList<Person>();
         persons.add(tiziano);

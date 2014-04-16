@@ -40,4 +40,8 @@ public class Model<E> {
         return callback;
     }
 
+    public Class<? extends Object> getEntityClass() {
+        return entity.getClass();
+    }
+
 }
