@@ -17,7 +17,7 @@ import java.net.URL;
  */
 public class ZoeSceneBuilder {
 
-    public static Scene build(URL url, DataContext context){
+    public static ZoeScene build(URL url, DataContext context){
         FXMLLoader loader = new FXMLLoader();
         loader.setLocation(url);
         loader.setBuilderFactory(new JavaFXBuilderFactory());
@@ -27,7 +27,7 @@ public class ZoeSceneBuilder {
         } catch (IOException e) {
             e.printStackTrace();
         }
-        Scene scene = new Scene(root, 500, 375);
+        ZoeScene scene = new ZoeScene(root, 500, 375);
         ZoeToolBar toolBar = new ZoeToolBar();
         Pane pane = (Pane) root;
         pane.getChildren().add(toolBar);
