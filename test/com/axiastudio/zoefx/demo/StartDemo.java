@@ -51,10 +51,10 @@ public class StartDemo extends ZoeApplication {
         persons.add(tiziano);
         DataContext<Person> personDataContext = new DataContext<Person>(persons);
         URL personsFxmlUrl = this.getClass().getResource("/com/axiastudio/zoefx/demo/persons.fxml");
-        ZoeScene personsScene = ZoeSceneBuilder.build(personsFxmlUrl, personDataContext);
+        ZoeScene personsScene = ZoeSceneBuilder.create().url(personsFxmlUrl).datacontext(personDataContext).build();
         Stage personsStage = new Stage();
         personsStage.setTitle("Zoe FX Framework - Persons");
-        personsStage.setScene(personsScene);
+        personsStage.setScene(personsScene.getScene());
         personsStage.show();
 
         List<Book> books = new ArrayList<Book>();
@@ -63,9 +63,9 @@ public class StartDemo extends ZoeApplication {
         books.add(yos);
         DataContext<Book> bookDataContext = new DataContext<Book>(books);
         URL booksFxmlUrl = this.getClass().getResource("/com/axiastudio/zoefx/demo/books.fxml");
-        ZoeScene booksScene = ZoeSceneBuilder.build(booksFxmlUrl, bookDataContext);
+        ZoeScene booksScene = ZoeSceneBuilder.create().url(booksFxmlUrl).datacontext(bookDataContext).build();
         primaryStage.setTitle("Zoe FX Framework - Books");
-        primaryStage.setScene(booksScene);
+        primaryStage.setScene(booksScene.getScene());
         primaryStage.show();
 
         List<Author> authors = new ArrayList<Author>();
@@ -73,10 +73,10 @@ public class StartDemo extends ZoeApplication {
         authors.add(marquez);
         DataContext<Author> authorDataContext = new DataContext<>(authors);
         URL authorsFxmlUrl = this.getClass().getResource("/com/axiastudio/zoefx/demo/authors.fxml");
-        ZoeScene authorsScene = ZoeSceneBuilder.build(authorsFxmlUrl, authorDataContext);
+        ZoeScene authorsScene = ZoeSceneBuilder.create().url(authorsFxmlUrl).datacontext(authorDataContext).build();
         Stage authorsStage = new Stage();
         authorsStage.setTitle("Zoe FX Framework - Authors");
-        authorsStage.setScene(authorsScene);
+        authorsStage.setScene(authorsScene.getScene());
         authorsStage.show();
 
 

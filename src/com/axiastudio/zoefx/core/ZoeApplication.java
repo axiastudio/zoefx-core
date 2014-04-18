@@ -20,8 +20,8 @@ public class ZoeApplication extends Application {
 
     @Override
     public void start(Stage stage) throws Exception {
-        ZoeScene scene = ZoeSceneBuilder.build(url, dataContext);
-        stage.setScene(scene);
+        ZoeScene zoeScene = ZoeSceneBuilder.create().datacontext(dataContext).url(url).build();
+        stage.setScene(zoeScene.getScene());
         stage.show();
     }
 

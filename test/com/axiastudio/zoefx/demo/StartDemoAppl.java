@@ -45,16 +45,16 @@ public class StartDemoAppl extends ZoeApplication {
 
         List<Person> persons = new ArrayList<Person>();
         persons.add(tiziano);
-        DataContext<Person> personDataContext = new DataContext<Person>(persons);
-        URL personsFxmlUrl = StartDemoAppl.class.getResource("/com/axiastudio/zoefx/demo/persons.fxml");
-        ZoeApplication.setPrimaryScene(personDataContext, personsFxmlUrl);
+        DataContext<Person> pDC = new DataContext<Person>(persons); // TODO: builder?
+        URL pFU = StartDemoAppl.class.getResource("/com/axiastudio/zoefx/demo/persons.fxml");
+        ZoeApplication.setPrimaryScene(pDC, pFU);
 
         List<Book> books = new ArrayList<Book>();
         books.add(karenina);
         books.add(wnp);
         books.add(yos);
-        DataContext<Book> bookDataContext = new DataContext<Book>(books);
-        URL booksFxmlUrl = StartDemoAppl.class.getResource("/com/axiastudio/zoefx/demo/books.fxml");
+        DataContext<Book> bDC = new DataContext<Book>(books);
+        URL bFU = StartDemoAppl.class.getResource("/com/axiastudio/zoefx/demo/books.fxml");
 
         ZoeApplication.launch(StartDemoAppl.class, args);
 

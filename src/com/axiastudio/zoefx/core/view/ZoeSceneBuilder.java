@@ -17,7 +17,27 @@ import java.net.URL;
  */
 public class ZoeSceneBuilder {
 
-    public static ZoeScene build(URL url, DataContext context){
+    private DataContext context;
+    private URL url;
+
+    public ZoeSceneBuilder() {
+    }
+
+    public static ZoeSceneBuilder create() {
+        return new ZoeSceneBuilder();
+    }
+
+    public ZoeSceneBuilder datacontext(DataContext context){
+        this.context = context;
+        return this;
+    }
+
+    public ZoeSceneBuilder url(URL url){
+        this.url = url;
+        return this;
+    }
+
+    public ZoeScene build(){
         FXMLLoader loader = new FXMLLoader();
         loader.setLocation(url);
         loader.setBuilderFactory(new JavaFXBuilderFactory());
@@ -27,7 +47,9 @@ public class ZoeSceneBuilder {
         } catch (IOException e) {
             e.printStackTrace();
         }
-        ZoeScene scene = new ZoeScene(root, 500, 375);
+        Scene scene = new Scene(root, 500, 375);
+        ZoeScene zoeScene = new ZoeScene();
+        zoeScene.setScene(scene);
         ZoeToolBar toolBar = new ZoeToolBar();
         Pane pane = (Pane) root;
         pane.getChildren().add(toolBar);
@@ -35,7 +57,7 @@ public class ZoeSceneBuilder {
         toolBar.setController(controller);
         controller.setScene(scene);
         controller.bindDataContext(context);
-        return scene;
+        return zoeScene;
     }
 
 }
