@@ -23,10 +23,10 @@ public class BeanClassAccess {
     public BeanClassAccess(Class beanClass, String name) {
         this.name = name;
         this.beanClass = beanClass;
-        inspectBeanProperty();
+        inspectBeanField();
     }
 
-    protected void inspectBeanProperty() {
+    protected void inspectBeanField() {
         Boolean getterOk=Boolean.FALSE;
 
         // getter

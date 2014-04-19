@@ -26,7 +26,7 @@ public class Model<E> {
         if( propertiesCache.containsKey(name) ){
             return propertiesCache.get(name);
         }
-        Property property = ItemPropertyBuilder.create().bean(entity).property(name).build();
+        Property property = ItemPropertyBuilder.create().bean(entity).field(name).build();
         propertiesCache.put(name, property);
         return property;
     }

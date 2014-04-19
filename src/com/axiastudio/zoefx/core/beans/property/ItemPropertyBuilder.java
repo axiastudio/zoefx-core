@@ -14,7 +14,7 @@ import java.util.Date;
 public class ItemPropertyBuilder {
 
     private Object bean;
-    private String propertyName;
+    private String name;
 
     public ItemPropertyBuilder() {
     }
@@ -28,13 +28,13 @@ public class ItemPropertyBuilder {
         return this;
     }
 
-    public ItemPropertyBuilder property(String name){
-        this.propertyName = name;
+    public ItemPropertyBuilder field(String name){
+        this.name = name;
         return this;
     }
 
     public Property build(){
-        BeanAccess beanAccess = new BeanAccess(bean, propertyName);
+        BeanAccess beanAccess = new BeanAccess(bean, name);
         Class type = beanAccess.getReturnType();
         if( type == null ){
             return null;
