@@ -42,6 +42,8 @@ public class ItemPropertyBuilder {
         Property item=null;
         if( type == String.class ){
             item = new ItemStringProperty(beanAccess);
+        } else if( type == Integer.class ){
+            item = new ItemIntegerProperty(beanAccess);
         } else if( type == Boolean.class ){
             item = new ItemBooleanProperty(beanAccess);
         } else if( type == Date.class ){

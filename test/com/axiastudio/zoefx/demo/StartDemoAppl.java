@@ -24,10 +24,8 @@ public class StartDemoAppl extends ZoeApplication {
 
         Book karenina = EntityBuilder.create(Book.class).set("title", "Anna Karenina").set("finished", true)
                 .set("description", "A very long book...").set("genre", Genre.ROMANCE).set("author", lev).build();
-
         Book wnp = EntityBuilder.create(Book.class).set("title", "War and peace").set("finished", false)
                 .set("description", "Another long book...").set("genre", Genre.HISTORIC).set("author", lev).build();
-
         Book yos = EntityBuilder.create(Book.class).set("title", "100 years of solitude").set("finished", false)
                 .set("description", "A beautiful book.").set("genre", Genre.ROMANCE).set("author", marquez).build();
 

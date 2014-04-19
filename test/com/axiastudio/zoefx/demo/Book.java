@@ -12,4 +12,5 @@ public class Book {
     public Boolean finished;
     public Genre genre;
     public Author author;
+    public Integer year;
 }
