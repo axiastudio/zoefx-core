@@ -5,9 +5,6 @@ import com.axiastudio.zoefx.core.beans.EntityBuilder;
 import com.axiastudio.zoefx.core.validators.ValidatorBuilder;
 import com.axiastudio.zoefx.core.validators.Validators;
 import com.axiastudio.zoefx.core.view.DataContext;
-import com.axiastudio.zoefx.core.view.ZoeScene;
-import com.axiastudio.zoefx.core.view.ZoeSceneBuilder;
-import javafx.stage.Stage;
 
 import java.net.URL;
 import java.util.ArrayList;
@@ -15,13 +12,12 @@ import java.util.List;
 
 /**
  * User: tiziano
- * Date: 18/03/14
- * Time: 20:38
+ * Date: 18/04/14
+ * Time: 00:36
  */
-public class StartDemo extends ZoeApplication {
+public class StartDemoAppl extends ZoeApplication {
 
-    @Override
-    public void start(Stage primaryStage) throws Exception{
+    public static void main(String args[]){
 
         Author lev = EntityBuilder.create(Author.class).set("name", "Lev").set("surname", "Tolstoj").build();
         Author marquez = EntityBuilder.create(Author.class).set("name", "Gabriel García").set("surname", "Márquez").build();
@@ -49,41 +45,18 @@ public class StartDemo extends ZoeApplication {
 
         List<Person> persons = new ArrayList<Person>();
         persons.add(tiziano);
-        DataContext<Person> personDataContext = new DataContext<Person>(persons);
-        URL personsFxmlUrl = this.getClass().getResource("/com/axiastudio/zoefx/demo/persons.fxml");
-        ZoeScene personsScene = ZoeSceneBuilder.create().url(personsFxmlUrl).datacontext(personDataContext).build();
-        Stage personsStage = new Stage();
-        personsStage.setTitle("Zoe FX Framework - Persons");
-        personsStage.setScene(personsScene.getScene());
-        personsStage.show();
+        DataContext<Person> pDC = new DataContext<Person>(persons); // TODO: builder?
+        URL pFU = StartDemoAppl.class.getResource("/com/axiastudio/zoefx/demo/persons.fxml");
+        ZoeApplication.setPrimaryScene(pDC, pFU);
 
         List<Book> books = new ArrayList<Book>();
         books.add(karenina);
         books.add(wnp);
         books.add(yos);
-        DataContext<Book> bookDataContext = new DataContext<Book>(books);
-        URL booksFxmlUrl = this.getClass().getResource("/com/axiastudio/zoefx/demo/books.fxml");
-        ZoeScene booksScene = ZoeSceneBuilder.create().url(booksFxmlUrl).datacontext(bookDataContext).build();
-        primaryStage.setTitle("Zoe FX Framework - Books");
-        primaryStage.setScene(booksScene.getScene());
-        primaryStage.show();
+        DataContext<Book> bDC = new DataContext<Book>(books);
+        URL bFU = StartDemoAppl.class.getResource("/com/axiastudio/zoefx/demo/books.fxml");
 
-        List<Author> authors = new ArrayList<Author>();
-        authors.add(lev);
-        authors.add(marquez);
-        DataContext<Author> authorDataContext = new DataContext<>(authors);
-        URL authorsFxmlUrl = this.getClass().getResource("/com/axiastudio/zoefx/demo/authors.fxml");
-        ZoeScene authorsScene = ZoeSceneBuilder.create().url(authorsFxmlUrl).datacontext(authorDataContext).build();
-        Stage authorsStage = new Stage();
-        authorsStage.setTitle("Zoe FX Framework - Authors");
-        authorsStage.setScene(authorsScene.getScene());
-        authorsStage.show();
-
+        ZoeApplication.launch(StartDemoAppl.class, args);
 
     }
-
-    public static void main(String[] args){
-        ZoeApplication.launch(StartDemo.class, args);
-    }
-
 }
