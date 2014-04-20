@@ -9,16 +9,12 @@ import javafx.beans.property.StringPropertyBase;
  * Date: 21/03/14
  * Time: 12:51
  */
-public class ItemStringProperty extends StringPropertyBase {
+public class ItemStringProperty<P> extends StringPropertyBase {
 
-    private BeanAccess<String> beanAccess;
+    private BeanAccess<P> beanAccess;
 
     public ItemStringProperty(BeanAccess beanAccess){
         this.beanAccess = beanAccess;
-    }
-
-    public ItemStringProperty(Object bean, String name) {
-        beanAccess = new BeanAccess(bean, name);
     }
 
     @Override
@@ -33,11 +29,22 @@ public class ItemStringProperty extends StringPropertyBase {
 
     @Override
     public String get() {
-        return beanAccess.getValue();
+        P value = beanAccess.getValue();
+        if( value instanceof String ) {
+            return (String) value;
+        } else if( value instanceof Integer ) {
+            return value.toString();
+        }
+        return null;
     }
 
     @Override
     public void set(String s) {
-        beanAccess.setValue(s);
+        Class<?> returnType = beanAccess.getReturnType();
+        if( returnType == String.class ){
+            beanAccess.setValue(s);
+        } else if( returnType == Integer.class ){
+            beanAccess.setValue(Integer.parseInt(s));
+        }
     }
 }

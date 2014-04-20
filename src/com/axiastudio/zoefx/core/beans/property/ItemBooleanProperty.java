@@ -9,16 +9,12 @@ import javafx.beans.property.BooleanPropertyBase;
  * Date: 21/03/14
  * Time: 12:51
  */
-public class ItemBooleanProperty extends BooleanPropertyBase {
+public class ItemBooleanProperty<P> extends BooleanPropertyBase {
 
-    private BeanAccess<Boolean> beanAccess;
+    private BeanAccess<P> beanAccess;
 
     public ItemBooleanProperty(BeanAccess beanAccess){
         this.beanAccess = beanAccess;
-    }
-
-    public ItemBooleanProperty(Object bean, String name) {
-        beanAccess = new BeanAccess(bean, name);
     }
 
     @Override
@@ -33,7 +29,13 @@ public class ItemBooleanProperty extends BooleanPropertyBase {
 
     @Override
     public boolean get() {
-        return beanAccess.getValue();
+        P value = beanAccess.getValue();
+        if( value instanceof Boolean ) {
+            return (Boolean) value;
+        } else if( value instanceof Integer ) {
+            return false;
+        }
+        return false;
     }
 
     @Override

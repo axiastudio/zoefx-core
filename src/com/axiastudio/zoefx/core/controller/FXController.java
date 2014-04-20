@@ -29,9 +29,7 @@ import javafx.util.Callback;
 
 import java.io.IOException;
 import java.net.URL;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.ResourceBundle;
+import java.util.*;
 
 /**
  * User: tiziano
@@ -90,7 +88,7 @@ public class FXController implements Initializable {
         for( Node node: nodes ){
             if( node instanceof ChoiceBox){
                 String name = node.getId();
-                Property property = model.getProperty(name);
+                Property property = model.getProperty(name, Enum.class);
                 List<Enum> enumConstants = ((ItemEnumProperty) property).getEnumConstants();
                 ObservableList<Enum> choices = FXCollections.observableArrayList(enumConstants);
                 ((ChoiceBox) node).setItems(choices);
@@ -118,30 +116,33 @@ public class FXController implements Initializable {
         List<Node> nodes = findNodes(container, new ArrayList<Node>());
         for( Node node: nodes ){
             String name = node.getId();
-            Property rightProperty = model.getProperty(name);
-            if( rightProperty == null ){
-                continue;
-            }
             Property leftProperty = null;
+            Property rightProperty = null;
             if( node instanceof TextField ){
                 leftProperty = ((TextField) node).textProperty();
+                rightProperty = model.getProperty(name, String.class);
                 Validator validator = Validators.getValidator(model.getEntityClass(), name);
                 if( validator != null ) {
                     leftProperty.addListener(new TextFieldListener(validator));
                 }
             } else if( node instanceof TextArea ){
                 leftProperty = ((TextArea) node).textProperty();
+                rightProperty = model.getProperty(name, String.class);
             } else if( node instanceof CheckBox ){
                 leftProperty = ((CheckBox) node).selectedProperty();
+                rightProperty = model.getProperty(name, Boolean.class);
             } else if( node instanceof ChoiceBox ){
                 leftProperty = ((ChoiceBox) node).valueProperty();
+                rightProperty = model.getProperty(name, Enum.class);
             } else if( node instanceof DatePicker ){
                 leftProperty = ((DatePicker) node).valueProperty();
+                rightProperty = model.getProperty(name, Date.class);
             } else if( node instanceof TableView ){
                 TableView tableView = (TableView) node;
                 leftProperty = tableView.itemsProperty();
+                rightProperty = model.getProperty(name, Collection.class);
             }
-            if( leftProperty != null ) {
+            if( rightProperty != null && leftProperty != null) {
                 if( isSet ) {
                     Bindings.bindBidirectional(leftProperty, rightProperty);
                     leftProperty.addListener(changeListener);

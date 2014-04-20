@@ -15,17 +15,12 @@ import java.util.Date;
  * Date: 21/03/14
  * Time: 12:51
  */
-public class ItemDateProperty extends ObjectPropertyBase {
+public class ItemDateProperty<P> extends ObjectPropertyBase {
 
-    private BeanAccess<Date> beanAccess;
+    private BeanAccess<P> beanAccess;
 
     public ItemDateProperty(BeanAccess beanAccess){
         this.beanAccess = beanAccess;
-    }
-
-    public ItemDateProperty(Object bean, String name) {
-        beanAccess = new BeanAccess(bean, name);
-
     }
 
     @Override
@@ -40,13 +35,16 @@ public class ItemDateProperty extends ObjectPropertyBase {
 
     @Override
     public Object get() {
-        Date date = beanAccess.getValue();
-        if( date == null ){
+        P value = beanAccess.getValue();
+        if( value == null ){
             return null;
         }
-        Instant instant = Instant.ofEpochMilli(date.getTime());
-        LocalDate localDate = LocalDateTime.ofInstant(instant, ZoneId.systemDefault()).toLocalDate();
-        return localDate;
+        if( value instanceof Date ) {
+            Instant instant = Instant.ofEpochMilli(((Date) value).getTime());
+            LocalDate localDate = LocalDateTime.ofInstant(instant, ZoneId.systemDefault()).toLocalDate();
+            return localDate;
+        }
+        return null;
     }
 
     @Override
