@@ -24,7 +24,7 @@ public class ItemPropertyBuilderTest {
         Book book = new Book();
         book.title = "";
 
-        Property titleProperty = ItemPropertyBuilder.create().bean(book).property("title").build();
+        Property titleProperty = ItemPropertyBuilder.create().bean(book).field("title").build();
 
         String aString="";
         SimpleStringProperty simpleStringProperty = new SimpleStringProperty(aString);

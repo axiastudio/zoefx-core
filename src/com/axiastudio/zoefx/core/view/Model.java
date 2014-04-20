@@ -22,11 +22,11 @@ public class Model<E> {
         this.entity = entity;
     }
 
-    public Property getProperty(String name){
+    public Property getProperty(String name, Class<?> klass){
         if( propertiesCache.containsKey(name) ){
             return propertiesCache.get(name);
         }
-        Property property = ItemPropertyBuilder.create().bean(entity).property(name).build();
+        Property property = ItemPropertyBuilder.create(klass).bean(entity).field(name).build();
         propertiesCache.put(name, property);
         return property;
     }

@@ -11,10 +11,11 @@ import java.util.Date;
  * Date: 10/04/14
  * Time: 11:08
  */
-public class ItemPropertyBuilder {
+public class ItemPropertyBuilder<T> {
 
     private Object bean;
-    private String propertyName;
+    private String name;
+    private Class<? extends T> propertyClass;
 
     public ItemPropertyBuilder() {
     }
@@ -23,37 +24,61 @@ public class ItemPropertyBuilder {
         return new ItemPropertyBuilder();
     }
 
+    public static <T> ItemPropertyBuilder<T> create(Class<? extends T> klass){
+        ItemPropertyBuilder<T> itemPropertyBuilder = new ItemPropertyBuilder<T>();
+        itemPropertyBuilder.propertyClass = klass;
+        return itemPropertyBuilder;
+    }
+
     public ItemPropertyBuilder bean(Object bean){
         this.bean = bean;
         return this;
     }
 
-    public ItemPropertyBuilder property(String name){
-        this.propertyName = name;
+    public ItemPropertyBuilder field(String name){
+        this.name = name;
         return this;
     }
 
     public Property build(){
-        BeanAccess beanAccess = new BeanAccess(bean, propertyName);
-        Class type = beanAccess.getReturnType();
-        if( type == null ){
+        BeanAccess beanAccess = new BeanAccess(bean, name);
+        Class<?> fieldType = beanAccess.getReturnType();
+        if( fieldType == null || propertyClass == null ){
             return null;
         }
-        Property item=null;
-        if( type == String.class ){
-            item = new ItemStringProperty(beanAccess);
-        } else if( type == Integer.class ){
-            item = new ItemIntegerProperty(beanAccess);
-        } else if( type == Boolean.class ){
-            item = new ItemBooleanProperty(beanAccess);
-        } else if( type == Date.class ){
-            item = new ItemDateProperty(beanAccess);
-        } else if( type != null && type.isEnum() ){
-            item = new ItemEnumProperty(beanAccess);
-        } else if( Collection.class.isAssignableFrom(type) ){
-            item = new ItemListProperty(beanAccess);
+        //System.out.println(bean.getClass().getSimpleName() + "." + name + " (" + fieldType + ") -> property (" + propertyClass + ")");
+        if( String.class.isAssignableFrom(propertyClass) ) {
+            if( String.class.isAssignableFrom(fieldType) ) {
+                // String field -> String property
+                ItemStringProperty<String> item = new ItemStringProperty(beanAccess);
+                return item;
+            } else if( Integer.class.isAssignableFrom(fieldType) ) {
+                // Integer field -> String property
+                ItemStringProperty<Integer> item = new ItemStringProperty(beanAccess);
+                return item;
+            }
+        } else if( Boolean.class.isAssignableFrom(propertyClass) ) {
+            if( Boolean.class.isAssignableFrom(fieldType) ) {
+                // Boolean field -> Boolean property
+                ItemBooleanProperty<Boolean> item = new ItemBooleanProperty(beanAccess);
+                return item;
+            }
+        } else if( Date.class.isAssignableFrom(propertyClass) ) {
+            if( Date.class.isAssignableFrom(fieldType) ) {
+                // Date field -> Date property
+                ItemDateProperty<Date> item = new ItemDateProperty(beanAccess);
+                return item;
+            }
+        } else if( Collection.class.isAssignableFrom(propertyClass) ) {
+                // Collection field -> Collection property
+                ItemListProperty item = new ItemListProperty(beanAccess);
+                return item;
+        } else if( Enum.class.isAssignableFrom(propertyClass) ) {
+            // Enum field -> Collection property
+            ItemEnumProperty item = new ItemEnumProperty(beanAccess);
+            return item;
         }
-        return item;
+        return null;
     }
 
 }
