@@ -51,6 +51,7 @@ public class CallbackBuilder {
             @Override
             public ObservableValue<T> call(TableColumn.CellDataFeatures<P, T> prCellDataFeatures) {
                 P bean = prCellDataFeatures.getValue();
+                // TODO: not only String in cell!
                 ObservableValue<T> property = ItemPropertyBuilder.create(String.class).bean(bean).field(idColumn).build();
                 return property;
             }
