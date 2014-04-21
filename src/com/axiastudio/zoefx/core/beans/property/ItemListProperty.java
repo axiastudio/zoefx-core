@@ -20,10 +20,6 @@ public class ItemListProperty<E> extends ListPropertyBase<E> {
         this.beanAccess = beanAccess;
     }
 
-    public ItemListProperty(E bean, String name) {
-        beanAccess = new BeanAccess(bean, name);
-    }
-
     @Override
     public Object getBean() {
         return beanAccess.getBean();

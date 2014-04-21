@@ -17,10 +17,6 @@ public class ItemIntegerProperty extends StringPropertyBase {
         this.beanAccess = beanAccess;
     }
 
-    public ItemIntegerProperty(Object bean, String name) {
-        beanAccess = new BeanAccess(bean, name);
-    }
-
     @Override
     public Object getBean() {
         return beanAccess.getBean();

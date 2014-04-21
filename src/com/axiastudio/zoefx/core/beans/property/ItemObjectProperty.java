@@ -20,11 +20,6 @@ public class ItemObjectProperty<P> extends ObjectPropertyBase {
         this.beanAccess = beanAccess;
     }
 
-    public ItemObjectProperty(Object bean, String name) {
-        beanAccess = new BeanAccess(bean, name);
-
-    }
-
     @Override
     public Object getBean() {
         return beanAccess.getBean();
