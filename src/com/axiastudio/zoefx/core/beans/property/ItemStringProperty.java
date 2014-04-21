@@ -35,10 +35,9 @@ public class ItemStringProperty<P> extends StringPropertyBase {
         P value = beanAccess.getValue();
         if( value instanceof String ) {
             return (String) value;
-        } else if( value instanceof Integer ) {
+        } else {
             return toStringFunction.call(value);
         }
-        return null;
     }
 
     @Override
@@ -46,7 +45,7 @@ public class ItemStringProperty<P> extends StringPropertyBase {
         Class<?> returnType = beanAccess.getReturnType();
         if( returnType == String.class ){
             beanAccess.setValue(s);
-        } else if( returnType == Integer.class ){
+        } else {
             beanAccess.setValue(fromStringFuction.call(s));
         }
     }
