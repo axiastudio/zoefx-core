@@ -12,15 +12,15 @@ import java.util.List;
  * Date: 21/03/14
  * Time: 12:51
  */
-public class ItemEnumProperty extends ObjectPropertyBase {
+public class ItemObjectProperty<P> extends ObjectPropertyBase {
 
-    private BeanAccess<Enum> beanAccess;
+    private BeanAccess<P> beanAccess;
 
-    public ItemEnumProperty(BeanAccess beanAccess){
+    public ItemObjectProperty(BeanAccess beanAccess){
         this.beanAccess = beanAccess;
     }
 
-    public ItemEnumProperty(Object bean, String name) {
+    public ItemObjectProperty(Object bean, String name) {
         beanAccess = new BeanAccess(bean, name);
 
     }
@@ -45,12 +45,16 @@ public class ItemEnumProperty extends ObjectPropertyBase {
         beanAccess.setValue(e);
     }
 
-    public List<Enum> getEnumConstants() {
-        List<Enum> enums = new ArrayList();
-        for( Object obj: beanAccess.getValue().getDeclaringClass().getEnumConstants() ){
-            enums.add((Enum) obj);
+    public List<P> getSuperset() {
+        List<P> superset = new ArrayList();
+        if( beanAccess.getReturnType().isEnum() ) {
+            for (Object obj : ((Enum) beanAccess.getValue()).getDeclaringClass().getEnumConstants()) {
+                superset.add((P) obj);
+            }
+        } else {
+            System.out.println("-> " + beanAccess.getReturnType());
         }
-        return enums;
+        return superset;
     }
 
 

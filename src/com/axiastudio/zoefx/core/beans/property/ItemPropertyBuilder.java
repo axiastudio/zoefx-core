@@ -86,9 +86,9 @@ public class ItemPropertyBuilder<T> {
                 // Collection field -> Collection property
                 ItemListProperty item = new ItemListProperty(beanAccess);
                 return item;
-        } else if( Enum.class.isAssignableFrom(propertyClass) ) {
-            // Enum field -> Collection property
-            ItemEnumProperty item = new ItemEnumProperty(beanAccess);
+        } else if( Object.class.isAssignableFrom(propertyClass) ) {
+            // Object field -> Object property
+            ItemObjectProperty<Object> item = new ItemObjectProperty(beanAccess);
             return item;
         }
         return null;

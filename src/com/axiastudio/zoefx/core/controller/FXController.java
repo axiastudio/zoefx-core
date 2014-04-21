@@ -1,6 +1,6 @@
 package com.axiastudio.zoefx.core.controller;
 
-import com.axiastudio.zoefx.core.beans.property.ItemEnumProperty;
+import com.axiastudio.zoefx.core.beans.property.ItemObjectProperty;
 import com.axiastudio.zoefx.core.listeners.TextFieldListener;
 import com.axiastudio.zoefx.core.validators.Validator;
 import com.axiastudio.zoefx.core.validators.Validators;
@@ -88,9 +88,9 @@ public class FXController implements Initializable {
         for( Node node: nodes ){
             if( node instanceof ChoiceBox){
                 String name = node.getId();
-                Property property = model.getProperty(name, Enum.class);
-                List<Enum> enumConstants = ((ItemEnumProperty) property).getEnumConstants();
-                ObservableList<Enum> choices = FXCollections.observableArrayList(enumConstants);
+                Property property = model.getProperty(name, Object.class);
+                List superset = ((ItemObjectProperty) property).getSuperset();
+                ObservableList choices = FXCollections.observableArrayList(superset);
                 ((ChoiceBox) node).setItems(choices);
             }
         }
@@ -133,7 +133,7 @@ public class FXController implements Initializable {
                 rightProperty = model.getProperty(name, Boolean.class);
             } else if( node instanceof ChoiceBox ){
                 leftProperty = ((ChoiceBox) node).valueProperty();
-                rightProperty = model.getProperty(name, Enum.class);
+                rightProperty = model.getProperty(name, Object.class);
             } else if( node instanceof DatePicker ){
                 leftProperty = ((DatePicker) node).valueProperty();
                 rightProperty = model.getProperty(name, Date.class);
