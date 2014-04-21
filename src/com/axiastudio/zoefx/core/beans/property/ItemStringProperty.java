@@ -2,6 +2,7 @@ package com.axiastudio.zoefx.core.beans.property;
 
 import com.axiastudio.zoefx.core.beans.BeanAccess;
 import javafx.beans.property.StringPropertyBase;
+import javafx.util.Callback;
 
 
 /**
@@ -12,6 +13,8 @@ import javafx.beans.property.StringPropertyBase;
 public class ItemStringProperty<P> extends StringPropertyBase {
 
     private BeanAccess<P> beanAccess;
+    private Callback<P, String> toStringFunction =null;
+    private Callback<String, P> fromStringFuction =null;
 
     public ItemStringProperty(BeanAccess beanAccess){
         this.beanAccess = beanAccess;
@@ -33,7 +36,7 @@ public class ItemStringProperty<P> extends StringPropertyBase {
         if( value instanceof String ) {
             return (String) value;
         } else if( value instanceof Integer ) {
-            return value.toString();
+            return toStringFunction.call(value);
         }
         return null;
     }
@@ -44,7 +47,15 @@ public class ItemStringProperty<P> extends StringPropertyBase {
         if( returnType == String.class ){
             beanAccess.setValue(s);
         } else if( returnType == Integer.class ){
-            beanAccess.setValue(Integer.parseInt(s));
+            beanAccess.setValue(fromStringFuction.call(s));
         }
+    }
+
+    public void setToStringFunction(Callback<P, String> callback) {
+        toStringFunction = callback;
+    }
+
+    public void setFromStringFunction(Callback<String, P> callback) {
+        fromStringFuction = callback;
     }
 }

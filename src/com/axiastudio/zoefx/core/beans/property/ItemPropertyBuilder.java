@@ -2,6 +2,7 @@ package com.axiastudio.zoefx.core.beans.property;
 
 import com.axiastudio.zoefx.core.beans.BeanAccess;
 import javafx.beans.property.Property;
+import javafx.util.Callback;
 
 import java.util.Collection;
 import java.util.Date;
@@ -55,6 +56,18 @@ public class ItemPropertyBuilder<T> {
             } else if( Integer.class.isAssignableFrom(fieldType) ) {
                 // Integer field -> String property
                 ItemStringProperty<Integer> item = new ItemStringProperty(beanAccess);
+                item.setToStringFunction(new Callback<Integer, String>() {
+                    @Override
+                    public String call(Integer i) {
+                        return i.toString();
+                    }
+                });
+                item.setFromStringFunction(new Callback<String, Integer>() {
+                    @Override
+                    public Integer call(String s) {
+                        return Integer.parseInt(s);
+                    }
+                });
                 return item;
             }
         } else if( Boolean.class.isAssignableFrom(propertyClass) ) {
