@@ -158,7 +158,12 @@ public class FXController implements Initializable {
         for( Node node: container.getChildren() ){
             if( node instanceof Pane ){
                 nodes = findNodes((Pane) node, nodes);
-            } else if( node.getId() != null && node.getId() != "" ){
+            } else if( node instanceof TabPane ){
+                for( Tab tab: ((TabPane) node).getTabs() ) {
+                    nodes = findNodes((Pane) tab.getContent(), nodes);
+                }
+            }
+            else if( node.getId() != null && node.getId() != "" ){
                 nodes.add(node);
             }
         }
