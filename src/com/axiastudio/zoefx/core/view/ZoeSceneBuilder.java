@@ -19,6 +19,7 @@ public class ZoeSceneBuilder {
 
     private DataContext context;
     private URL url;
+    private FXController controller=null;
 
     public ZoeSceneBuilder() {
     }
@@ -37,10 +38,19 @@ public class ZoeSceneBuilder {
         return this;
     }
 
+    public ZoeSceneBuilder controller(FXController controller){
+        this.controller = controller;
+        return this;
+    }
+
     public ZoeScene build(){
+        if( controller == null ) {
+            controller = new FXController();
+        }
         FXMLLoader loader = new FXMLLoader();
         loader.setLocation(url);
         loader.setBuilderFactory(new JavaFXBuilderFactory());
+        loader.setController(controller);
         Parent root=null;
         try {
             root = (Parent) loader.load(url.openStream());
@@ -53,7 +63,6 @@ public class ZoeSceneBuilder {
         ZoeToolBar toolBar = new ZoeToolBar();
         Pane pane = (Pane) root;
         pane.getChildren().add(toolBar);
-        FXController controller = new FXController();
         toolBar.setController(controller);
         controller.setScene(scene);
         controller.bindDataContext(context);
