@@ -17,7 +17,6 @@ import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.FXMLLoader;
-import javafx.fxml.Initializable;
 import javafx.fxml.JavaFXBuilderFactory;
 import javafx.scene.Node;
 import javafx.scene.Parent;
@@ -36,7 +35,7 @@ import java.util.*;
  * Date: 20/03/14
  * Time: 23:04
  */
-public class FXController implements Initializable {
+public class FXController extends BaseController {
 
     private Scene scene;
     private DataContext context=null;

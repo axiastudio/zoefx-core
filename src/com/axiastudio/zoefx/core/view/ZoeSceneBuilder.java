@@ -1,5 +1,6 @@
 package com.axiastudio.zoefx.core.view;
 
+import com.axiastudio.zoefx.core.controller.BaseController;
 import com.axiastudio.zoefx.core.controller.FXController;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.JavaFXBuilderFactory;
@@ -19,7 +20,9 @@ public class ZoeSceneBuilder {
 
     private DataContext context;
     private URL url;
-    private FXController controller=null;
+    private BaseController controller=null;
+    private Integer width=500;
+    private Integer height=375;
 
     public ZoeSceneBuilder() {
     }
@@ -38,34 +41,46 @@ public class ZoeSceneBuilder {
         return this;
     }
 
-    public ZoeSceneBuilder controller(FXController controller){
+    public ZoeSceneBuilder width(Integer width){
+        this.width = width;
+        return this;
+    }
+
+    public ZoeSceneBuilder height(Integer height){
+        this.height = height;
+        return this;
+    }
+
+    public ZoeSceneBuilder controller(BaseController controller){
         this.controller = controller;
         return this;
     }
 
     public ZoeScene build(){
-        if( controller == null ) {
-            controller = new FXController();
-        }
         FXMLLoader loader = new FXMLLoader();
         loader.setLocation(url);
         loader.setBuilderFactory(new JavaFXBuilderFactory());
-        loader.setController(controller);
+        if( controller != null ) {
+            loader.setController(controller);
+        }
         Parent root=null;
         try {
             root = (Parent) loader.load(url.openStream());
         } catch (IOException e) {
             e.printStackTrace();
         }
-        Scene scene = new Scene(root, 500, 375);
+        Scene scene = new Scene(root, width, height);
         ZoeScene zoeScene = new ZoeScene();
         zoeScene.setScene(scene);
-        ZoeToolBar toolBar = new ZoeToolBar();
-        Pane pane = (Pane) root;
-        pane.getChildren().add(toolBar);
-        toolBar.setController(controller);
-        controller.setScene(scene);
-        controller.bindDataContext(context);
+        if( controller instanceof FXController ) {
+            FXController fxController = (FXController) controller;
+            ZoeToolBar toolBar = new ZoeToolBar();
+            Pane pane = (Pane) root;
+            pane.getChildren().add(toolBar);
+            toolBar.setController(fxController);
+            fxController.setScene(scene);
+            fxController.bindDataContext(context);
+        }
         return zoeScene;
     }
 
