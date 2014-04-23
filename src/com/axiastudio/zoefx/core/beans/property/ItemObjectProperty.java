@@ -1,6 +1,9 @@
 package com.axiastudio.zoefx.core.beans.property;
 
+import com.axiastudio.zoefx.core.Utilities;
 import com.axiastudio.zoefx.core.beans.BeanAccess;
+import com.axiastudio.zoefx.core.db.Database;
+import com.axiastudio.zoefx.core.db.Manager;
 import javafx.beans.property.ObjectPropertyBase;
 
 import java.util.ArrayList;
@@ -42,12 +45,19 @@ public class ItemObjectProperty<P> extends ObjectPropertyBase {
 
     public List<P> getSuperset() {
         List<P> superset = new ArrayList();
-        if( beanAccess.getReturnType().isEnum() ) {
+        Class<?> returnType = beanAccess.getReturnType();
+        if( returnType.isEnum() ) {
             for (Object obj : ((Enum) beanAccess.getValue()).getDeclaringClass().getEnumConstants()) {
                 superset.add((P) obj);
             }
         } else {
-            System.out.println("-> " + beanAccess.getReturnType());
+            Database database = Utilities.queryUtility(Database.class);
+            if( database != null ) {
+                Manager<?> manager = database.createManager(returnType);
+                for (Object obj : manager.getAll()) {
+                    superset.add((P) obj);
+                }
+            }
         }
         return superset;
     }
