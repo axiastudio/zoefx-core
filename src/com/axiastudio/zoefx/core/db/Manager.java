@@ -19,4 +19,6 @@ public interface Manager<E> {
 
     List<E> getAll();
 
+    E create();
+
 }

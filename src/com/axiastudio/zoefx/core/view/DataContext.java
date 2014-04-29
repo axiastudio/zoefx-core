@@ -1,5 +1,9 @@
 package com.axiastudio.zoefx.core.view;
 
+import com.axiastudio.zoefx.core.Utilities;
+import com.axiastudio.zoefx.core.beans.EntityBuilder;
+import com.axiastudio.zoefx.core.db.Database;
+import com.axiastudio.zoefx.core.db.Manager;
 import javafx.beans.property.Property;
 
 import java.util.HashMap;
@@ -93,15 +97,11 @@ public class DataContext<E> {
     }
 
     public void create() {
-        try {
-            E entity = (E) store.get(0).getClass().newInstance();
-            store.add(currentIndex+1, entity);
-            goNext();
-        } catch (InstantiationException e) {
-            e.printStackTrace();
-        } catch (IllegalAccessException e) {
-            e.printStackTrace();
-        }
+        Database db = Utilities.queryUtility(Database.class);
+        Manager<?> manager = db.createManager(store.get(0).getClass());
+        E entity = (E) manager.create();
+        store.add(entity);
+        goLast();
     }
 
     public void delete() {
