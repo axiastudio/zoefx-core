@@ -4,9 +4,9 @@ import com.axiastudio.zoefx.core.beans.property.ItemObjectProperty;
 import com.axiastudio.zoefx.core.listeners.TextFieldListener;
 import com.axiastudio.zoefx.core.validators.Validator;
 import com.axiastudio.zoefx.core.validators.Validators;
+import com.axiastudio.zoefx.core.db.DataSet;
 import com.axiastudio.zoefx.core.view.Model;
 import com.axiastudio.zoefx.core.console.ConsoleController;
-import com.axiastudio.zoefx.core.view.DataContext;
 import com.axiastudio.zoefx.core.view.ZoeToolBar;
 import javafx.beans.binding.Bindings;
 import javafx.beans.property.Property;
@@ -38,7 +38,7 @@ import java.util.*;
 public class FXController extends BaseController {
 
     private Scene scene;
-    private DataContext context=null;
+    private DataSet context=null;
 
 
     @Override
@@ -50,7 +50,7 @@ public class FXController extends BaseController {
         this.scene = scene;
     }
 
-    public void bindDataContext(DataContext context){
+    public void bindDataContext(DataSet context){
         this.context = context;
         initializeChoices();
         initializeColumns();
@@ -170,7 +170,7 @@ public class FXController extends BaseController {
     }
 
 
-    public DataContext getContext() {
+    public DataSet getContext() {
         return context;
     }
 

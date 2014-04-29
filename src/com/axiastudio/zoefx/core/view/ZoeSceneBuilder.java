@@ -2,6 +2,7 @@ package com.axiastudio.zoefx.core.view;
 
 import com.axiastudio.zoefx.core.controller.BaseController;
 import com.axiastudio.zoefx.core.controller.FXController;
+import com.axiastudio.zoefx.core.db.DataSet;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.JavaFXBuilderFactory;
 import javafx.scene.Parent;
@@ -18,7 +19,7 @@ import java.net.URL;
  */
 public class ZoeSceneBuilder {
 
-    private DataContext context;
+    private DataSet context;
     private URL url;
     private BaseController controller=null;
     private Integer width=500;
@@ -31,7 +32,7 @@ public class ZoeSceneBuilder {
         return new ZoeSceneBuilder();
     }
 
-    public ZoeSceneBuilder datacontext(DataContext context){
+    public ZoeSceneBuilder datacontext(DataSet context){
         this.context = context;
         return this;
     }

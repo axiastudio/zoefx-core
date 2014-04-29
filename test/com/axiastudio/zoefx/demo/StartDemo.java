@@ -4,7 +4,7 @@ import com.axiastudio.zoefx.core.beans.EntityBuilder;
 import com.axiastudio.zoefx.core.controller.FXController;
 import com.axiastudio.zoefx.core.validators.ValidatorBuilder;
 import com.axiastudio.zoefx.core.validators.Validators;
-import com.axiastudio.zoefx.core.view.DataContext;
+import com.axiastudio.zoefx.core.db.DataSet;
 import com.axiastudio.zoefx.core.view.ZoeScene;
 import com.axiastudio.zoefx.core.view.ZoeSceneBuilder;
 import javafx.application.Application;
@@ -53,7 +53,7 @@ public class StartDemo extends Application {
         books.add(wnp);
         books.add(yos);
         ZoeScene booksScene = ZoeSceneBuilder.create().url(StartDemo.class.getResource("/com/axiastudio/zoefx/demo/books.fxml"))
-                .controller(new FXController()).datacontext(new DataContext<Book>(books)).build();
+                .controller(new FXController()).datacontext(new DataSet<Book>(books)).build();
         primaryStage.setTitle("Zoe FX Framework - Books");
         primaryStage.setScene(booksScene.getScene());
         primaryStage.show();
@@ -62,7 +62,7 @@ public class StartDemo extends Application {
         List<Person> persons = new ArrayList<Person>();
         persons.add(tiziano);
         ZoeScene personsScene = ZoeSceneBuilder.create().url(StartDemo.class.getResource("/com/axiastudio/zoefx/demo/persons.fxml"))
-                .controller(new FXController()).datacontext(new DataContext<Person>(persons)).build();
+                .controller(new FXController()).datacontext(new DataSet<Person>(persons)).build();
         Stage personsStage = new Stage();
         personsStage.setTitle("Zoe FX Framework - Persons");
         personsStage.setScene(personsScene.getScene());
@@ -73,7 +73,7 @@ public class StartDemo extends Application {
         authors.add(lev);
         authors.add(marquez);
         ZoeScene authorsScene = ZoeSceneBuilder.create().url(StartDemo.class.getResource("/com/axiastudio/zoefx/demo/authors.fxml"))
-                .controller(new FXController()).datacontext(new DataContext<Author>(authors)).build();
+                .controller(new FXController()).datacontext(new DataSet<Author>(authors)).build();
         Stage authorsStage = new Stage();
         authorsStage.setTitle("Zoe FX Framework - Authors");
         authorsStage.setScene(authorsScene.getScene());

@@ -1,9 +1,10 @@
-package com.axiastudio.zoefx.core.view;
+package com.axiastudio.zoefx.core.db;
 
 import com.axiastudio.zoefx.core.Utilities;
 import com.axiastudio.zoefx.core.beans.EntityBuilder;
 import com.axiastudio.zoefx.core.db.Database;
 import com.axiastudio.zoefx.core.db.Manager;
+import com.axiastudio.zoefx.core.view.Model;
 import javafx.beans.property.Property;
 
 import java.util.HashMap;
@@ -15,7 +16,7 @@ import java.util.Map;
  * Date: 25/03/14
  * Time: 16:52
  */
-public class DataContext<E> {
+public class DataSet<E> {
 
     private List<E> store;
     private Integer currentIndex;
@@ -23,7 +24,7 @@ public class DataContext<E> {
     private Map<Property, Object> changes = new HashMap();
     private Boolean dirty=Boolean.FALSE;
 
-    public DataContext(List<E> store) {
+    public DataSet(List<E> store) {
         this.store = store;
         goFirst();
 
