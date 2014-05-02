@@ -95,6 +95,11 @@ public class FXController extends BaseController {
         }
     }
 
+    private void refreshModel() {
+        unsetModel();
+        setModel();
+    }
+
     private void unsetModel() {
         configureModel(false);
     }
@@ -244,6 +249,7 @@ public class FXController extends BaseController {
         @Override
         public void handle(ActionEvent e) {
             context.create();
+            refreshModel();
             refreshNavBar();
         }
     };

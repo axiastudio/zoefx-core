@@ -1,9 +1,6 @@
 package com.axiastudio.zoefx.core.db;
 
 import com.axiastudio.zoefx.core.Utilities;
-import com.axiastudio.zoefx.core.beans.EntityBuilder;
-import com.axiastudio.zoefx.core.db.Database;
-import com.axiastudio.zoefx.core.db.Manager;
 import com.axiastudio.zoefx.core.view.Model;
 import javafx.beans.property.Property;
 
@@ -92,16 +89,36 @@ public class DataSet<E> {
     }
 
     public void commit() {
-        // TODO: persistence handler?
+        Database db = Utilities.queryUtility(Database.class);
+        if( db != null ) {
+            Manager<E> manager = db.createManager(getEntityClass());
+            E entity = store.get(currentIndex);
+            manager.commit(entity);
+        }
         changes.clear();
         dirty = Boolean.FALSE;
     }
 
+    private Class<E> getEntityClass() {
+        return (Class<E>) store.get(0).getClass();
+    }
+
     public void create() {
         Database db = Utilities.queryUtility(Database.class);
-        Manager<?> manager = db.createManager(store.get(0).getClass());
-        E entity = (E) manager.create();
-        store.add(entity);
+        if( db != null ) {
+            Manager<E> manager = db.createManager(getEntityClass());
+            E entity = manager.create();
+            store.add(entity);
+        } else {
+            try {
+                E entity = getEntityClass().newInstance();
+                store.add(entity);
+            } catch (InstantiationException e) {
+                e.printStackTrace();
+            } catch (IllegalAccessException e) {
+                e.printStackTrace();
+            }
+        }
         goLast();
     }
 
