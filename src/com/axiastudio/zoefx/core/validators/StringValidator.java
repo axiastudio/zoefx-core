@@ -9,8 +9,15 @@ public class StringValidator extends AbstractValidator implements Validator<Stri
 
     private Integer minLength=0;
     private Integer maxLength=-1;
+    private Boolean notNull=false;
 
     public Boolean validate(String value) {
+        if( value == null ){
+            if( notNull ) {
+                return Boolean.FALSE;
+            }
+            return Boolean.TRUE;
+        }
         if( !super.validate(value) ){
             return Boolean.FALSE;
         }

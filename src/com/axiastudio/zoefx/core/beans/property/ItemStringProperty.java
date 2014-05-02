@@ -35,9 +35,10 @@ public class ItemStringProperty<P> extends StringPropertyBase {
         P value = beanAccess.getValue();
         if( value instanceof String ) {
             return (String) value;
-        } else {
+        } else if( value != null ) {
             return toStringFunction.call(value);
         }
+        return null;
     }
 
     @Override

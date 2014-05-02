@@ -65,6 +65,9 @@ public class ItemPropertyBuilder<T> {
                 item.setFromStringFunction(new Callback<String, Integer>() {
                     @Override
                     public Integer call(String s) {
+                        if( s== null ){
+                            return null;
+                        }
                         return Integer.parseInt(s);
                     }
                 });
