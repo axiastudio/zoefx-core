@@ -1,6 +1,7 @@
 package com.axiastudio.zoefx.core.controller;
 
 import com.axiastudio.zoefx.core.beans.property.ItemObjectProperty;
+import com.axiastudio.zoefx.core.events.ModelEvent;
 import com.axiastudio.zoefx.core.listeners.TextFieldListener;
 import com.axiastudio.zoefx.core.validators.Validator;
 import com.axiastudio.zoefx.core.validators.Validators;
@@ -114,6 +115,7 @@ public class FXController extends BaseController {
         Model model;
         if( isSet ) {
             model = dataset.newModel();
+            scene.getRoot().fireEvent(new ModelEvent(ModelEvent.REFRESH));
         } else {
             model = dataset.getCurrentModel();
         }
