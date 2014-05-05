@@ -19,7 +19,7 @@ import java.net.URL;
  */
 public class ZoeSceneBuilder {
 
-    private DataSet context;
+    private DataSet dataset;
     private URL url;
     private BaseController controller=null;
     private Integer width=500;
@@ -33,7 +33,7 @@ public class ZoeSceneBuilder {
     }
 
     public ZoeSceneBuilder datacontext(DataSet context){
-        this.context = context;
+        this.dataset = context;
         return this;
     }
 
@@ -80,7 +80,7 @@ public class ZoeSceneBuilder {
             pane.getChildren().add(toolBar);
             toolBar.setController(fxController);
             fxController.setScene(scene);
-            fxController.bindDataContext(context);
+            fxController.bindDataSet(dataset);
         }
         return zoeScene;
     }

@@ -38,7 +38,7 @@ import java.util.*;
 public class FXController extends BaseController {
 
     private Scene scene;
-    private DataSet context=null;
+    private DataSet dataset =null;
 
 
     @Override
@@ -50,8 +50,8 @@ public class FXController extends BaseController {
         this.scene = scene;
     }
 
-    public void bindDataContext(DataSet context){
-        this.context = context;
+    public void bindDataSet(DataSet dataset){
+        this.dataset = dataset;
         initializeChoices();
         initializeColumns();
         setModel();
@@ -59,7 +59,7 @@ public class FXController extends BaseController {
 
 
     private void initializeColumns(){
-        Model model = context.newModel();
+        Model model = dataset.newModel();
         Parent root = this.scene.getRoot();
         Pane container = (Pane) root;
         List<Node> nodes = findNodes(container, new ArrayList<Node>());
@@ -80,7 +80,7 @@ public class FXController extends BaseController {
     }
 
     private void initializeChoices(){
-        Model model = context.newModel();
+        Model model = dataset.newModel();
         Parent root = this.scene.getRoot();
         Pane container = (Pane) root;
         List<Node> nodes = findNodes(container, new ArrayList<Node>());
@@ -111,9 +111,9 @@ public class FXController extends BaseController {
     private void configureModel(Boolean isSet) {
         Model model;
         if( isSet ) {
-            model = context.newModel();
+            model = dataset.newModel();
         } else {
-            model = context.getCurrentModel();
+            model = dataset.getCurrentModel();
         }
         Parent root = this.scene.getRoot();
         Pane container = (Pane) root;
@@ -175,8 +175,8 @@ public class FXController extends BaseController {
     }
 
 
-    public DataSet getContext() {
-        return context;
+    public DataSet getDataset() {
+        return dataset;
     }
 
 
@@ -199,7 +199,7 @@ public class FXController extends BaseController {
         @Override
         public void handle(ActionEvent e) {
             unsetModel();
-            context.goFirst();
+            dataset.goFirst();
             setModel();
             refreshNavBar();
         }
@@ -208,7 +208,7 @@ public class FXController extends BaseController {
         @Override
         public void handle(ActionEvent e) {
             unsetModel();
-            context.goPrevious();
+            dataset.goPrevious();
             setModel();
             refreshNavBar();
         }
@@ -217,7 +217,7 @@ public class FXController extends BaseController {
         @Override
         public void handle(ActionEvent e) {
             unsetModel();
-            context.goNext();
+            dataset.goNext();
             setModel();
             refreshNavBar();
         }
@@ -226,7 +226,7 @@ public class FXController extends BaseController {
         @Override
         public void handle(ActionEvent e) {
             unsetModel();
-            context.goLast();
+            dataset.goLast();
             setModel();
             refreshNavBar();
         }
@@ -234,21 +234,21 @@ public class FXController extends BaseController {
     public EventHandler<ActionEvent> handlerSave = new EventHandler<ActionEvent>() {
         @Override
         public void handle(ActionEvent e) {
-            context.commit();
+            dataset.commit();
             refreshNavBar();
         }
     };
     public EventHandler<ActionEvent> handlerCancel = new EventHandler<ActionEvent>() {
         @Override
         public void handle(ActionEvent e) {
-            context.revert();
+            dataset.revert();
             refreshNavBar();
         }
     };
     public EventHandler<ActionEvent> handlerAdd = new EventHandler<ActionEvent>() {
         @Override
         public void handle(ActionEvent e) {
-            context.create();
+            dataset.create();
             refreshModel();
             refreshNavBar();
         }
@@ -256,7 +256,7 @@ public class FXController extends BaseController {
     public EventHandler<ActionEvent> handlerDelete = new EventHandler<ActionEvent>() {
         @Override
         public void handle(ActionEvent e) {
-            context.delete();
+            dataset.delete();
             refreshNavBar();
         }
     };
@@ -292,7 +292,7 @@ public class FXController extends BaseController {
     public ChangeListener changeListener = new ChangeListener() {
         @Override
         public void changed(ObservableValue observable, Object oldValue, Object newValue) {
-            context.addChange((Property) observable, oldValue, newValue);
+            dataset.addChange((Property) observable, oldValue, newValue);
             refreshNavBar();
         }
     };

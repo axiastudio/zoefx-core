@@ -80,10 +80,10 @@ public class ZoeToolBar extends ToolBar {
         }
         //List<Object> store = this.controller.getStore();
 
-        isOnlyOne.setValue(controller.getContext().size()==1);
-        isDirty.setValue(controller.getContext().isDirty());
-        isBOF.setValue(controller.getContext().getCurrentIndex() == 0);
-        isEOF.setValue(controller.getContext().getCurrentIndex() == controller.getContext().size()-1);
+        isOnlyOne.setValue(controller.getDataset().size()==1);
+        isDirty.setValue(controller.getDataset().isDirty());
+        isBOF.setValue(controller.getDataset().getCurrentIndex() == 0);
+        isEOF.setValue(controller.getDataset().getCurrentIndex() == controller.getDataset().size()-1);
 
     }
 }
