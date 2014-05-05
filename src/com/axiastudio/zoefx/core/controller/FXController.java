@@ -55,6 +55,7 @@ public class FXController extends BaseController {
         initializeChoices();
         initializeColumns();
         setModel();
+        refreshNavBar();
     }
 
 
@@ -98,6 +99,7 @@ public class FXController extends BaseController {
     private void refreshModel() {
         unsetModel();
         setModel();
+        refreshNavBar();
     }
 
     private void unsetModel() {

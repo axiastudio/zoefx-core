@@ -2,7 +2,9 @@ package com.axiastudio.zoefx.core.view;
 
 import com.axiastudio.zoefx.core.controller.FXController;
 import javafx.beans.property.SimpleBooleanProperty;
+import javafx.geometry.Pos;
 import javafx.scene.control.Button;
+import javafx.scene.control.Label;
 import javafx.scene.control.ToolBar;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
@@ -19,7 +21,8 @@ public class ZToolBar extends ToolBar {
 
     private FXController controller;
     private Map<String, Button> buttons = new HashMap<String, Button>();
-    private String[] buttonNames = {"first", "previous", "next", "last", "save", "cancel", "add", "delete", "console"};
+    private String[] buttonNames = {"first", "previous", "COUNTER", "next", "last", "save", "cancel", "add", "delete", "console"};
+    private Label counterLabel;
 
     private SimpleBooleanProperty isOnlyOne = new SimpleBooleanProperty(false);
     private SimpleBooleanProperty isDirty = new SimpleBooleanProperty(false);
@@ -34,11 +37,20 @@ public class ZToolBar extends ToolBar {
     private void initNavBar(){
 
         for( String buttonName: buttonNames ){
-            Button button = new Button();
-            button.setId(buttonName+"NavButton");
-            button.setGraphic(new ImageView(new Image(getClass().getResourceAsStream("/com/axiastudio/zoefx/core/resources/" +buttonName+".png"))));
-            this.buttons.put(buttonName, button);
-            this.getItems().add(button);
+            if( buttonName.equals("COUNTER") ){
+                counterLabel = new Label();
+                counterLabel.setMinWidth(80);
+                counterLabel.setAlignment(Pos.BASELINE_CENTER);
+                counterLabel.setId("counterNavLabel");
+                counterLabel.setText("0/0");
+                getItems().add(counterLabel);
+            } else {
+                Button button = new Button();
+                button.setId(buttonName + "NavButton");
+                button.setGraphic(new ImageView(new Image(getClass().getResourceAsStream("/com/axiastudio/zoefx/core/resources/" + buttonName + ".png"))));
+                buttons.put(buttonName, button);
+                getItems().add(button);
+            }
         }
     }
 
@@ -47,35 +59,35 @@ public class ZToolBar extends ToolBar {
         this.controller = controller;
 
         // handlers
-        this.buttons.get("first").setOnAction(this.controller.handlerGoFirst);
-        this.buttons.get("previous").setOnAction(this.controller.handlerGoPrevious);
-        this.buttons.get("next").setOnAction(this.controller.handlerGoNext);
-        this.buttons.get("last").setOnAction(this.controller.handlerGoLast);
+        buttons.get("first").setOnAction(this.controller.handlerGoFirst);
+        buttons.get("previous").setOnAction(this.controller.handlerGoPrevious);
+        buttons.get("next").setOnAction(this.controller.handlerGoNext);
+        buttons.get("last").setOnAction(this.controller.handlerGoLast);
 
-        this.buttons.get("cancel").setOnAction(this.controller.handlerCancel);
-        this.buttons.get("save").setOnAction(this.controller.handlerSave);
-        this.buttons.get("add").setOnAction(this.controller.handlerAdd);
+        buttons.get("cancel").setOnAction(this.controller.handlerCancel);
+        buttons.get("save").setOnAction(this.controller.handlerSave);
+        buttons.get("add").setOnAction(this.controller.handlerAdd);
 
-        this.buttons.get("console").setOnAction(this.controller.handlerConsole);
+        buttons.get("console").setOnAction(this.controller.handlerConsole);
 
         // status
-        this.buttons.get("first").disableProperty().bind(isDirty.or(isOnlyOne).or(isBOF));
-        this.buttons.get("previous").disableProperty().bind(isDirty.or(isOnlyOne).or(isBOF));
-        this.buttons.get("next").disableProperty().bind(isDirty.or(isOnlyOne).or(isEOF));
-        this.buttons.get("last").disableProperty().bind(isDirty.or(isOnlyOne).or(isEOF));
+        buttons.get("first").disableProperty().bind(isDirty.or(isOnlyOne).or(isBOF));
+        buttons.get("previous").disableProperty().bind(isDirty.or(isOnlyOne).or(isBOF));
+        buttons.get("next").disableProperty().bind(isDirty.or(isOnlyOne).or(isEOF));
+        buttons.get("last").disableProperty().bind(isDirty.or(isOnlyOne).or(isEOF));
 
-        this.buttons.get("cancel").disableProperty().bind(isDirty.not());
-        this.buttons.get("save").disableProperty().bind(isDirty.not());
+        buttons.get("cancel").disableProperty().bind(isDirty.not());
+        buttons.get("save").disableProperty().bind(isDirty.not());
 
-        this.buttons.get("add").disableProperty().bind(isDirty);
-        this.buttons.get("delete").disableProperty().bind(isDirty);
+        buttons.get("add").disableProperty().bind(isDirty);
+        buttons.get("delete").disableProperty().bind(isDirty);
 
 
     }
 
     public void refresh(){
 
-        if( this.controller == null ){
+        if( controller == null ){
             return;
         }
         //List<Object> store = this.controller.getStore();
@@ -84,6 +96,10 @@ public class ZToolBar extends ToolBar {
         isDirty.setValue(controller.getDataset().isDirty());
         isBOF.setValue(controller.getDataset().getCurrentIndex() == 0);
         isEOF.setValue(controller.getDataset().getCurrentIndex() == controller.getDataset().size()-1);
+
+        // counter
+        String text = (controller.getDataset().getCurrentIndex() + 1) + "/" + controller.getDataset().size();
+        counterLabel.setText(text);
 
     }
 }
