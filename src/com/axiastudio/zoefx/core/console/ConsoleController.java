@@ -15,6 +15,8 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 
 import java.net.URL;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.ResourceBundle;
 
 /**
@@ -56,8 +58,12 @@ public class ConsoleController implements Initializable {
             }
 
             String sourceText = source.getText();
-            Object eval = engine.eval(sourceText);
-            ConsoleController.this.output.appendText(eval.toString() + "\n");
+
+            Map<String, Object> bindings = new HashMap<>();
+            bindings.put("controller", controller);
+
+            Object eval = engine.eval(sourceText, bindings);
+            ConsoleController.this.output.appendText(eval + "\n");
         }
     };
 }
