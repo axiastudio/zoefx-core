@@ -32,8 +32,8 @@ public class ZoeSceneBuilder {
         return new ZoeSceneBuilder();
     }
 
-    public ZoeSceneBuilder datacontext(DataSet context){
-        this.dataset = context;
+    public ZoeSceneBuilder dataset(DataSet dataset){
+        this.dataset = dataset;
         return this;
     }
 
