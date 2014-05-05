@@ -17,7 +17,7 @@ import java.net.URL;
  * Date: 20/03/14
  * Time: 22:52
  */
-public class ZoeSceneBuilder {
+public class ZSceneBuilder {
 
     private DataSet dataset;
     private URL url;
@@ -25,39 +25,39 @@ public class ZoeSceneBuilder {
     private Integer width=500;
     private Integer height=375;
 
-    public ZoeSceneBuilder() {
+    public ZSceneBuilder() {
     }
 
-    public static ZoeSceneBuilder create() {
-        return new ZoeSceneBuilder();
+    public static ZSceneBuilder create() {
+        return new ZSceneBuilder();
     }
 
-    public ZoeSceneBuilder dataset(DataSet dataset){
+    public ZSceneBuilder dataset(DataSet dataset){
         this.dataset = dataset;
         return this;
     }
 
-    public ZoeSceneBuilder url(URL url){
+    public ZSceneBuilder url(URL url){
         this.url = url;
         return this;
     }
 
-    public ZoeSceneBuilder width(Integer width){
+    public ZSceneBuilder width(Integer width){
         this.width = width;
         return this;
     }
 
-    public ZoeSceneBuilder height(Integer height){
+    public ZSceneBuilder height(Integer height){
         this.height = height;
         return this;
     }
 
-    public ZoeSceneBuilder controller(BaseController controller){
+    public ZSceneBuilder controller(BaseController controller){
         this.controller = controller;
         return this;
     }
 
-    public ZoeScene build(){
+    public ZScene build(){
         FXMLLoader loader = new FXMLLoader();
         loader.setLocation(url);
         loader.setBuilderFactory(new JavaFXBuilderFactory());
@@ -71,18 +71,18 @@ public class ZoeSceneBuilder {
             e.printStackTrace();
         }
         Scene scene = new Scene(root, width, height);
-        ZoeScene zoeScene = new ZoeScene();
-        zoeScene.setScene(scene);
+        ZScene zScene = new ZScene();
+        zScene.setScene(scene);
         if( controller instanceof FXController ) {
             FXController fxController = (FXController) controller;
-            ZoeToolBar toolBar = new ZoeToolBar();
+            ZToolBar toolBar = new ZToolBar();
             Pane pane = (Pane) root;
             pane.getChildren().add(toolBar);
             toolBar.setController(fxController);
             fxController.setScene(scene);
             fxController.bindDataSet(dataset);
         }
-        return zoeScene;
+        return zScene;
     }
 
 }

@@ -7,7 +7,7 @@ import javafx.scene.Scene;
  * Date: 18/04/14
  * Time: 00:42
  */
-public class ZoeScene {
+public class ZScene {
 
     private Scene scene;
 

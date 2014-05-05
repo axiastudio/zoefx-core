@@ -7,7 +7,7 @@ import com.axiastudio.zoefx.core.validators.Validators;
 import com.axiastudio.zoefx.core.db.DataSet;
 import com.axiastudio.zoefx.core.view.Model;
 import com.axiastudio.zoefx.core.console.ConsoleController;
-import com.axiastudio.zoefx.core.view.ZoeToolBar;
+import com.axiastudio.zoefx.core.view.ZToolBar;
 import javafx.beans.binding.Bindings;
 import javafx.beans.property.Property;
 import javafx.beans.value.ChangeListener;
@@ -183,7 +183,7 @@ public class FXController extends BaseController {
     private void refreshNavBar(){
         Pane pane = (Pane) this.scene.getRoot();
         Node lookup = pane.lookup("#navigationBar");
-        ((ZoeToolBar) lookup).refresh();
+        ((ZToolBar) lookup).refresh();
     }
 
     private FXController self(){

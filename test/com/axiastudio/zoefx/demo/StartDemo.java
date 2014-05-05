@@ -5,8 +5,9 @@ import com.axiastudio.zoefx.core.controller.FXController;
 import com.axiastudio.zoefx.core.validators.ValidatorBuilder;
 import com.axiastudio.zoefx.core.validators.Validators;
 import com.axiastudio.zoefx.core.db.DataSet;
-import com.axiastudio.zoefx.core.view.ZoeScene;
-import com.axiastudio.zoefx.core.view.ZoeSceneBuilder;
+import com.axiastudio.zoefx.core.view.ZScene;
+import com.axiastudio.zoefx.core.view.ZSceneBuilder;
+import com.axiastudio.zoefx.core.view.ZSceneBuilder;
 import javafx.application.Application;
 import javafx.stage.Stage;
 
@@ -52,7 +53,7 @@ public class StartDemo extends Application {
         books.add(karenina);
         books.add(wnp);
         books.add(yos);
-        ZoeScene booksScene = ZoeSceneBuilder.create().url(StartDemo.class.getResource("/com/axiastudio/zoefx/demo/books.fxml"))
+        ZScene booksScene = ZSceneBuilder.create().url(StartDemo.class.getResource("/com/axiastudio/zoefx/demo/books.fxml"))
                 .controller(new FXController()).dataset(new DataSet<Book>(books)).build();
         primaryStage.setTitle("Zoe FX Framework - Books");
         primaryStage.setScene(booksScene.getScene());
@@ -61,7 +62,7 @@ public class StartDemo extends Application {
         // Secondary stage
         List<Person> persons = new ArrayList<Person>();
         persons.add(tiziano);
-        ZoeScene personsScene = ZoeSceneBuilder.create().url(StartDemo.class.getResource("/com/axiastudio/zoefx/demo/persons.fxml"))
+        ZScene personsScene = ZSceneBuilder.create().url(StartDemo.class.getResource("/com/axiastudio/zoefx/demo/persons.fxml"))
                 .controller(new FXController()).dataset(new DataSet<Person>(persons)).build();
         Stage personsStage = new Stage();
         personsStage.setTitle("Zoe FX Framework - Persons");
@@ -72,7 +73,7 @@ public class StartDemo extends Application {
         List<Author> authors = new ArrayList<Author>();
         authors.add(lev);
         authors.add(marquez);
-        ZoeScene authorsScene = ZoeSceneBuilder.create().url(StartDemo.class.getResource("/com/axiastudio/zoefx/demo/authors.fxml"))
+        ZScene authorsScene = ZSceneBuilder.create().url(StartDemo.class.getResource("/com/axiastudio/zoefx/demo/authors.fxml"))
                 .controller(new FXController()).dataset(new DataSet<Author>(authors)).build();
         Stage authorsStage = new Stage();
         authorsStage.setTitle("Zoe FX Framework - Authors");

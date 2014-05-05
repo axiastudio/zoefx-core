@@ -15,7 +15,7 @@ import java.util.Map;
  * Date: 20/03/14
  * Time: 23:10
  */
-public class ZoeToolBar extends ToolBar {
+public class ZToolBar extends ToolBar {
 
     private FXController controller;
     private Map<String, Button> buttons = new HashMap<String, Button>();
@@ -26,7 +26,7 @@ public class ZoeToolBar extends ToolBar {
     private SimpleBooleanProperty isBOF = new SimpleBooleanProperty(false);
     private SimpleBooleanProperty isEOF = new SimpleBooleanProperty(false);
 
-    public ZoeToolBar() {
+    public ZToolBar() {
         this.setId("navigationBar");
         initNavBar();
     }
