@@ -280,7 +280,7 @@ public class FXController extends BaseController {
             console.setController(self());
 
             Stage stage = new Stage();
-            stage.setTitle("Zoe FX SCript Console");
+            stage.setTitle("Zoe FX Script Console");
             stage.setScene(new Scene(root, 450, 450));
             stage.show();
         }
