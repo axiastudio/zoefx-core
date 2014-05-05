@@ -4,6 +4,7 @@ import com.axiastudio.zoefx.core.beans.BeanAccess;
 import javafx.beans.property.Property;
 import javafx.util.Callback;
 
+import java.math.BigDecimal;
 import java.util.Collection;
 import java.util.Date;
 
@@ -65,10 +66,29 @@ public class ItemPropertyBuilder<T> {
                 item.setFromStringFunction(new Callback<String, Integer>() {
                     @Override
                     public Integer call(String s) {
-                        if( s== null ){
+                        if( s == null ){
                             return null;
                         }
                         return Integer.parseInt(s);
+                    }
+                });
+                return item;
+            } else if( BigDecimal.class.isAssignableFrom(fieldType) ) {
+                // BigDecimal field -> String property
+                ItemStringProperty<BigDecimal> item = new ItemStringProperty(beanAccess);
+                item.setToStringFunction(new Callback<BigDecimal, String>() {
+                    @Override
+                    public String call(BigDecimal i) {
+                        return i.toString();
+                    }
+                });
+                item.setFromStringFunction(new Callback<String, BigDecimal>() {
+                    @Override
+                    public BigDecimal call(String s) {
+                        if( s == null ){
+                            return null;
+                        }
+                        return new BigDecimal(s);
                     }
                 });
                 return item;
