@@ -24,7 +24,13 @@ public class DataSet<E> {
     public DataSet(List<E> store) {
         this.store = store;
         goFirst();
+    }
 
+    public void setStore(List<E> store) {
+        this.store = store;
+        goFirst();
+        changes.clear();
+        dirty = Boolean.FALSE;
     }
 
     public Integer getCurrentIndex() {
