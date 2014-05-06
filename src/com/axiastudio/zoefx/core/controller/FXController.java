@@ -147,6 +147,7 @@ public class FXController extends BaseController {
                 rightProperty = model.getProperty(name, Date.class);
             } else if( node instanceof TableView ){
                 TableView tableView = (TableView) node;
+                tableView.setContextMenu(createContextMenu(tableView));
                 leftProperty = tableView.itemsProperty();
                 rightProperty = model.getProperty(name, Collection.class);
             }
@@ -160,6 +161,39 @@ public class FXController extends BaseController {
                 }
             }
         }
+    }
+
+    private ContextMenu createContextMenu(TableView tableView){
+        ContextMenu contextMenu = new ContextMenu();
+
+        MenuItem infoItem = new MenuItem("Information");
+        infoItem.setOnAction(new EventHandler<ActionEvent>() {
+            public void handle(ActionEvent e) {
+                ObservableList selectedItems = tableView.getSelectionModel().getSelectedItems();
+                System.out.println(selectedItems);
+            }
+        });
+        MenuItem openItem = new MenuItem("Open");
+        openItem.setOnAction(new EventHandler<ActionEvent>() {
+            public void handle(ActionEvent e) {
+                System.out.println("Open!");
+            }
+        });
+        MenuItem addItem = new MenuItem("Add");
+        addItem.setOnAction(new EventHandler<ActionEvent>() {
+            public void handle(ActionEvent e) {
+                System.out.println("Add!");
+            }
+        });
+        MenuItem delItem = new MenuItem("Delete");
+        delItem.setOnAction(new EventHandler<ActionEvent>() {
+            public void handle(ActionEvent e) {
+                System.out.println("Delete!");
+            }
+        });
+
+        contextMenu.getItems().addAll(infoItem, openItem, addItem, delItem);
+        return contextMenu;
     }
 
     private List<Node> findNodes( Pane container, List<Node> nodes ){
