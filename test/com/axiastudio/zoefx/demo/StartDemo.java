@@ -7,7 +7,6 @@ import com.axiastudio.zoefx.core.validators.Validators;
 import com.axiastudio.zoefx.core.db.DataSet;
 import com.axiastudio.zoefx.core.view.ZScene;
 import com.axiastudio.zoefx.core.view.ZSceneBuilder;
-import com.axiastudio.zoefx.core.view.ZSceneBuilder;
 import javafx.application.Application;
 import javafx.stage.Stage;
 
