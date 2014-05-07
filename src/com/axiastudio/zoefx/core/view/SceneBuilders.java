@@ -7,9 +7,9 @@ import java.util.HashMap;
  * Date: 07/05/14
  * Time: 08:37
  */
-public class Forms {
+public class SceneBuilders {
 
-    private static HashMap<Class, ZSceneBuilder> forms = new HashMap<>();
+    private static HashMap<Class, ZSceneBuilder> scenebuilders = new HashMap<>();
 
     /**
      * Registers the scene builder for the given entity class.
@@ -19,7 +19,7 @@ public class Forms {
      *
      */
     public static void registerForm(Class entityClass, ZSceneBuilder builder){
-        Forms.forms.put(entityClass, builder);
+        SceneBuilders.scenebuilders.put(entityClass, builder);
     }
 
     /**
@@ -30,6 +30,6 @@ public class Forms {
      *
      */
     public static ZSceneBuilder queryForm(Class entityClass){
-        return Forms.forms.get(entityClass);
+        return SceneBuilders.scenebuilders.get(entityClass);
     }
 }

@@ -173,7 +173,7 @@ public class FXController extends BaseController {
                 if( selectedItems.size()==0 ) {
                     return;
                 }
-                ZSceneBuilder sceneBuilder = Forms.queryForm(selectedItems.get(0).getClass());
+                ZSceneBuilder sceneBuilder = SceneBuilders.queryForm(selectedItems.get(0).getClass());
                 FXController controller = Controllers.queryController(sceneBuilder);
                 List<Object> newStore = new ArrayList<>();
                 for( int i=0; i<selectedItems.size(); i++ ) {
