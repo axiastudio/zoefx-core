@@ -6,9 +6,8 @@ import com.axiastudio.zoefx.core.listeners.TextFieldListener;
 import com.axiastudio.zoefx.core.validators.Validator;
 import com.axiastudio.zoefx.core.validators.Validators;
 import com.axiastudio.zoefx.core.db.DataSet;
-import com.axiastudio.zoefx.core.view.Model;
+import com.axiastudio.zoefx.core.view.*;
 import com.axiastudio.zoefx.core.console.ConsoleController;
-import com.axiastudio.zoefx.core.view.ZToolBar;
 import javafx.beans.binding.Bindings;
 import javafx.beans.property.Property;
 import javafx.beans.value.ChangeListener;
@@ -147,6 +146,7 @@ public class FXController extends BaseController {
                 rightProperty = model.getProperty(name, Date.class);
             } else if( node instanceof TableView ){
                 TableView tableView = (TableView) node;
+                tableView.getSelectionModel().setSelectionMode(SelectionMode.MULTIPLE);
                 tableView.setContextMenu(createContextMenu(tableView));
                 leftProperty = tableView.itemsProperty();
                 rightProperty = model.getProperty(name, Collection.class);
@@ -170,7 +170,19 @@ public class FXController extends BaseController {
         infoItem.setOnAction(new EventHandler<ActionEvent>() {
             public void handle(ActionEvent e) {
                 ObservableList selectedItems = tableView.getSelectionModel().getSelectedItems();
-                System.out.println(selectedItems);
+                if( selectedItems.size()==0 ) {
+                    return;
+                }
+                ZSceneBuilder sceneBuilder = Forms.queryForm(selectedItems.get(0).getClass());
+                List<Object> newStore = new ArrayList<>();
+                for( int i=0; i<selectedItems.size(); i++ ) {
+                    newStore.add(selectedItems.get(i));
+                }
+                DataSet<Object> newDataset = new DataSet<>(newStore);
+                ZScene newScene = sceneBuilder.dataset(newDataset).controller(new FXController()).build();
+                Stage newStage = new Stage();
+                newStage.setScene(newScene.getScene());
+                newStage.show();
             }
         });
         MenuItem openItem = new MenuItem("Open");
