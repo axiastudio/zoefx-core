@@ -13,6 +13,7 @@ import javafx.beans.property.Property;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
+import javafx.collections.ListChangeListener;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
@@ -75,6 +76,7 @@ public class FXController extends BaseController {
                     // https://javafx-jira.kenai.com/browse/RT-36633
                     Callback callback = model.getCallback(name, columnId);
                     column.setCellValueFactory(callback);
+                    //tableView.getItems().addListener(listChangeListener);
                 }
             }
         }
@@ -192,7 +194,10 @@ public class FXController extends BaseController {
         MenuItem addItem = new MenuItem("Add");
         addItem.setOnAction(new EventHandler<ActionEvent>() {
             public void handle(ActionEvent e) {
-                System.out.println("Add!");
+                dataset.create(tableView.getId());
+                refreshModel();
+                dataset.getDirty();
+                refreshNavBar();
             }
         });
         MenuItem delItem = new MenuItem("Delete");
@@ -346,6 +351,16 @@ public class FXController extends BaseController {
             refreshNavBar();
         }
     };
+
+    /*
+    public ListChangeListener listChangeListener = new ListChangeListener() {
+        @Override
+        public void onChanged(Change change) {
+            // TODO
+            System.out.println("ListChangeListener");
+        }
+    };
+    */
 
 
 }

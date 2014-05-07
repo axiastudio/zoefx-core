@@ -1,9 +1,11 @@
 package com.axiastudio.zoefx.core.db;
 
 import com.axiastudio.zoefx.core.Utilities;
+import com.axiastudio.zoefx.core.beans.BeanAccess;
 import com.axiastudio.zoefx.core.view.Model;
 import javafx.beans.property.Property;
 
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -126,6 +128,28 @@ public class DataSet<E> {
             }
         }
         goLast();
+    }
+
+    public void create(String name) {
+        Database db = Utilities.queryUtility(Database.class);
+        E entity = store.get(currentIndex);
+        BeanAccess<Collection> beanAccess = new BeanAccess<Collection>(entity, name);
+        Collection collection = beanAccess.getValue();
+        Class<?> genericReturnType = beanAccess.getGenericReturnType();
+        if( db != null ) {
+            Manager<?> manager = db.createManager(genericReturnType);
+            Object o = manager.create();
+            collection.add(o);
+        } else {
+            try {
+                Object o = genericReturnType.newInstance();
+                collection.add(o);
+            } catch (InstantiationException e) {
+                e.printStackTrace();
+            } catch (IllegalAccessException e) {
+                e.printStackTrace();
+            }
+        }
     }
 
     public void delete() {
