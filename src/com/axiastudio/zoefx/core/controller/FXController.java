@@ -174,12 +174,13 @@ public class FXController extends BaseController {
                     return;
                 }
                 ZSceneBuilder sceneBuilder = Forms.queryForm(selectedItems.get(0).getClass());
+                FXController controller = Controllers.queryController(sceneBuilder);
                 List<Object> newStore = new ArrayList<>();
                 for( int i=0; i<selectedItems.size(); i++ ) {
                     newStore.add(selectedItems.get(i));
                 }
                 DataSet<Object> newDataset = new DataSet<>(newStore);
-                ZScene newScene = sceneBuilder.dataset(newDataset).controller(new FXController()).build();
+                ZScene newScene = sceneBuilder.dataset(newDataset).controller(controller).build();
                 Stage newStage = new Stage();
                 newStage.setScene(newScene.getScene());
                 newStage.show();
