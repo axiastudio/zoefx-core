@@ -173,14 +173,11 @@ public class FXController extends BaseController {
                 if( selectedItems.size()==0 ) {
                     return;
                 }
-                ZSceneBuilder sceneBuilder = SceneBuilders.queryForm(selectedItems.get(0).getClass());
-                FXController controller = Controllers.queryController(sceneBuilder);
                 List<Object> newStore = new ArrayList<>();
                 for( int i=0; i<selectedItems.size(); i++ ) {
                     newStore.add(selectedItems.get(i));
                 }
-                DataSet<Object> newDataset = new DataSet<>(newStore);
-                ZScene newScene = sceneBuilder.dataset(newDataset).controller(controller).build();
+                ZScene newScene = SceneBuilders.queryZScene(newStore);
                 Stage newStage = new Stage();
                 newStage.setScene(newScene.getScene());
                 newStage.show();
@@ -208,6 +205,8 @@ public class FXController extends BaseController {
         contextMenu.getItems().addAll(infoItem, openItem, addItem, delItem);
         return contextMenu;
     }
+
+
 
     private List<Node> findNodes( Pane container, List<Node> nodes ){
         for( Node node: container.getChildren() ){
