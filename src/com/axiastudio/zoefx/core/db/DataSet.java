@@ -20,7 +20,7 @@ public class DataSet<E> {
     private List<E> store;
     private Integer currentIndex;
     private Model<E> currentModel=null;
-    private Map<Property, Object> changes = new HashMap();
+    private Map<Property, Object> olds = new HashMap();
     private Boolean dirty=Boolean.FALSE;
 
     public DataSet(List<E> store) {
@@ -31,7 +31,7 @@ public class DataSet<E> {
     public void setStore(List<E> store) {
         this.store = store;
         goFirst();
-        changes.clear();
+        olds.clear();
         dirty = Boolean.FALSE;
     }
 
@@ -81,18 +81,17 @@ public class DataSet<E> {
         dirty = Boolean.TRUE;
     }
 
-    public void addChange(Property property, Object oldValue, Object newValue){
-        if( !changes.keySet().contains(property) ){
-            changes.put(property, oldValue);
-            getDirty();
+    public void putOldValue(Property property, Object oldValue){
+        if( !olds.keySet().contains(property) ){
+            olds.put(property, oldValue);
         }
     }
 
     public void revert() {
-        for( Property property: changes.keySet() ){
-            property.setValue(changes.get(property));
+        for( Property property: olds.keySet() ){
+            property.setValue(olds.get(property));
         }
-        changes.clear();
+        olds.clear();
         dirty = Boolean.FALSE;
     }
 
@@ -103,7 +102,7 @@ public class DataSet<E> {
             E entity = store.get(currentIndex);
             manager.commit(entity);
         }
-        changes.clear();
+        olds.clear();
         dirty = Boolean.FALSE;
     }
 
