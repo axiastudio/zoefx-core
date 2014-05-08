@@ -1,9 +1,11 @@
 package com.axiastudio.zoefx.core.db;
 
 import com.axiastudio.zoefx.core.Utilities;
+import com.axiastudio.zoefx.core.beans.BeanAccess;
 import com.axiastudio.zoefx.core.view.Model;
 import javafx.beans.property.Property;
 
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -18,7 +20,7 @@ public class DataSet<E> {
     private List<E> store;
     private Integer currentIndex;
     private Model<E> currentModel=null;
-    private Map<Property, Object> changes = new HashMap();
+    private Map<Property, Object> olds = new HashMap();
     private Boolean dirty=Boolean.FALSE;
 
     public DataSet(List<E> store) {
@@ -29,7 +31,7 @@ public class DataSet<E> {
     public void setStore(List<E> store) {
         this.store = store;
         goFirst();
-        changes.clear();
+        olds.clear();
         dirty = Boolean.FALSE;
     }
 
@@ -79,18 +81,17 @@ public class DataSet<E> {
         dirty = Boolean.TRUE;
     }
 
-    public void addChange(Property property, Object oldValue, Object newValue){
-        if( !changes.keySet().contains(property) ){
-            changes.put(property, oldValue);
-            getDirty();
+    public void putOldValue(Property property, Object oldValue){
+        if( !olds.keySet().contains(property) ){
+            olds.put(property, oldValue);
         }
     }
 
     public void revert() {
-        for( Property property: changes.keySet() ){
-            property.setValue(changes.get(property));
+        for( Property property: olds.keySet() ){
+            property.setValue(olds.get(property));
         }
-        changes.clear();
+        olds.clear();
         dirty = Boolean.FALSE;
     }
 
@@ -101,7 +102,7 @@ public class DataSet<E> {
             E entity = store.get(currentIndex);
             manager.commit(entity);
         }
-        changes.clear();
+        olds.clear();
         dirty = Boolean.FALSE;
     }
 
@@ -126,6 +127,28 @@ public class DataSet<E> {
             }
         }
         goLast();
+    }
+
+    public void create(String name) {
+        Database db = Utilities.queryUtility(Database.class);
+        E entity = store.get(currentIndex);
+        BeanAccess<Collection> beanAccess = new BeanAccess<Collection>(entity, name);
+        Collection collection = beanAccess.getValue();
+        Class<?> genericReturnType = beanAccess.getGenericReturnType();
+        if( db != null ) {
+            Manager<?> manager = db.createManager(genericReturnType);
+            Object o = manager.create();
+            collection.add(o);
+        } else {
+            try {
+                Object o = genericReturnType.newInstance();
+                collection.add(o);
+            } catch (InstantiationException e) {
+                e.printStackTrace();
+            } catch (IllegalAccessException e) {
+                e.printStackTrace();
+            }
+        }
     }
 
     public void delete() {

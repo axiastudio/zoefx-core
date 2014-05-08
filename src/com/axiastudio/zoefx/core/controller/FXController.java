@@ -8,10 +8,10 @@ import com.axiastudio.zoefx.core.validators.Validators;
 import com.axiastudio.zoefx.core.db.DataSet;
 import com.axiastudio.zoefx.core.view.*;
 import com.axiastudio.zoefx.core.console.ConsoleController;
+import javafx.beans.*;
+import javafx.beans.Observable;
 import javafx.beans.binding.Bindings;
 import javafx.beans.property.Property;
-import javafx.beans.value.ChangeListener;
-import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
@@ -75,6 +75,7 @@ public class FXController extends BaseController {
                     // https://javafx-jira.kenai.com/browse/RT-36633
                     Callback callback = model.getCallback(name, columnId);
                     column.setCellValueFactory(callback);
+                    //tableView.getItems().addListener(listChangeListener);
                 }
             }
         }
@@ -154,11 +155,12 @@ public class FXController extends BaseController {
             if( rightProperty != null && leftProperty != null) {
                 if( isSet ) {
                     Bindings.bindBidirectional(leftProperty, rightProperty);
-                    leftProperty.addListener(changeListener);
+                    leftProperty.addListener(invalidationListener);
                 } else {
                     Bindings.unbindBidirectional(leftProperty, rightProperty);
-                    leftProperty.removeListener(changeListener);
+                    leftProperty.removeListener(invalidationListener);
                 }
+                dataset.putOldValue(leftProperty, leftProperty.getValue());
             }
         }
     }
@@ -192,7 +194,10 @@ public class FXController extends BaseController {
         MenuItem addItem = new MenuItem("Add");
         addItem.setOnAction(new EventHandler<ActionEvent>() {
             public void handle(ActionEvent e) {
-                System.out.println("Add!");
+                dataset.create(tableView.getId());
+                refreshModel();
+                dataset.getDirty();
+                refreshNavBar();
             }
         });
         MenuItem delItem = new MenuItem("Delete");
@@ -339,10 +344,10 @@ public class FXController extends BaseController {
      *  Listeners
      */
 
-    public ChangeListener changeListener = new ChangeListener() {
+    public InvalidationListener invalidationListener = new InvalidationListener() {
         @Override
-        public void changed(ObservableValue observable, Object oldValue, Object newValue) {
-            dataset.addChange((Property) observable, oldValue, newValue);
+        public void invalidated(Observable observable) {
+            dataset.getDirty();
             refreshNavBar();
         }
     };
