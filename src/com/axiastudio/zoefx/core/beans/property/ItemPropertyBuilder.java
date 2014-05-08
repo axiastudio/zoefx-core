@@ -5,8 +5,13 @@ import javafx.beans.property.Property;
 import javafx.util.Callback;
 
 import java.math.BigDecimal;
+import java.text.DecimalFormat;
+import java.text.NumberFormat;
+import java.text.ParseException;
+import java.text.ParsePosition;
 import java.util.Collection;
 import java.util.Date;
+import java.util.Locale;
 
 /**
  * User: tiziano
@@ -79,7 +84,8 @@ public class ItemPropertyBuilder<T> {
                 item.setToStringFunction(new Callback<BigDecimal, String>() {
                     @Override
                     public String call(BigDecimal i) {
-                        return i.toString();
+                        NumberFormat numberFormat = NumberFormat.getCurrencyInstance();
+                        return numberFormat.format(i);
                     }
                 });
                 item.setFromStringFunction(new Callback<String, BigDecimal>() {
@@ -88,7 +94,22 @@ public class ItemPropertyBuilder<T> {
                         if( s == null ){
                             return null;
                         }
-                        return new BigDecimal(s);
+                        NumberFormat numberFormat = NumberFormat.getCurrencyInstance();
+                        try {
+                            Number number = numberFormat.parse(s);
+                            if( number instanceof Double ) {
+                                // es. "€ 12,99"
+                                return new BigDecimal((Double) number);
+                            } else if( number instanceof Long ) {
+                                // es. "€ 12"
+                                return new BigDecimal((Long) number);
+                            }
+                        } catch (ParseException e) {
+                            return null;
+                        } catch (ClassCastException e) {
+                            return null;
+                        }
+                        return null;
                     }
                 });
                 return item;
