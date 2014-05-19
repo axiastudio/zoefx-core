@@ -24,6 +24,7 @@ public class ZSceneBuilder {
     private BaseController controller=null;
     private Integer width=500;
     private Integer height=375;
+    private ZSceneMode mode=ZSceneMode.WINDOW;
 
     public ZSceneBuilder() {
     }
@@ -80,6 +81,7 @@ public class ZSceneBuilder {
         zScene.setScene(scene);
         if( controller instanceof FXController ) {
             FXController fxController = (FXController) controller;
+            fxController.setMode(mode);
             ZToolBar toolBar = new ZToolBar();
             Pane pane = (Pane) root;
             pane.getChildren().add(toolBar);
