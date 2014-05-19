@@ -75,15 +75,22 @@ public class SceneBuilders {
      * Query the ZScene for the given store.
      *
      * @param store The store
+     * @param mode is the ZScene mode (Window or dialog)
      * @return  The ZScene
      *
      */
-    public static ZScene queryZScene(List<Object> store) {
-        ZSceneBuilder sceneBuilder = SceneBuilders.querySceneBuilder(store);
-        FXController controller = Controllers.queryController(sceneBuilder);
+    public static ZScene queryZScene(List<Object> store, ZSceneMode mode) {
+        ZSceneBuilder zsb = SceneBuilders.querySceneBuilder(store);
+        FXController controller = Controllers.queryController(zsb);
         DataSet<Object> dataSet = new DataSet<>(store);
-        ZScene zScene = sceneBuilder.dataset(dataSet).controller(controller).build();
+        zsb = zsb.dataset(dataSet);
+        zsb = zsb.controller(controller);
+        zsb.mode(ZSceneMode.DIALOG);
+        ZScene zScene = zsb.build();
         return zScene;
+    }
+    public static ZScene queryZScene(List<Object> store) {
+        return queryZScene(store, ZSceneMode.WINDOW);
     }
 
 }

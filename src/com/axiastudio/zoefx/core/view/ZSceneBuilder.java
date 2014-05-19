@@ -57,6 +57,11 @@ public class ZSceneBuilder {
         return this;
     }
 
+    public ZSceneBuilder mode(ZSceneMode mode){
+        this.mode = mode;
+        return this;
+    }
+
     public ZScene build(){
         FXMLLoader loader = new FXMLLoader();
         loader.setLocation(url);

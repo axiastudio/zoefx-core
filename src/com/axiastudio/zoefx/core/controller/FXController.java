@@ -38,7 +38,8 @@ import java.util.*;
 public class FXController extends BaseController {
 
     private Scene scene;
-    private DataSet dataset =null;
+    private DataSet dataset = null;
+    private ZSceneMode mode;
 
 
     @Override
@@ -179,7 +180,7 @@ public class FXController extends BaseController {
                 for( int i=0; i<selectedItems.size(); i++ ) {
                     newStore.add(selectedItems.get(i));
                 }
-                ZScene newScene = SceneBuilders.queryZScene(newStore);
+                ZScene newScene = SceneBuilders.queryZScene(newStore, ZSceneMode.DIALOG);
                 Stage newStage = new Stage();
                 newStage.setScene(newScene.getScene());
                 newStage.show();
@@ -245,6 +246,13 @@ public class FXController extends BaseController {
         return this;
     }
 
+    public ZSceneMode getMode() {
+        return mode;
+    }
+
+    public void setMode(ZSceneMode mode) {
+        this.mode = mode;
+    }
 
     /*
      *  Navigation Bar
