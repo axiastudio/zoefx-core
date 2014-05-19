@@ -12,7 +12,7 @@ import java.util.Collection;
  * Date: 07/04/14
  * Time: 17:22
  */
-public class ItemListProperty<E> extends ListPropertyBase<E> {
+public class ItemListProperty<E> extends ListPropertyBase<E> implements ZoeFXProperty<ObservableList<E>> {
 
     private BeanAccess<E> beanAccess;
 
@@ -37,6 +37,12 @@ public class ItemListProperty<E> extends ListPropertyBase<E> {
 
     @Override
     public void set(ObservableList es) {
+        System.out.println("--");
         //beanProperty.setValue(s);
+    }
+
+    @Override
+    public void refresh() {
+        fireValueChangedEvent();
     }
 }

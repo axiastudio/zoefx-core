@@ -9,7 +9,7 @@ import javafx.beans.property.StringPropertyBase;
  * Date: 21/03/14
  * Time: 12:51
  */
-public class ItemIntegerProperty extends StringPropertyBase {
+public class ItemIntegerProperty extends StringPropertyBase implements ZoeFXProperty<String> {
 
     private BeanAccess<Integer> beanAccess;
 
@@ -35,5 +35,10 @@ public class ItemIntegerProperty extends StringPropertyBase {
     @Override
     public void set(String s) {
         beanAccess.setValue(Integer.parseInt(s));
+    }
+
+    @Override
+    public void refresh() {
+        fireValueChangedEvent();
     }
 }

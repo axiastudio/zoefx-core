@@ -1,17 +1,13 @@
 package com.axiastudio.zoefx.core.beans.property;
 
 import com.axiastudio.zoefx.core.beans.BeanAccess;
-import javafx.beans.property.Property;
 import javafx.util.Callback;
 
 import java.math.BigDecimal;
-import java.text.DecimalFormat;
 import java.text.NumberFormat;
 import java.text.ParseException;
-import java.text.ParsePosition;
 import java.util.Collection;
 import java.util.Date;
-import java.util.Locale;
 
 /**
  * User: tiziano
@@ -27,9 +23,11 @@ public class ItemPropertyBuilder<T> {
     public ItemPropertyBuilder() {
     }
 
+    /*
     public static ItemPropertyBuilder create(){
         return new ItemPropertyBuilder();
     }
+    */
 
     public static <T> ItemPropertyBuilder<T> create(Class<? extends T> klass){
         ItemPropertyBuilder<T> itemPropertyBuilder = new ItemPropertyBuilder<T>();
@@ -47,7 +45,7 @@ public class ItemPropertyBuilder<T> {
         return this;
     }
 
-    public Property build(){
+    public ZoeFXProperty build(){
         BeanAccess beanAccess = new BeanAccess(bean, name);
         Class<?> fieldType = beanAccess.getReturnType();
         if( fieldType == null || propertyClass == null ){

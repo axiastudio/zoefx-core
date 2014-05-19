@@ -22,9 +22,9 @@ public class ItemPropertyBuilderTest {
     public void test() throws Exception {
 
         Book book = new Book();
-        book.title = "";
+        book.title = "to compile";
 
-        Property titleProperty = ItemPropertyBuilder.create().bean(book).field("title").build();
+        Property titleProperty = ItemPropertyBuilder.create(String.class).bean(book).field("title").build();
 
         String aString="";
         SimpleStringProperty simpleStringProperty = new SimpleStringProperty(aString);
@@ -32,8 +32,30 @@ public class ItemPropertyBuilderTest {
         titleProperty.bindBidirectional(simpleStringProperty);
 
         simpleStringProperty.set("Anna Karenina");
+        //titleProperty.setValue("Anna Karenina");
+
+        System.out.println(simpleStringProperty.getValue());
+        System.out.println(book.title);
 
         assert simpleStringProperty.get().equals(titleProperty.getValue());
+
+    }
+
+    @Test
+    public void testSimpleOnSimple() throws Exception {
+        Book book = new Book();
+        book.title = null;
+
+        SimpleStringProperty leftProperty = new SimpleStringProperty(book.title);
+        SimpleStringProperty rightProperty = new SimpleStringProperty();
+
+        rightProperty.bindBidirectional(leftProperty);
+
+        System.out.println(rightProperty);
+        leftProperty.setValue("setValue");
+        System.out.println(rightProperty);
+        book.title = "book.title";
+        System.out.println(rightProperty);
 
     }
 }

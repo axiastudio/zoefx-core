@@ -15,7 +15,7 @@ import java.util.Date;
  * Date: 21/03/14
  * Time: 12:51
  */
-public class ItemDateProperty<P> extends ObjectPropertyBase {
+public class ItemDateProperty<P> extends ObjectPropertyBase implements ZoeFXProperty {
 
     private BeanAccess<P> beanAccess;
 
@@ -56,6 +56,11 @@ public class ItemDateProperty<P> extends ObjectPropertyBase {
         Instant instant = ((LocalDate) localDate).atStartOfDay().atZone(ZoneId.systemDefault()).toInstant();
         Date date = Date.from(instant);
         beanAccess.setValue(date);
+    }
+
+    @Override
+    public void refresh() {
+        fireValueChangedEvent();
     }
 
 }

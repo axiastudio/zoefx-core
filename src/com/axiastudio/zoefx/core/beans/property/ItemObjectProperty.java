@@ -15,7 +15,7 @@ import java.util.List;
  * Date: 21/03/14
  * Time: 12:51
  */
-public class ItemObjectProperty<P> extends ObjectPropertyBase {
+public class ItemObjectProperty<P> extends ObjectPropertyBase implements ZoeFXProperty {
 
     private BeanAccess<P> beanAccess;
 
@@ -62,5 +62,8 @@ public class ItemObjectProperty<P> extends ObjectPropertyBase {
         return superset;
     }
 
-
+    @Override
+    public void refresh() {
+        fireValueChangedEvent();
+    }
 }

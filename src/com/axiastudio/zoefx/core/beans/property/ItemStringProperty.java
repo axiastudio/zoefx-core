@@ -10,7 +10,7 @@ import javafx.util.Callback;
  * Date: 21/03/14
  * Time: 12:51
  */
-public class ItemStringProperty<P> extends StringPropertyBase {
+public class ItemStringProperty<P> extends StringPropertyBase implements ZoeFXProperty<String> {
 
     private BeanAccess<P> beanAccess;
     private Callback<P, String> toStringFunction =null;
@@ -58,4 +58,10 @@ public class ItemStringProperty<P> extends StringPropertyBase {
     public void setFromStringFunction(Callback<String, P> callback) {
         fromStringFuction = callback;
     }
+
+    @Override
+    public void refresh() {
+        fireValueChangedEvent();
+    }
+
 }

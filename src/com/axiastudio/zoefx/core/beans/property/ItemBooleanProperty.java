@@ -9,7 +9,7 @@ import javafx.beans.property.BooleanPropertyBase;
  * Date: 21/03/14
  * Time: 12:51
  */
-public class ItemBooleanProperty<P> extends BooleanPropertyBase {
+public class ItemBooleanProperty<P> extends BooleanPropertyBase implements ZoeFXProperty<Boolean> {
 
     private BeanAccess<P> beanAccess;
 
@@ -41,6 +41,11 @@ public class ItemBooleanProperty<P> extends BooleanPropertyBase {
     @Override
     public void set(boolean b) {
         beanAccess.setValue(b);
+    }
+
+    @Override
+    public void refresh() {
+        fireValueChangedEvent();
     }
 
 }

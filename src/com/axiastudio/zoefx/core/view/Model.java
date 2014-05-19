@@ -15,18 +15,25 @@ import java.util.Map;
 public class Model<E> {
 
     private E entity;
-    private Map<String, Property> propertiesCache = new HashMap();
+    private Map<String, ZoeFXProperty> propertiesCache = new HashMap();
     private Map<String, Callback> callbacksCache = new HashMap();
 
     public Model(E entity) {
         this.entity = entity;
     }
 
-    public Property getProperty(String name, Class<?> klass){
+    public ZoeFXProperty getProperty(String name){
         if( propertiesCache.containsKey(name) ){
             return propertiesCache.get(name);
         }
-        Property property = ItemPropertyBuilder.create(klass).bean(entity).field(name).build();
+        return null;
+    }
+
+    public ZoeFXProperty getProperty(String name, Class<?> klass){
+        if( propertiesCache.containsKey(name) ){
+            return propertiesCache.get(name);
+        }
+        ZoeFXProperty property = ItemPropertyBuilder.create(klass).bean(entity).field(name).build();
         propertiesCache.put(name, property);
         return property;
     }
@@ -43,5 +50,16 @@ public class Model<E> {
     public Class<? extends Object> getEntityClass() {
         return entity.getClass();
     }
+
+    public E getEntity() {
+        return entity;
+    }
+
+    //@Override
+    //protected void finalize() throws Throwable {
+    //    for( Property property: propertiesCache.values() ){
+    //        property.unbind();
+    //    }
+    //}
 
 }
