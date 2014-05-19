@@ -301,6 +301,12 @@ public class FXController extends BaseController {
             refreshNavBar();
         }
     };
+    public EventHandler<ActionEvent> handlerConfirm = new EventHandler<ActionEvent>() {
+        @Override
+        public void handle(ActionEvent e) {
+            ((Stage) scene.getWindow()).close();
+        }
+    };
     public EventHandler<ActionEvent> handlerCancel = new EventHandler<ActionEvent>() {
         @Override
         public void handle(ActionEvent e) {

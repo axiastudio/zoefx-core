@@ -28,7 +28,6 @@ public class ZToolBar extends ToolBar {
     private SimpleBooleanProperty isDirty = new SimpleBooleanProperty(false);
     private SimpleBooleanProperty isBOF = new SimpleBooleanProperty(false);
     private SimpleBooleanProperty isEOF = new SimpleBooleanProperty(false);
-    private SimpleBooleanProperty isDialog = new SimpleBooleanProperty(false);
 
     public ZToolBar() {
         this.setId("navigationBar");
@@ -66,7 +65,6 @@ public class ZToolBar extends ToolBar {
         buttons.get("last").setOnAction(this.controller.handlerGoLast);
 
         buttons.get("cancel").setOnAction(this.controller.handlerCancel);
-        buttons.get("save").setOnAction(this.controller.handlerSave);
         buttons.get("add").setOnAction(this.controller.handlerAdd);
 
         buttons.get("console").setOnAction(this.controller.handlerConsole);
@@ -80,12 +78,18 @@ public class ZToolBar extends ToolBar {
         buttons.get("cancel").disableProperty().bind(isDirty.not());
         buttons.get("save").disableProperty().bind(isDirty.not());
 
-        buttons.get("add").disableProperty().bind(isDirty.or(isDialog));
-        buttons.get("delete").disableProperty().bind(isDirty.or(isDialog));
 
-        // dialog icons
-        if( controller.getMode().equals(ZSceneMode.DIALOG) ){
+        // ZScene mode customs
+        if( controller.getMode().equals(ZSceneMode.WINDOW) ){
+            buttons.get("add").disableProperty().bind(isDirty);
+            buttons.get("delete").disableProperty().bind(isDirty);
+            buttons.get("save").setOnAction(this.controller.handlerSave);
+        }
+        else if( controller.getMode().equals(ZSceneMode.DIALOG) ){
+            buttons.get("add").disableProperty().bind(new SimpleBooleanProperty(true));
+            buttons.get("delete").disableProperty().bind(new SimpleBooleanProperty(true));
             buttons.get("save").setGraphic(new ImageView(new Image(getClass().getResourceAsStream("/com/axiastudio/zoefx/core/resources/checkmark.png"))));
+            buttons.get("save").setOnAction(this.controller.handlerConfirm);
         }
 
     }
@@ -105,9 +109,6 @@ public class ZToolBar extends ToolBar {
         // counter
         String text = (controller.getDataset().getCurrentIndex() + 1) + "/" + controller.getDataset().size();
         counterLabel.setText(text);
-
-        // ZScene mode
-        isDialog.setValue(controller.getMode().equals(ZSceneMode.DIALOG));
 
 
     }
