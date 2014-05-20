@@ -40,6 +40,7 @@ public class FXController extends BaseController {
     private Scene scene;
     private DataSet dataset = null;
     private ZSceneMode mode;
+    private Behavior behavior = null;
 
 
     @Override
@@ -252,6 +253,10 @@ public class FXController extends BaseController {
 
     public void setMode(ZSceneMode mode) {
         this.mode = mode;
+    }
+
+    public void setBehavior(Behavior behavior) {
+        this.behavior = behavior;
     }
 
     /*

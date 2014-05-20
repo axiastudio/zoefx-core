@@ -10,6 +10,7 @@ import javafx.scene.Scene;
 import javafx.scene.layout.Pane;
 
 import java.io.IOException;
+import java.io.InputStream;
 import java.net.URL;
 
 /**
@@ -22,6 +23,7 @@ public class ZSceneBuilder {
     private DataSet dataset;
     private URL url;
     private BaseController controller=null;
+    private InputStream propertiesStrem=null;
     private Integer width=500;
     private Integer height=375;
     private ZSceneMode mode=ZSceneMode.WINDOW;
@@ -31,6 +33,11 @@ public class ZSceneBuilder {
 
     public static ZSceneBuilder create() {
         return new ZSceneBuilder();
+    }
+
+    public ZSceneBuilder properties(InputStream stream){
+        propertiesStrem = stream;
+        return this;
     }
 
     public ZSceneBuilder dataset(DataSet dataset){
@@ -88,6 +95,10 @@ public class ZSceneBuilder {
             toolBar.setController(fxController);
             fxController.setScene(scene);
             fxController.bindDataSet(dataset);
+            if( propertiesStrem != null ){
+                Behavior behavior = new Behavior(propertiesStrem);
+                fxController.setBehavior(behavior);
+            }
         }
         return zScene;
     }
