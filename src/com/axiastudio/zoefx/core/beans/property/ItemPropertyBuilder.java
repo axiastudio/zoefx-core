@@ -18,6 +18,7 @@ public class ItemPropertyBuilder<T> {
 
     private Object bean;
     private String name;
+    private String lookup=null;
     private Class<? extends T> propertyClass;
 
     public ItemPropertyBuilder() {
@@ -42,6 +43,11 @@ public class ItemPropertyBuilder<T> {
 
     public ItemPropertyBuilder field(String name){
         this.name = name;
+        return this;
+    }
+
+    public ItemPropertyBuilder lookup(String lookup){
+        this.lookup = lookup;
         return this;
     }
 
@@ -108,6 +114,20 @@ public class ItemPropertyBuilder<T> {
                             return null;
                         }
                         return null;
+                    }
+                });
+                return item;
+            } else if( Object.class.isAssignableFrom(fieldType) ){
+                // Object field -> String property
+                ItemStringProperty<Object> item = new ItemStringProperty(beanAccess);
+                item.setToStringFunction(new Callback<Object, String>() {
+                    @Override
+                    public String call(Object o) {
+                        if( lookup != null ) {
+                            BeanAccess ba = new BeanAccess(o, lookup);
+                            return (String) ba.getValue();
+                        }
+                        return o.toString();
                     }
                 });
                 return item;

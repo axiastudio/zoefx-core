@@ -15,6 +15,7 @@ public class CallbackBuilder {
     private Object bean;
     private String collectionName;
     private String propertyName;
+    private String lookup=null;
 
 
     public CallbackBuilder() {
@@ -36,15 +37,24 @@ public class CallbackBuilder {
         return this;
     }
 
+    public CallbackBuilder lookup(String lookup){
+        this.lookup = lookup;
+        return this;
+    }
+
     public Callback build(){
         BeanClassAccess beanClassAccess = new BeanClassAccess(bean.getClass(), collectionName);
         Class<?> pClass = beanClassAccess.getGenericReturnType();
         BeanClassAccess beanPropertyClassAccess = new BeanClassAccess(pClass, propertyName);
         Class<?> tClass = beanPropertyClassAccess.getReturnType();
-        return createCallback(pClass, tClass, propertyName);
+        return createCallback(pClass, tClass, propertyName, lookup);
     }
 
     private <P, T> Callback<TableColumn.CellDataFeatures<P, T>, ObservableValue<T>> createCallback(Class<P> pClass, Class<T> tClass, String idColumn){
+        return createCallback(pClass, tClass, idColumn, null);
+    }
+
+    private <P, T> Callback<TableColumn.CellDataFeatures<P, T>, ObservableValue<T>> createCallback(Class<P> pClass, Class<T> tClass, String idColumn, String lookup){
 
         Callback<TableColumn.CellDataFeatures<P, T>, ObservableValue<T>> callback = new Callback<TableColumn.CellDataFeatures<P, T>, ObservableValue<T>>() {
 
@@ -52,7 +62,11 @@ public class CallbackBuilder {
             public ObservableValue<T> call(TableColumn.CellDataFeatures<P, T> prCellDataFeatures) {
                 P bean = prCellDataFeatures.getValue();
                 // TODO: not only String in cell!
-                ObservableValue<T> property = ItemPropertyBuilder.create(String.class).bean(bean).field(idColumn).build();
+                ItemPropertyBuilder ipb = ItemPropertyBuilder.create(String.class).bean(bean).field(idColumn);
+                if( lookup != null ){
+                    ipb = ipb.lookup(lookup);
+                }
+                ObservableValue<T> property = ipb.build();
                 return property;
             }
         };

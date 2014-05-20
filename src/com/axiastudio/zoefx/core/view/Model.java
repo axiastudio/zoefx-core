@@ -39,11 +39,19 @@ public class Model<E> {
     }
 
     public Callback getCallback(String name, String columnId) {
+        return getCallback(name, columnId, null);
+    }
+
+    public Callback getCallback(String name, String columnId, String lookup) {
         String key = name+"."+columnId;
         if( callbacksCache.containsKey(key) ){
             return callbacksCache.get(key);
         }
-        Callback callback = CallbackBuilder.create().bean(entity).property(key).build();
+        CallbackBuilder cb = CallbackBuilder.create().bean(entity).property(key);
+        if( lookup != null ){
+            cb = cb.lookup(lookup);
+        }
+        Callback callback = cb.build();
         return callback;
     }
 
@@ -55,11 +63,11 @@ public class Model<E> {
         return entity;
     }
 
-    //@Override
-    //protected void finalize() throws Throwable {
-    //    for( Property property: propertiesCache.values() ){
-    //        property.unbind();
-    //    }
-    //}
+    @Override
+    protected void finalize() throws Throwable {
+        for( Property property: propertiesCache.values() ){
+            property.unbind();
+        }
+    }
 
 }

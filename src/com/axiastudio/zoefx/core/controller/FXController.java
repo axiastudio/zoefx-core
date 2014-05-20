@@ -78,8 +78,17 @@ public class FXController extends BaseController {
                     //String columnId = column.getId();
                     String columnId = column.getText().toLowerCase(); // XXX: RT-36633 JavaXFX issue
                     // https://javafx-jira.kenai.com/browse/RT-36633
-                    Callback callback = model.getCallback(name, columnId);
-                    column.setCellValueFactory(callback);
+                    String lookup=null;
+                    if( behavior != null ) {
+                        lookup = behavior.getProperties().getProperty(columnId + ".lookup");
+                    }
+                    if( lookup != null ) {
+                        Callback callback = model.getCallback(name, columnId, lookup);
+                        column.setCellValueFactory(callback);
+                    } else {
+                        Callback callback = model.getCallback(name, columnId);
+                        column.setCellValueFactory(callback);
+                    }
                     //tableView.getItems().addListener(listChangeListener);
                 }
             }

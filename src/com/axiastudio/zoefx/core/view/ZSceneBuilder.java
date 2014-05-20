@@ -94,11 +94,11 @@ public class ZSceneBuilder {
             pane.getChildren().add(toolBar);
             toolBar.setController(fxController);
             fxController.setScene(scene);
-            fxController.bindDataSet(dataset);
             if( propertiesStrem != null ){
                 Behavior behavior = new Behavior(propertiesStrem);
                 fxController.setBehavior(behavior);
             }
+            fxController.bindDataSet(dataset);
         }
         return zScene;
     }
