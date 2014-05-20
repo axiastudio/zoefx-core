@@ -23,6 +23,8 @@ import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import javafx.scene.layout.Pane;
 import javafx.stage.Stage;
 import javafx.util.Callback;
@@ -173,6 +175,7 @@ public class FXController extends BaseController {
         ContextMenu contextMenu = new ContextMenu();
 
         MenuItem infoItem = new MenuItem("Information");
+        infoItem.setGraphic(new ImageView(new Image(getClass().getResourceAsStream("/com/axiastudio/zoefx/core/resources/info.png"))));
         infoItem.setOnAction(new EventHandler<ActionEvent>() {
             public void handle(ActionEvent e) {
                 ObservableList selectedItems = tableView.getSelectionModel().getSelectedItems();
@@ -192,33 +195,35 @@ public class FXController extends BaseController {
             }
         });
         MenuItem openItem = new MenuItem("Open");
-        openItem.setOnAction(new EventHandler<ActionEvent>() {
-            public void handle(ActionEvent e) {
-                ObservableList selectedItems = tableView.getSelectionModel().getSelectedItems();
-                if( selectedItems.size()==0 ) {
-                    return;
-                }
-                List<Object> newStore = new ArrayList<>();
-                String propertyName = tableView.getId() + ".reference";
-                String reference = behavior.getProperties().getProperty(propertyName, null);
-                for( int i=0; i<selectedItems.size(); i++ ) {
-                    Object item = selectedItems.get(i);
-                    if( reference != null ) {
-                        BeanAccess<Object> ba = new BeanAccess<>(item, reference);
-                        newStore.add(ba.getValue());
-                    } else {
-                        newStore.add(item);
+        openItem.setGraphic(new ImageView(new Image(getClass().getResourceAsStream("/com/axiastudio/zoefx/core/resources/open.png"))));
+                openItem.setOnAction(new EventHandler<ActionEvent>() {
+                    public void handle(ActionEvent e) {
+                        ObservableList selectedItems = tableView.getSelectionModel().getSelectedItems();
+                        if (selectedItems.size() == 0) {
+                            return;
+                        }
+                        List<Object> newStore = new ArrayList<>();
+                        String propertyName = tableView.getId() + ".reference";
+                        String reference = behavior.getProperties().getProperty(propertyName, null);
+                        for (int i = 0; i < selectedItems.size(); i++) {
+                            Object item = selectedItems.get(i);
+                            if (reference != null) {
+                                BeanAccess<Object> ba = new BeanAccess<>(item, reference);
+                                newStore.add(ba.getValue());
+                            } else {
+                                newStore.add(item);
+                            }
+                        }
+                        ZScene newScene = SceneBuilders.queryZScene(newStore, ZSceneMode.DIALOG);
+                        if (newScene != null) {
+                            Stage newStage = new Stage();
+                            newStage.setScene(newScene.getScene());
+                            newStage.show();
+                        }
                     }
-                }
-                ZScene newScene = SceneBuilders.queryZScene(newStore, ZSceneMode.DIALOG);
-                if( newScene != null ) {
-                    Stage newStage = new Stage();
-                    newStage.setScene(newScene.getScene());
-                    newStage.show();
-                }
-            }
-        });
+                });
         MenuItem addItem = new MenuItem("Add");
+        addItem.setGraphic(new ImageView(new Image(getClass().getResourceAsStream("/com/axiastudio/zoefx/core/resources/add.png"))));
         addItem.setOnAction(new EventHandler<ActionEvent>() {
             public void handle(ActionEvent e) {
                 dataset.create(tableView.getId());
@@ -228,6 +233,7 @@ public class FXController extends BaseController {
             }
         });
         MenuItem delItem = new MenuItem("Delete");
+        delItem.setGraphic(new ImageView(new Image(getClass().getResourceAsStream("/com/axiastudio/zoefx/core/resources/delete.png"))));
         delItem.setOnAction(new EventHandler<ActionEvent>() {
             public void handle(ActionEvent e) {
                 System.out.println("Delete!");
