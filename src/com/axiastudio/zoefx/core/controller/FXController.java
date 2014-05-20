@@ -1,5 +1,6 @@
 package com.axiastudio.zoefx.core.controller;
 
+import com.axiastudio.zoefx.core.beans.BeanAccess;
 import com.axiastudio.zoefx.core.beans.property.ItemObjectProperty;
 import com.axiastudio.zoefx.core.events.ModelEvent;
 import com.axiastudio.zoefx.core.listeners.TextFieldListener;
@@ -160,6 +161,7 @@ public class FXController extends BaseController {
                     leftProperty.addListener(invalidationListener);
                 } else {
                     Bindings.unbindBidirectional(leftProperty, rightProperty);
+                    //rightProperty.unbind();
                     leftProperty.removeListener(invalidationListener);
                 }
                 dataset.putOldValue(leftProperty, leftProperty.getValue());
@@ -182,15 +184,38 @@ public class FXController extends BaseController {
                     newStore.add(selectedItems.get(i));
                 }
                 ZScene newScene = SceneBuilders.queryZScene(newStore, ZSceneMode.DIALOG);
-                Stage newStage = new Stage();
-                newStage.setScene(newScene.getScene());
-                newStage.show();
+                if( newScene != null ) {
+                    Stage newStage = new Stage();
+                    newStage.setScene(newScene.getScene());
+                    newStage.show();
+                }
             }
         });
         MenuItem openItem = new MenuItem("Open");
         openItem.setOnAction(new EventHandler<ActionEvent>() {
             public void handle(ActionEvent e) {
-                System.out.println("Open!");
+                ObservableList selectedItems = tableView.getSelectionModel().getSelectedItems();
+                if( selectedItems.size()==0 ) {
+                    return;
+                }
+                List<Object> newStore = new ArrayList<>();
+                String propertyName = tableView.getId() + ".reference";
+                String reference = behavior.getProperties().getProperty(propertyName, null);
+                for( int i=0; i<selectedItems.size(); i++ ) {
+                    Object item = selectedItems.get(i);
+                    if( reference != null ) {
+                        BeanAccess<Object> ba = new BeanAccess<>(item, reference);
+                        newStore.add(ba.getValue());
+                    } else {
+                        newStore.add(item);
+                    }
+                }
+                ZScene newScene = SceneBuilders.queryZScene(newStore, ZSceneMode.DIALOG);
+                if( newScene != null ) {
+                    Stage newStage = new Stage();
+                    newStage.setScene(newScene.getScene());
+                    newStage.show();
+                }
             }
         });
         MenuItem addItem = new MenuItem("Add");
@@ -310,6 +335,7 @@ public class FXController extends BaseController {
         @Override
         public void handle(ActionEvent e) {
             ((Stage) scene.getWindow()).close();
+            // TODO: get the parent dirty
         }
     };
     public EventHandler<ActionEvent> handlerCancel = new EventHandler<ActionEvent>() {
@@ -370,6 +396,14 @@ public class FXController extends BaseController {
             refreshNavBar();
         }
     };
+
+
+    /*
+     *  fire Events
+     */
+    public void fireRefreshEvent(){
+        scene.getRoot().fireEvent(new ModelEvent(ModelEvent.REFRESH));
+    }
 
 
 }

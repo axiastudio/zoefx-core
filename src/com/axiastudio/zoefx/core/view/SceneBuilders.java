@@ -81,13 +81,16 @@ public class SceneBuilders {
      */
     public static ZScene queryZScene(List<Object> store, ZSceneMode mode) {
         ZSceneBuilder zsb = SceneBuilders.querySceneBuilder(store);
-        FXController controller = Controllers.queryController(zsb);
-        DataSet<Object> dataSet = new DataSet<>(store);
-        zsb = zsb.dataset(dataSet);
-        zsb = zsb.controller(controller);
-        zsb.mode(ZSceneMode.DIALOG);
-        ZScene zScene = zsb.build();
-        return zScene;
+        if( zsb != null ){
+            FXController controller = Controllers.queryController(zsb);
+            DataSet<Object> dataSet = new DataSet<>(store);
+            zsb = zsb.dataset(dataSet);
+            zsb = zsb.controller(controller);
+            zsb.mode(ZSceneMode.DIALOG);
+            ZScene zScene = zsb.build();
+            return zScene;
+        }
+        return null;
     }
     public static ZScene queryZScene(List<Object> store) {
         return queryZScene(store, ZSceneMode.WINDOW);
