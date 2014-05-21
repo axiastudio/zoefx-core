@@ -21,7 +21,7 @@ public class ZToolBar extends ToolBar {
 
     private FXController controller;
     private Map<String, Button> buttons = new HashMap<String, Button>();
-    private String[] buttonNames = {"first", "previous", "COUNTER", "next", "last", "save", "cancel", "add", "delete", "console"};
+    private String[] buttonNames = {"first", "previous", "COUNTER", "next", "last", "add", "delete", "save", "cancel", "refresh", "search", "info", "console"};
     private Label counterLabel;
 
     private SimpleBooleanProperty isOnlyOne = new SimpleBooleanProperty(false);
@@ -66,6 +66,8 @@ public class ZToolBar extends ToolBar {
 
         buttons.get("cancel").setOnAction(this.controller.handlerCancel);
         buttons.get("add").setOnAction(this.controller.handlerAdd);
+
+        buttons.get("search").setOnAction(this.controller.handlerSearch);
 
         buttons.get("console").setOnAction(this.controller.handlerConsole);
 

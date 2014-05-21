@@ -212,8 +212,8 @@ public class FXController extends BaseController {
                             return;
                         }
                         List<Object> newStore = new ArrayList<>();
-                        String propertyName = tableView.getId() + ".reference";
-                        String reference = behavior.getProperties().getProperty(propertyName, null);
+                        String referenceProperty = tableView.getId() + ".reference";
+                        String reference = behavior.getProperties().getProperty(referenceProperty, null);
                         for (int i = 0; i < selectedItems.size(); i++) {
                             Object item = selectedItems.get(i);
                             if (reference != null) {
@@ -235,7 +235,14 @@ public class FXController extends BaseController {
         addItem.setGraphic(new ImageView(new Image(getClass().getResourceAsStream("/com/axiastudio/zoefx/core/resources/add.png"))));
         addItem.setOnAction(new EventHandler<ActionEvent>() {
             public void handle(ActionEvent e) {
-                dataset.create(tableView.getId());
+                String referenceProperty = tableView.getId() + ".reference";
+                String reference = behavior.getProperties().getProperty(referenceProperty, null);
+                if (reference != null) {
+                    System.out.println("Search and select " + referenceProperty);
+                    dataset.create(tableView.getId());
+                } else {
+                    dataset.create(tableView.getId());
+                }
                 refreshModel();
                 dataset.getDirty();
                 refreshNavBar();
@@ -366,6 +373,12 @@ public class FXController extends BaseController {
             dataset.create();
             refreshModel();
             refreshNavBar();
+        }
+    };
+    public EventHandler<ActionEvent> handlerSearch = new EventHandler<ActionEvent>() {
+        @Override
+        public void handle(ActionEvent e) {
+            
         }
     };
     public EventHandler<ActionEvent> handlerDelete = new EventHandler<ActionEvent>() {
