@@ -12,9 +12,9 @@ import javafx.util.Callback;
  */
 public class CallbackBuilder {
 
-    private Object bean;
-    private String collectionName;
-    private String propertyName;
+    private Class beanClass;
+    private String collectionName=null;
+    private String fieldName =null;
     private String lookup=null;
 
 
@@ -25,29 +25,40 @@ public class CallbackBuilder {
         return new CallbackBuilder();
     }
 
-    public CallbackBuilder bean(Object bean){
-        this.bean = bean;
+    public CallbackBuilder beanClass(Class klass){
+        this.beanClass = klass; // es. Person
         return  this;
     }
 
-    public CallbackBuilder property(String name){
+    public CallbackBuilder field(String name){
         String[] split = name.split("\\.");
-        collectionName = split[0];
-        propertyName = split[1];
+        if( split.length == 1 ){
+            fieldName = split[0];
+            collectionName = null;
+        } else if( split.length == 2 ){
+            collectionName = split[0]; // ex. loans
+            fieldName = split[1]; // ex. book
+        }
         return this;
     }
 
     public CallbackBuilder lookup(String lookup){
-        this.lookup = lookup;
+        this.lookup = lookup; // ex. title -> Person.loans[i].book.title
         return this;
     }
 
     public Callback build(){
-        BeanClassAccess beanClassAccess = new BeanClassAccess(bean.getClass(), collectionName);
-        Class<?> pClass = beanClassAccess.getGenericReturnType();
-        BeanClassAccess beanPropertyClassAccess = new BeanClassAccess(pClass, propertyName);
+        Class<?> pClass;
+        if( collectionName != null ) {
+            BeanClassAccess beanClassAccess = new BeanClassAccess(beanClass, collectionName);
+            pClass = beanClassAccess.getGenericReturnType();
+        } else {
+            pClass = beanClass;
+
+        }
+        BeanClassAccess beanPropertyClassAccess = new BeanClassAccess(pClass, fieldName);
         Class<?> tClass = beanPropertyClassAccess.getReturnType();
-        return createCallback(pClass, tClass, propertyName, lookup);
+        return createCallback(pClass, tClass, fieldName, lookup);
     }
 
     private <P, T> Callback<TableColumn.CellDataFeatures<P, T>, ObservableValue<T>> createCallback(Class<P> pClass, Class<T> tClass, String idColumn){

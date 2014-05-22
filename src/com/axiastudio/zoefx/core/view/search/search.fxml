@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import java.lang.*?>
+<?import java.util.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.paint.*?>
+
+<SplitPane dividerPositions="0.5, 0.5" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" orientation="VERTICAL" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.axiastudio.zoefx.core.view.search.SearchController">
+   <items>
+      <TableView fx:id="results" prefHeight="200.0" prefWidth="200.0" />
+      <Accordion>
+        <panes>
+          <TitledPane animated="false" text="filters">
+               <content>
+                  <VBox fx:id="filterbox" prefHeight="200.0" prefWidth="100.0" />
+               </content>
+          </TitledPane>
+        </panes>
+      </Accordion>
+      <ToolBar prefHeight="40.0" prefWidth="200.0">
+        <items>
+          <Button fx:id="search" mnemonicParsing="false" onAction="#search" text="Search" />
+        </items>
+      </ToolBar>
+   </items>
+</SplitPane>

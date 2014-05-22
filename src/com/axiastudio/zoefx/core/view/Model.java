@@ -47,7 +47,7 @@ public class Model<E> {
         if( callbacksCache.containsKey(key) ){
             return callbacksCache.get(key);
         }
-        CallbackBuilder cb = CallbackBuilder.create().bean(entity).property(key);
+        CallbackBuilder cb = CallbackBuilder.create().beanClass(entity.getClass()).field(key);
         if( lookup != null ){
             cb = cb.lookup(lookup);
         }

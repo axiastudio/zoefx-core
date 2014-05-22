@@ -9,6 +9,7 @@ import com.axiastudio.zoefx.core.validators.Validators;
 import com.axiastudio.zoefx.core.db.DataSet;
 import com.axiastudio.zoefx.core.view.*;
 import com.axiastudio.zoefx.core.console.ConsoleController;
+import com.axiastudio.zoefx.core.view.search.SearchController;
 import javafx.beans.*;
 import javafx.beans.Observable;
 import javafx.beans.binding.Bindings;
@@ -378,7 +379,33 @@ public class FXController extends BaseController {
     public EventHandler<ActionEvent> handlerSearch = new EventHandler<ActionEvent>() {
         @Override
         public void handle(ActionEvent e) {
-            
+            URL url = getClass().getResource("/com/axiastudio/zoefx/core/view/search/search.fxml");
+            FXMLLoader loader = new FXMLLoader();
+            loader.setLocation(url);
+            loader.setBuilderFactory(new JavaFXBuilderFactory());
+            Parent root = null;
+            try {
+                root = loader.load(url.openStream());
+            } catch (IOException e1) {
+                e1.printStackTrace();
+            }
+
+            SearchController controller = loader.getController();
+            controller.setEntityClass(dataset.getCurrentModel().getEntityClass());
+            List<String> columns = new ArrayList<>();
+            String searchcolumns = behavior.getProperties().getProperty("searchcolumns");
+            if( searchcolumns != null ){
+                String[] split = searchcolumns.split(",");
+                for( int i=0; i<split.length; i++ ){
+                    columns.add(split[i]);
+                }
+            }
+            controller.setColumns(columns);
+
+            Stage stage = new Stage();
+            stage.setTitle("Search");
+            stage.setScene(new Scene(root, 450, 450));
+            stage.show();
         }
     };
     public EventHandler<ActionEvent> handlerDelete = new EventHandler<ActionEvent>() {
