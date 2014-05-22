@@ -21,6 +21,7 @@
       <ToolBar prefHeight="40.0" prefWidth="200.0">
         <items>
           <Button fx:id="search" mnemonicParsing="false" onAction="#search" text="Search" />
+            <Button fx:id="apply" mnemonicParsing="false" onAction="#apply" text="Apply" />
         </items>
       </ToolBar>
    </items>

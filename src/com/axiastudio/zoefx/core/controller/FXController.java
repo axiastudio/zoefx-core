@@ -45,11 +45,12 @@ public class FXController extends BaseController {
     private DataSet dataset = null;
     private ZSceneMode mode;
     private Behavior behavior = null;
+    private FXController me;
 
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
-
+        me = this;
     }
 
     public void setScene(Scene scene){
@@ -130,7 +131,7 @@ public class FXController extends BaseController {
         Model model;
         if( isSet ) {
             model = dataset.newModel();
-            scene.getRoot().fireEvent(new ModelEvent(ModelEvent.REFRESH));
+            fireRefreshEvent();
         } else {
             model = dataset.getCurrentModel();
         }
@@ -401,6 +402,7 @@ public class FXController extends BaseController {
                 }
             }
             controller.setColumns(columns);
+            controller.setParentController(me);
 
             Stage stage = new Stage();
             stage.setTitle("Search");
