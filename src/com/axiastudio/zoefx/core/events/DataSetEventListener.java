@@ -9,6 +9,6 @@ import java.util.EventListener;
  */
 public interface DataSetEventListener extends EventListener {
 
-    void dataSetEventHandler(DataSetEvent e);
+    void dataSetEventHandler(DataSetEvent event);
 
 }

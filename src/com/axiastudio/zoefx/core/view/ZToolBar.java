@@ -13,6 +13,8 @@ import javafx.scene.image.ImageView;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  * User: tiziano
@@ -119,7 +121,7 @@ public class ZToolBar extends ToolBar implements DataSetEventListener {
 
     @Override
     public void dataSetEventHandler(DataSetEvent event) {
-        System.out.println(event.getEventType() + " -> toolBar");
+        Logger.getLogger(this.getClass().getName()).log(Level.FINE, "{0} event handled", event.getEventType().getName());
         if( event.getEventType().equals(DataSetEvent.INDEX_CHANGED) ){
             refresh();
         } else if( event.getEventType().equals(DataSetEvent.GET_DIRTY) ){

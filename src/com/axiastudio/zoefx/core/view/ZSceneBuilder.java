@@ -3,6 +3,7 @@ package com.axiastudio.zoefx.core.view;
 import com.axiastudio.zoefx.core.controller.BaseController;
 import com.axiastudio.zoefx.core.controller.FXController;
 import com.axiastudio.zoefx.core.db.DataSet;
+import com.axiastudio.zoefx.core.db.TimeMachine;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.JavaFXBuilderFactory;
 import javafx.scene.Parent;
@@ -98,6 +99,8 @@ public class ZSceneBuilder {
                 Behavior behavior = new Behavior(propertiesStrem);
                 fxController.setBehavior(behavior);
             }
+            TimeMachine timeMachine = new TimeMachine();
+            fxController.setTimeMachine(timeMachine);
             dataset.addDataSetEventListener(toolBar);
             dataset.addDataSetEventListener(fxController);
             fxController.bindDataSet(dataset);

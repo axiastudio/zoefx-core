@@ -3,6 +3,7 @@ package com.axiastudio.zoefx.core.controller;
 import com.axiastudio.zoefx.core.beans.BeanAccess;
 import com.axiastudio.zoefx.core.beans.property.ItemObjectProperty;
 import com.axiastudio.zoefx.core.beans.property.ZoeFXProperty;
+import com.axiastudio.zoefx.core.db.TimeMachine;
 import com.axiastudio.zoefx.core.events.DataSetEvent;
 import com.axiastudio.zoefx.core.events.DataSetEventListener;
 import com.axiastudio.zoefx.core.db.DataSet;
@@ -32,6 +33,8 @@ import javafx.util.Callback;
 import java.io.IOException;
 import java.net.URL;
 import java.util.*;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  * User: tiziano
@@ -45,6 +48,7 @@ public class FXController extends BaseController implements DataSetEventListener
     private ZSceneMode mode;
     private Behavior behavior = null;
     private FXController me;
+    private TimeMachine timeMachine = null;
     private Map<String, Property> fxProperties = new HashMap<>();
 
 
@@ -63,7 +67,10 @@ public class FXController extends BaseController implements DataSetEventListener
         scanFXProperties();
         initializeChoices();
         initializeColumns();
+
+        // first show
         setModel(model);
+        timeMachine.createSnapshot(fxProperties.values());
     }
 
 
@@ -185,69 +192,15 @@ public class FXController extends BaseController implements DataSetEventListener
                 fxProperties.put(name, property);
             }
         }
-    }
 
-    private void updateCache(){
-        for( String name: fxProperties.keySet() ){
-            Property property = fxProperties.get(name);
-            dataset.putOldValue(property, property.getValue());
-        }
-    }
-
-    /*
-    private void configureModel(Boolean isSet) {
-        Model model;
-        if( isSet ) {
-            model = dataset.newModel();
-        } else {
-            model = dataset.getCurrentModel();
-        }
-        Parent root = scene.getRoot();
-        Pane container = (Pane) root;
-        List<Node> nodes = findNodes(container, new ArrayList<Node>());
-        for( Node node: nodes ){
-            String name = node.getId();
-            Property fxProperty = null;
-            Property zoeProperty = null;
-            if( node instanceof TextField ){
-                fxProperty = fxProperties.get(name); //((TextField) node).textProperty();
-                zoeProperty = model.getProperty(name, String.class);
-                Validator validator = Validators.getValidator(model.getEntityClass(), name);
+        /*
+        Validator validator = Validators.getValidator(model.getEntityClass(), name);
                 if( validator != null ) {
                     fxProperty.addListener(new TextFieldListener(validator));
                 }
-            } else if( node instanceof TextArea ){
-                fxProperty = fxProperties.get(name); //((TextArea) node).textProperty();
-                zoeProperty = model.getProperty(name, String.class);
-            } else if( node instanceof CheckBox ){
-                fxProperty = fxProperties.get(name); //((CheckBox) node).selectedProperty();
-                zoeProperty = model.getProperty(name, Boolean.class);
-            } else if( node instanceof ChoiceBox ){
-                fxProperty = fxProperties.get(name); //((ChoiceBox) node).valueProperty();
-                zoeProperty = model.getProperty(name, Object.class);
-            } else if( node instanceof DatePicker ){
-                fxProperty = fxProperties.get(name); //((DatePicker) node).valueProperty();
-                zoeProperty = model.getProperty(name, Date.class);
-            } else if( node instanceof TableView ){
-                TableView tableView = (TableView) node;
-                tableView.getSelectionModel().setSelectionMode(SelectionMode.MULTIPLE);
-                tableView.setContextMenu(createContextMenu(tableView));
-                fxProperty = fxProperties.get(name); //tableView.itemsProperty();
-                zoeProperty = model.getProperty(name, Collection.class);
-            }
-            if( zoeProperty != null && fxProperty != null) {
-                if( isSet ) {
-                    Bindings.bindBidirectional(fxProperty, zoeProperty);
-                    fxProperty.addListener(invalidationListener);
-                } else {
-                    Bindings.unbindBidirectional(fxProperty, zoeProperty);
-                    //rightProperty.unbind();
-                    fxProperty.removeListener(invalidationListener);
-                }
-                //dataset.putOldValue(fxProperty, fxProperty.getValue());
-            }
-        }
-    }*/
+         */
+    }
+
 
     private ContextMenu createContextMenu(TableView tableView){
         ContextMenu contextMenu = new ContextMenu();
@@ -367,6 +320,10 @@ public class FXController extends BaseController implements DataSetEventListener
         this.behavior = behavior;
     }
 
+    public void setTimeMachine(TimeMachine timeMachine) {
+        this.timeMachine = timeMachine;
+    }
+
     /*
     public void refresh(){
         unsetModel();
@@ -385,6 +342,7 @@ public class FXController extends BaseController implements DataSetEventListener
             unsetModel();
             dataset.goFirst();
             setModel(dataset.newModel());
+            timeMachine.resetAndcreateSnapshot(fxProperties.values());
         }
     };
     public EventHandler<ActionEvent> handlerGoPrevious = new EventHandler<ActionEvent>() {
@@ -393,6 +351,7 @@ public class FXController extends BaseController implements DataSetEventListener
             unsetModel();
             dataset.goPrevious();
             setModel(dataset.newModel());
+            timeMachine.resetAndcreateSnapshot(fxProperties.values());
         }
     };
     public EventHandler<ActionEvent> handlerGoNext = new EventHandler<ActionEvent>() {
@@ -401,6 +360,7 @@ public class FXController extends BaseController implements DataSetEventListener
             unsetModel();
             dataset.goNext();
             setModel(dataset.newModel());
+            timeMachine.resetAndcreateSnapshot(fxProperties.values());
         }
     };
     public EventHandler<ActionEvent> handlerGoLast = new EventHandler<ActionEvent>() {
@@ -409,12 +369,14 @@ public class FXController extends BaseController implements DataSetEventListener
             unsetModel();
             dataset.goLast();
             setModel(dataset.newModel());
+            timeMachine.resetAndcreateSnapshot(fxProperties.values());
         }
     };
     public EventHandler<ActionEvent> handlerSave = new EventHandler<ActionEvent>() {
         @Override
         public void handle(ActionEvent e) {
             dataset.commit();
+            timeMachine.resetAndcreateSnapshot(fxProperties.values());
         }
     };
     public EventHandler<ActionEvent> handlerConfirm = new EventHandler<ActionEvent>() {
@@ -426,15 +388,19 @@ public class FXController extends BaseController implements DataSetEventListener
     };
     public EventHandler<ActionEvent> handlerCancel = new EventHandler<ActionEvent>() {
         @Override
-        public void handle(ActionEvent e) {
+        public void handle(ActionEvent e)
+        {
+            timeMachine.rollback();
             dataset.revert();
+            timeMachine.resetAndcreateSnapshot(fxProperties.values());
         }
     };
     public EventHandler<ActionEvent> handlerAdd = new EventHandler<ActionEvent>() {
         @Override
         public void handle(ActionEvent e) {
             dataset.create();
-            //refreshModel();
+            unsetModel();
+            setModel(dataset.newModel());
         }
     };
     public EventHandler<ActionEvent> handlerSearch = new EventHandler<ActionEvent>() {
@@ -515,20 +481,10 @@ public class FXController extends BaseController implements DataSetEventListener
 
     @Override
     public void dataSetEventHandler(DataSetEvent event) {
-        System.out.println(event.getEventType() + " -> controller");
+        Logger.getLogger(this.getClass().getName()).log(Level.FINE, "{0} event handled", event.getEventType().getName());
         if( event.getEventType().equals(DataSetEvent.STORE_CHANGED) ){
-            //unsetModel();
-            //setModel();
-        } else if( event.getEventType().equals(DataSetEvent.REVERT) ){
-            //unsetModel();
-            //setModel();
-            //updateCache();
-        } else if( event.getEventType().equals(DataSetEvent.INDEX_CHANGED) ){
-            //updateCache();
-        } else if( event.getEventType().equals(DataSetEvent.CREATE) ){
-            //refreshModel();
-        } else if( event.getEventType().equals(DataSetEvent.COMMIT) ){
-            //updateCache();
+            unsetModel();
+            setModel();
         }
     }
 }

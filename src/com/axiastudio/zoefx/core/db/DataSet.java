@@ -6,9 +6,10 @@ import com.axiastudio.zoefx.core.events.DataSetEvent;
 import com.axiastudio.zoefx.core.events.DataSetEventGenerator;
 import com.axiastudio.zoefx.core.events.DataSetEventListener;
 import com.axiastudio.zoefx.core.view.Model;
-import javafx.beans.property.Property;
 
 import java.util.*;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  * User: tiziano
@@ -20,9 +21,7 @@ public class DataSet<E> implements DataSetEventGenerator {
     private List<E> store;
     private Integer currentIndex;
     private Model<E> currentModel=null;
-    private Map<Property, Object> olds = new HashMap();
     private Boolean dirty=Boolean.FALSE;
-
     private List<DataSetEventListener> dataSetEventListeners = new ArrayList<DataSetEventListener>();
 
 
@@ -34,7 +33,6 @@ public class DataSet<E> implements DataSetEventGenerator {
     public void setStore(List<E> store) {
         this.store = store;
         goFirst();
-        olds.clear();
         fireDataSetEvent(new DataSetEvent(DataSetEvent.STORE_CHANGED));
         dirty = Boolean.FALSE;
     }
@@ -89,17 +87,7 @@ public class DataSet<E> implements DataSetEventGenerator {
         }
     }
 
-    public void putOldValue(Property property, Object oldValue){
-        if( !olds.keySet().contains(property) ){
-            olds.put(property, oldValue);
-        }
-    }
-
     public void revert() {
-        for( Property property: olds.keySet() ){
-            property.setValue(olds.get(property));
-        }
-        olds.clear();
         dirty = Boolean.FALSE;
         fireDataSetEvent(new DataSetEvent(DataSetEvent.REVERT));
     }
@@ -111,7 +99,6 @@ public class DataSet<E> implements DataSetEventGenerator {
             E entity = store.get(currentIndex);
             manager.commit(entity);
         }
-        olds.clear();
         dirty = Boolean.FALSE;
         fireDataSetEvent(new DataSetEvent(DataSetEvent.COMMIT));
     }
@@ -176,7 +163,7 @@ public class DataSet<E> implements DataSetEventGenerator {
     }
 
     private void fireDataSetEvent(DataSetEvent event){
-        System.out.println("fire -> " + event.getEventType());
+        Logger.getLogger(this.getClass().getName()).log(Level.FINE, "{0} event fired", event.getEventType().getName());
         for(DataSetEventListener listener: dataSetEventListeners) {
             listener.dataSetEventHandler(event);
         }
