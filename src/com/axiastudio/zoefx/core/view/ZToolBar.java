@@ -1,6 +1,8 @@
 package com.axiastudio.zoefx.core.view;
 
 import com.axiastudio.zoefx.core.controller.FXController;
+import com.axiastudio.zoefx.core.events.DataSetEvent;
+import com.axiastudio.zoefx.core.events.DataSetEventListener;
 import javafx.beans.property.SimpleBooleanProperty;
 import javafx.geometry.Pos;
 import javafx.scene.control.Button;
@@ -17,7 +19,7 @@ import java.util.Map;
  * Date: 20/03/14
  * Time: 23:10
  */
-public class ZToolBar extends ToolBar {
+public class ZToolBar extends ToolBar implements DataSetEventListener {
 
     private FXController controller;
     private Map<String, Button> buttons = new HashMap<String, Button>();
@@ -96,7 +98,7 @@ public class ZToolBar extends ToolBar {
 
     }
 
-    public void refresh(){
+    private void refresh(){
 
         if( controller == null ){
             return;
@@ -113,5 +115,21 @@ public class ZToolBar extends ToolBar {
         counterLabel.setText(text);
 
 
+    }
+
+    @Override
+    public void dataSetEventHandler(DataSetEvent event) {
+        System.out.println(event.getEventType() + " -> toolBar");
+        if( event.getEventType().equals(DataSetEvent.INDEX_CHANGED) ){
+            refresh();
+        } else if( event.getEventType().equals(DataSetEvent.GET_DIRTY) ){
+            refresh();
+        } else if( event.getEventType().equals(DataSetEvent.COMMIT) ){
+            refresh();
+        } else if( event.getEventType().equals(DataSetEvent.STORE_CHANGED) ){
+            refresh();
+        } else if( event.getEventType().equals(DataSetEvent.REVERT) ){
+            refresh();
+        }
     }
 }

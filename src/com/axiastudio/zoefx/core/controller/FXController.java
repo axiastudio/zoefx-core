@@ -2,7 +2,8 @@ package com.axiastudio.zoefx.core.controller;
 
 import com.axiastudio.zoefx.core.beans.BeanAccess;
 import com.axiastudio.zoefx.core.beans.property.ItemObjectProperty;
-import com.axiastudio.zoefx.core.events.ModelEvent;
+import com.axiastudio.zoefx.core.events.DataSetEvent;
+import com.axiastudio.zoefx.core.events.DataSetEventListener;
 import com.axiastudio.zoefx.core.listeners.TextFieldListener;
 import com.axiastudio.zoefx.core.validators.Validator;
 import com.axiastudio.zoefx.core.validators.Validators;
@@ -39,7 +40,7 @@ import java.util.*;
  * Date: 20/03/14
  * Time: 23:04
  */
-public class FXController extends BaseController {
+public class FXController extends BaseController implements DataSetEventListener {
 
     private Scene scene;
     private DataSet dataset = null;
@@ -59,10 +60,9 @@ public class FXController extends BaseController {
 
     public void bindDataSet(DataSet dataset){
         this.dataset = dataset;
-        initializeChoices();
-        initializeColumns();
-        setModel();
-        refreshNavBar();
+        initializeChoices(); // XXX: INDEX_CHANGED
+        initializeColumns(); // XXX: INDEX_CHANGED
+        setModel();          // XXX: INDEX_CHANGED
     }
 
 
@@ -116,7 +116,7 @@ public class FXController extends BaseController {
     private void refreshModel() {
         unsetModel();
         setModel();
-        refreshNavBar();
+        //refreshNavBar();
     }
 
     private void unsetModel() {
@@ -134,7 +134,7 @@ public class FXController extends BaseController {
         } else {
             model = dataset.getCurrentModel();
         }
-        Parent root = this.scene.getRoot();
+        Parent root = scene.getRoot();
         Pane container = (Pane) root;
         List<Node> nodes = findNodes(container, new ArrayList<Node>());
         for( Node node: nodes ){
@@ -246,7 +246,6 @@ public class FXController extends BaseController {
                 }
                 refreshModel();
                 dataset.getDirty();
-                refreshNavBar();
             }
         });
         MenuItem delItem = new MenuItem("Delete");
@@ -284,13 +283,6 @@ public class FXController extends BaseController {
         return dataset;
     }
 
-
-    private void refreshNavBar(){
-        Pane pane = (Pane) this.scene.getRoot();
-        Node lookup = pane.lookup("#navigationBar");
-        ((ZToolBar) lookup).refresh();
-    }
-
     private FXController self(){
         return this;
     }
@@ -307,12 +299,13 @@ public class FXController extends BaseController {
         this.behavior = behavior;
     }
 
+    /*
     public void refresh(){
         unsetModel();
         dataset.goFirst();
         setModel();
-        refreshNavBar();
-    }
+        //refreshNavBar();
+    }*/
 
     /*
      *  Navigation Bar
@@ -324,7 +317,6 @@ public class FXController extends BaseController {
             unsetModel();
             dataset.goFirst();
             setModel();
-            refreshNavBar();
         }
     };
     public EventHandler<ActionEvent> handlerGoPrevious = new EventHandler<ActionEvent>() {
@@ -333,7 +325,6 @@ public class FXController extends BaseController {
             unsetModel();
             dataset.goPrevious();
             setModel();
-            refreshNavBar();
         }
     };
     public EventHandler<ActionEvent> handlerGoNext = new EventHandler<ActionEvent>() {
@@ -342,7 +333,6 @@ public class FXController extends BaseController {
             unsetModel();
             dataset.goNext();
             setModel();
-            refreshNavBar();
         }
     };
     public EventHandler<ActionEvent> handlerGoLast = new EventHandler<ActionEvent>() {
@@ -351,14 +341,12 @@ public class FXController extends BaseController {
             unsetModel();
             dataset.goLast();
             setModel();
-            refreshNavBar();
         }
     };
     public EventHandler<ActionEvent> handlerSave = new EventHandler<ActionEvent>() {
         @Override
         public void handle(ActionEvent e) {
             dataset.commit();
-            refreshNavBar();
         }
     };
     public EventHandler<ActionEvent> handlerConfirm = new EventHandler<ActionEvent>() {
@@ -372,7 +360,6 @@ public class FXController extends BaseController {
         @Override
         public void handle(ActionEvent e) {
             dataset.revert();
-            refreshNavBar();
         }
     };
     public EventHandler<ActionEvent> handlerAdd = new EventHandler<ActionEvent>() {
@@ -380,7 +367,6 @@ public class FXController extends BaseController {
         public void handle(ActionEvent e) {
             dataset.create();
             refreshModel();
-            refreshNavBar();
         }
     };
     public EventHandler<ActionEvent> handlerSearch = new EventHandler<ActionEvent>() {
@@ -420,7 +406,6 @@ public class FXController extends BaseController {
         @Override
         public void handle(ActionEvent e) {
             dataset.delete();
-            refreshNavBar();
         }
     };
     public EventHandler<ActionEvent> handlerConsole = new EventHandler<ActionEvent>() {
@@ -456,12 +441,17 @@ public class FXController extends BaseController {
         @Override
         public void invalidated(Observable observable) {
             dataset.getDirty();
-            refreshNavBar();
         }
     };
 
 
-
-
-
+    @Override
+    public void dataSetEventHandler(DataSetEvent event) {
+        System.out.println(event.getEventType() + " -> controller");
+        if( event.getEventType().equals(DataSetEvent.STORE_CHANGED) ){
+            refreshModel();
+        } else if( event.getEventType().equals(DataSetEvent.REVERT) ){
+            refreshModel();
+        }
+    }
 }

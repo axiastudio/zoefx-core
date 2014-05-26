@@ -98,6 +98,8 @@ public class ZSceneBuilder {
                 Behavior behavior = new Behavior(propertiesStrem);
                 fxController.setBehavior(behavior);
             }
+            dataset.addDataSetEventListener(toolBar);
+            dataset.addDataSetEventListener(fxController);
             fxController.bindDataSet(dataset);
         }
         return zScene;

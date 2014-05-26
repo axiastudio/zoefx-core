@@ -2,26 +2,29 @@ package com.axiastudio.zoefx.core.db;
 
 import com.axiastudio.zoefx.core.Utilities;
 import com.axiastudio.zoefx.core.beans.BeanAccess;
+import com.axiastudio.zoefx.core.events.DataSetEvent;
+import com.axiastudio.zoefx.core.events.DataSetEventGenerator;
+import com.axiastudio.zoefx.core.events.DataSetEventListener;
 import com.axiastudio.zoefx.core.view.Model;
 import javafx.beans.property.Property;
 
-import java.util.Collection;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 /**
  * User: tiziano
  * Date: 25/03/14
  * Time: 16:52
  */
-public class DataSet<E> {
+public class DataSet<E> implements DataSetEventGenerator {
 
     private List<E> store;
     private Integer currentIndex;
     private Model<E> currentModel=null;
     private Map<Property, Object> olds = new HashMap();
     private Boolean dirty=Boolean.FALSE;
+
+    private List<DataSetEventListener> dataSetEventListeners = new ArrayList<DataSetEventListener>();
+
 
     public DataSet(List<E> store) {
         this.store = store;
@@ -32,6 +35,7 @@ public class DataSet<E> {
         this.store = store;
         goFirst();
         olds.clear();
+        fireDataSetEvent(new DataSetEvent(DataSetEvent.STORE_CHANGED));
         dirty = Boolean.FALSE;
     }
 
@@ -42,6 +46,7 @@ public class DataSet<E> {
     public Model<E> newModel() {
         E entity = store.get(currentIndex);
         currentModel = new Model(entity);
+        fireDataSetEvent(new DataSetEvent(DataSetEvent.INDEX_CHANGED));
         return currentModel;
     }
 
@@ -78,7 +83,10 @@ public class DataSet<E> {
     }
 
     public void getDirty() {
-        dirty = Boolean.TRUE;
+        if( !dirty ) {
+            dirty = Boolean.TRUE;
+            fireDataSetEvent(new DataSetEvent(DataSetEvent.GET_DIRTY));
+        }
     }
 
     public void putOldValue(Property property, Object oldValue){
@@ -93,6 +101,7 @@ public class DataSet<E> {
         }
         olds.clear();
         dirty = Boolean.FALSE;
+        fireDataSetEvent(new DataSetEvent(DataSetEvent.REVERT));
     }
 
     public void commit() {
@@ -104,6 +113,7 @@ public class DataSet<E> {
         }
         olds.clear();
         dirty = Boolean.FALSE;
+        fireDataSetEvent(new DataSetEvent(DataSetEvent.COMMIT));
     }
 
     private Class<E> getEntityClass() {
@@ -126,7 +136,8 @@ public class DataSet<E> {
                 e.printStackTrace();
             }
         }
-        goLast();
+        currentIndex = store.size()-1;
+        fireDataSetEvent(new DataSetEvent(DataSetEvent.CREATE));
     }
 
     public void create(String name) {
@@ -149,9 +160,25 @@ public class DataSet<E> {
                 e.printStackTrace();
             }
         }
+        fireDataSetEvent(new DataSetEvent(DataSetEvent.CREATE));
     }
 
     public void delete() {
+        //fireDataSetEvent(new DataSetEvent(DataSetEvent.DELETE));
+    }
 
+    /*
+     *  EVENTS
+     */
+    @Override
+    public void addDataSetEventListener(DataSetEventListener listener) {
+        dataSetEventListeners.add(listener);
+    }
+
+    private void fireDataSetEvent(DataSetEvent event){
+        System.out.println("fire -> " + event.getEventType());
+        for(DataSetEventListener listener: dataSetEventListeners) {
+            listener.dataSetEventHandler(event);
+        }
     }
 }
