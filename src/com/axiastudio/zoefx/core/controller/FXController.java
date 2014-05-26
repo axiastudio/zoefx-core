@@ -131,7 +131,6 @@ public class FXController extends BaseController {
         Model model;
         if( isSet ) {
             model = dataset.newModel();
-            fireRefreshEvent();
         } else {
             model = dataset.getCurrentModel();
         }
@@ -308,6 +307,13 @@ public class FXController extends BaseController {
         this.behavior = behavior;
     }
 
+    public void refresh(){
+        unsetModel();
+        dataset.goFirst();
+        setModel();
+        refreshNavBar();
+    }
+
     /*
      *  Navigation Bar
      */
@@ -455,12 +461,7 @@ public class FXController extends BaseController {
     };
 
 
-    /*
-     *  fire Events
-     */
-    public void fireRefreshEvent(){
-        scene.getRoot().fireEvent(new ModelEvent(ModelEvent.REFRESH));
-    }
+
 
 
 }

@@ -77,7 +77,7 @@ public class SearchController<T> implements Initializable {
             store.add(item);
         }
         parentController.getDataset().setStore(store);
-        parentController.fireRefreshEvent();
+        parentController.refresh();
 
     }
 }
