@@ -2,12 +2,9 @@ package com.axiastudio.zoefx.core.view.search;
 
 import com.axiastudio.zoefx.core.Utilities;
 import com.axiastudio.zoefx.core.beans.property.CallbackBuilder;
-import com.axiastudio.zoefx.core.controller.FXController;
 import com.axiastudio.zoefx.core.db.DataSet;
 import com.axiastudio.zoefx.core.db.Database;
 import com.axiastudio.zoefx.core.db.Manager;
-import javafx.beans.Observable;
-import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
@@ -16,11 +13,9 @@ import javafx.fxml.Initializable;
 import javafx.scene.control.SelectionMode;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
-import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.util.Callback;
 
 import java.net.URL;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.ResourceBundle;
 
@@ -35,7 +30,7 @@ public class SearchController<T> implements Initializable {
     private TableView results;
 
     private Class entityClass;
-    private FXController parentController;
+    private Callback<List<T>, Boolean> callback=null;
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
@@ -46,8 +41,8 @@ public class SearchController<T> implements Initializable {
         this.entityClass = entityClass;
     }
 
-    public void setParentController(FXController parentController) {
-        this.parentController = parentController;
+    public void setCallback(Callback<List<T>, Boolean> callback) {
+        this.callback = callback;
     }
 
     public void setColumns(List<String> columns) {
@@ -72,10 +67,6 @@ public class SearchController<T> implements Initializable {
     @FXML
     private void apply(ActionEvent event){
         ObservableList<T> items = results.getSelectionModel().getSelectedItems();
-        List<T> store = new ArrayList<>();
-        for( T item: items ){
-            store.add(item);
-        }
-        parentController.getDataset().setStore(store);
+        callback.call(items);
     }
 }

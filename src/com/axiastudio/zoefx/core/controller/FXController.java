@@ -1,6 +1,7 @@
 package com.axiastudio.zoefx.core.controller;
 
 import com.axiastudio.zoefx.core.beans.BeanAccess;
+import com.axiastudio.zoefx.core.beans.BeanClassAccess;
 import com.axiastudio.zoefx.core.beans.property.ItemObjectProperty;
 import com.axiastudio.zoefx.core.beans.property.ZoeFXProperty;
 import com.axiastudio.zoefx.core.db.TimeMachine;
@@ -47,14 +48,12 @@ public class FXController extends BaseController implements DataSetEventListener
     private DataSet dataset = null;
     private ZSceneMode mode;
     private Behavior behavior = null;
-    private FXController me;
     private TimeMachine timeMachine = null;
     private Map<String, Property> fxProperties = new HashMap<>();
 
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
-        me = this;
     }
 
     public void setScene(Scene scene){
@@ -257,13 +256,38 @@ public class FXController extends BaseController implements DataSetEventListener
         addItem.setGraphic(new ImageView(new Image(getClass().getResourceAsStream("/com/axiastudio/zoefx/core/resources/add.png"))));
         addItem.setOnAction(new EventHandler<ActionEvent>() {
             public void handle(ActionEvent e) {
-                String referenceProperty = tableView.getId() + ".reference";
-                String reference = behavior.getProperties().getProperty(referenceProperty, null);
-                if (reference != null) {
-                    System.out.println("Search and select " + referenceProperty);
-                    dataset.create(tableView.getId());
+                final String collectionName = tableView.getId();
+                String referenceProperty = collectionName + ".reference";
+                String searchcolumnsProperty = collectionName + ".searchcolumns";
+                String referenceName = behavior.getProperties().getProperty(referenceProperty, null);
+                String searchcolumns = behavior.getProperties().getProperty(searchcolumnsProperty, "caption"); // XXX: default caption?
+                if (referenceName != null) {
+                    Class classToSearch = null;
+                    try {
+                        Class parentEntityClass = dataset.getCurrentModel().getEntityClass();
+                        Class<?> collectionGenericReturnType = (new BeanClassAccess(parentEntityClass, collectionName)).getGenericReturnType();
+                        Class<?> referenceReturnType = (new BeanClassAccess(collectionGenericReturnType, referenceName)).getReturnType();
+                        String className = referenceReturnType.getName();
+                        classToSearch = Class.forName(className);
+                        Callback callback = new Callback<List, Boolean>() {
+                            @Override
+                            public Boolean call(List items) {
+                                for( Object item: items ){
+                                    Object relationEntity = dataset.create(collectionName);
+                                    BeanAccess<Object> ba = new BeanAccess<>(relationEntity, referenceName);
+                                    ba.setValue(item);
+                                    // TODO: refresh
+                                }
+                                return true;
+                            }
+                        };
+                        Stage stage = searchStage(classToSearch, searchcolumns, callback);
+                        stage.show();
+                    } catch (ClassNotFoundException e1) {
+                        e1.printStackTrace();
+                    }
                 } else {
-                    dataset.create(tableView.getId());
+                    dataset.create(collectionName);
                 }
                 //refreshModel();
                 dataset.getDirty();
@@ -331,6 +355,37 @@ public class FXController extends BaseController implements DataSetEventListener
         setModel();
         //refreshNavBar();
     }*/
+
+    private Stage searchStage(Class classToSearch, String searchcolumns, Callback callback) {
+        URL url = getClass().getResource("/com/axiastudio/zoefx/core/view/search/search.fxml");
+        FXMLLoader loader = new FXMLLoader();
+        loader.setLocation(url);
+        loader.setBuilderFactory(new JavaFXBuilderFactory());
+        Parent root = null;
+        try {
+            root = loader.load(url.openStream());
+        } catch (IOException e1) {
+            e1.printStackTrace();
+        }
+
+        SearchController controller = loader.getController();
+        controller.setEntityClass(classToSearch);
+        List<String> columns = new ArrayList<>();
+        if( searchcolumns != null ){
+            String[] split = searchcolumns.split(",");
+            for( int i=0; i<split.length; i++ ){
+                columns.add(split[i]);
+            }
+        }
+        controller.setColumns(columns);
+        controller.setCallback(callback);
+        //controller.setParentDataSet(dataset);
+
+        Stage stage = new Stage();
+        stage.setTitle("Search");
+        stage.setScene(new Scene(root, 450, 450));
+        return stage;
+    }
 
     /*
      *  Navigation Bar
@@ -406,35 +461,23 @@ public class FXController extends BaseController implements DataSetEventListener
     public EventHandler<ActionEvent> handlerSearch = new EventHandler<ActionEvent>() {
         @Override
         public void handle(ActionEvent e) {
-            URL url = getClass().getResource("/com/axiastudio/zoefx/core/view/search/search.fxml");
-            FXMLLoader loader = new FXMLLoader();
-            loader.setLocation(url);
-            loader.setBuilderFactory(new JavaFXBuilderFactory());
-            Parent root = null;
-            try {
-                root = loader.load(url.openStream());
-            } catch (IOException e1) {
-                e1.printStackTrace();
-            }
-
-            SearchController controller = loader.getController();
-            controller.setEntityClass(dataset.getCurrentModel().getEntityClass());
-            List<String> columns = new ArrayList<>();
+            Class classToSearch = dataset.getCurrentModel().getEntityClass();
             String searchcolumns = behavior.getProperties().getProperty("searchcolumns");
-            if( searchcolumns != null ){
-                String[] split = searchcolumns.split(",");
-                for( int i=0; i<split.length; i++ ){
-                    columns.add(split[i]);
+            Callback callback = new Callback<List, Boolean>() {
+                @Override
+                public Boolean call(List items) {
+                    List store = new ArrayList();
+                    for( Object item: items ){
+                        store.add(item);
+                    }
+                    dataset.setStore(store);
+                    return true;
                 }
-            }
-            controller.setColumns(columns);
-            controller.setParentController(me);
-
-            Stage stage = new Stage();
-            stage.setTitle("Search");
-            stage.setScene(new Scene(root, 450, 450));
+            };
+            Stage stage = searchStage(classToSearch, searchcolumns, callback);
             stage.show();
         }
+
     };
     public EventHandler<ActionEvent> handlerDelete = new EventHandler<ActionEvent>() {
         @Override

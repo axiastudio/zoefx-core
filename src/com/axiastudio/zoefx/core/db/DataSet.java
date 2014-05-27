@@ -107,47 +107,56 @@ public class DataSet<E> implements DataSetEventGenerator {
         return (Class<E>) store.get(0).getClass();
     }
 
-    public void create() {
+    public E create() {
         Database db = Utilities.queryUtility(Database.class);
         if( db != null ) {
             Manager<E> manager = db.createManager(getEntityClass());
             E entity = manager.create();
             store.add(entity);
+            currentIndex = store.size()-1;
+            fireDataSetEvent(new DataSetEvent(DataSetEvent.CREATE));
+            return entity;
         } else {
             try {
                 E entity = getEntityClass().newInstance();
                 store.add(entity);
+                currentIndex = store.size()-1;
+                fireDataSetEvent(new DataSetEvent(DataSetEvent.CREATE));
+                return entity;
             } catch (InstantiationException e) {
                 e.printStackTrace();
             } catch (IllegalAccessException e) {
                 e.printStackTrace();
             }
         }
-        currentIndex = store.size()-1;
-        fireDataSetEvent(new DataSetEvent(DataSetEvent.CREATE));
+        return null;
     }
 
-    public void create(String name) {
+    public Object create(String name) {
         Database db = Utilities.queryUtility(Database.class);
-        E entity = store.get(currentIndex);
-        BeanAccess<Collection> beanAccess = new BeanAccess<Collection>(entity, name);
+        E parentEntity = store.get(currentIndex);
+        BeanAccess<Collection> beanAccess = new BeanAccess<Collection>(parentEntity, name);
         Collection collection = beanAccess.getValue();
         Class<?> genericReturnType = beanAccess.getGenericReturnType();
         if( db != null ) {
             Manager<?> manager = db.createManager(genericReturnType);
-            Object o = manager.create();
-            collection.add(o);
+            Object entity = manager.create();
+            collection.add(entity);
+            fireDataSetEvent(new DataSetEvent(DataSetEvent.CREATE));
+            return entity;
         } else {
             try {
-                Object o = genericReturnType.newInstance();
-                collection.add(o);
+                Object entity = genericReturnType.newInstance();
+                collection.add(entity);
+                fireDataSetEvent(new DataSetEvent(DataSetEvent.CREATE));
+                return entity;
             } catch (InstantiationException e) {
                 e.printStackTrace();
             } catch (IllegalAccessException e) {
                 e.printStackTrace();
             }
         }
-        fireDataSetEvent(new DataSetEvent(DataSetEvent.CREATE));
+        return null;
     }
 
     public void delete() {
