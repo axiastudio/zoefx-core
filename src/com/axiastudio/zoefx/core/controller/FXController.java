@@ -276,7 +276,7 @@ public class FXController extends BaseController implements DataSetEventListener
                                     Object relationEntity = dataset.create(collectionName);
                                     BeanAccess<Object> ba = new BeanAccess<>(relationEntity, referenceName);
                                     ba.setValue(item);
-                                    // TODO: refresh
+                                    refresh();
                                 }
                                 return true;
                             }
@@ -348,13 +348,12 @@ public class FXController extends BaseController implements DataSetEventListener
         this.timeMachine = timeMachine;
     }
 
-    /*
     public void refresh(){
         unsetModel();
-        dataset.goFirst();
-        setModel();
-        //refreshNavBar();
-    }*/
+        setModel(dataset.newModel());
+        timeMachine.resetAndcreateSnapshot(fxProperties.values());
+        // TODO: refresh sub model
+    }
 
     private Stage searchStage(Class classToSearch, String searchcolumns, Callback callback) {
         URL url = getClass().getResource("/com/axiastudio/zoefx/core/view/search/search.fxml");
@@ -483,6 +482,12 @@ public class FXController extends BaseController implements DataSetEventListener
         @Override
         public void handle(ActionEvent e) {
             dataset.delete();
+        }
+    };
+    public EventHandler<ActionEvent> handlerRefresh = new EventHandler<ActionEvent>() {
+        @Override
+        public void handle(ActionEvent e) {
+            refresh();
         }
     };
     public EventHandler<ActionEvent> handlerConsole = new EventHandler<ActionEvent>() {
