@@ -245,7 +245,7 @@ public class FXController extends BaseController implements DataSetEventListener
                                 newStore.add(item);
                             }
                         }
-                        ZScene newScene = SceneBuilders.queryZScene(newStore, ZSceneMode.DIALOG);
+                        ZScene newScene = SceneBuilders.queryZScene(newStore, ZSceneMode.WINDOW);
                         if (newScene != null) {
                             Stage newStage = new Stage();
                             newStage.setScene(newScene.getScene());

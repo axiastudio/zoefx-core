@@ -86,7 +86,7 @@ public class SceneBuilders {
             DataSet<Object> dataSet = new DataSet<>(store);
             zsb = zsb.dataset(dataSet);
             zsb = zsb.controller(controller);
-            zsb.mode(ZSceneMode.DIALOG);
+            zsb.mode(mode);
             ZScene zScene = zsb.build();
             return zScene;
         }
