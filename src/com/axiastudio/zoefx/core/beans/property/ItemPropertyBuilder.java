@@ -82,6 +82,25 @@ public class ItemPropertyBuilder<T> {
                     }
                 });
                 return item;
+            } else if( Double.class.isAssignableFrom(fieldType) ) {
+                // Double field -> String property
+                ItemStringProperty<Double> item = new ItemStringProperty(beanAccess);
+                item.setToStringFunction(new Callback<Double, String>() {
+                    @Override
+                    public String call(Double d) {
+                        return d.toString();
+                    }
+                });
+                item.setFromStringFunction(new Callback<String, Double>() {
+                    @Override
+                    public Double call(String s) {
+                        if( s == null ){
+                            return null;
+                        }
+                        return Double.parseDouble(s);
+                    }
+                });
+                return item;
             } else if( BigDecimal.class.isAssignableFrom(fieldType) ) {
                 // BigDecimal field -> String property
                 ItemStringProperty<BigDecimal> item = new ItemStringProperty(beanAccess);
@@ -95,16 +114,16 @@ public class ItemPropertyBuilder<T> {
                 item.setFromStringFunction(new Callback<String, BigDecimal>() {
                     @Override
                     public BigDecimal call(String s) {
-                        if( s == null ){
+                        if (s == null) {
                             return null;
                         }
                         NumberFormat numberFormat = NumberFormat.getCurrencyInstance();
                         try {
                             Number number = numberFormat.parse(s);
-                            if( number instanceof Double ) {
+                            if (number instanceof Double) {
                                 // es. "€ 12,99"
                                 return new BigDecimal((Double) number);
-                            } else if( number instanceof Long ) {
+                            } else if (number instanceof Long) {
                                 // es. "€ 12"
                                 return new BigDecimal((Long) number);
                             }
