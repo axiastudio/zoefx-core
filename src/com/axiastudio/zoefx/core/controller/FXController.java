@@ -373,9 +373,11 @@ public class FXController extends BaseController implements DataSetEventListener
         for( TableView tableView: tableViews.values() ){
             // XXX: workaround for https://javafx-jira.kenai.com/browse/RT-22599
             ObservableList items = tableView.getItems();
+            tableView.itemsProperty().removeListener(invalidationListener);
             tableView.setItems(null);
             tableView.layout();
             tableView.setItems(items);
+            tableView.itemsProperty().addListener(invalidationListener);
         }
     }
 
