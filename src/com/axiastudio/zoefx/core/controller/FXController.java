@@ -98,6 +98,11 @@ public class FXController extends BaseController implements DataSetEventListener
                         Callback callback = model.getCallback(name, columnId);
                         column.setCellValueFactory(callback);
                     }
+                    // custom date order
+                    BeanClassAccess beanClassAccess = new BeanClassAccess(model.getEntityClass(), columnId);
+                    if( Date.class.isAssignableFrom(beanClassAccess.getReturnType()) ) {
+                        column.setComparator(Comparator.nullsFirst(Comparators.DateComparator));
+                    }
                     //tableView.getItems().addListener(listChangeListener);
                 }
             }

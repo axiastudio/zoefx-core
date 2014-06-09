@@ -4,10 +4,12 @@ import com.axiastudio.zoefx.core.beans.BeanAccess;
 import javafx.util.Callback;
 
 import java.math.BigDecimal;
+import java.text.DateFormat;
 import java.text.NumberFormat;
 import java.text.ParseException;
 import java.util.Collection;
 import java.util.Date;
+import java.util.Locale;
 
 /**
  * User: tiziano
@@ -133,6 +135,17 @@ public class ItemPropertyBuilder<T> {
                             return null;
                         }
                         return null;
+                    }
+                });
+                return item;
+            } else if( Date.class.isAssignableFrom(fieldType) ){
+                // Date field -> String property
+                ItemStringProperty<Date> item = new ItemStringProperty(beanAccess);
+                item.setToStringFunction(new Callback<Date, String>() {
+                    @Override
+                    public String call(Date date) {
+                        DateFormat dateFormat = DateFormat.getDateInstance(DateFormat.SHORT, Locale.getDefault());
+                        return dateFormat.format(date);
                     }
                 });
                 return item;

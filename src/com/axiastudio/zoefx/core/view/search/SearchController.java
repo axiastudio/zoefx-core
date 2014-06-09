@@ -1,10 +1,12 @@
 package com.axiastudio.zoefx.core.view.search;
 
 import com.axiastudio.zoefx.core.Utilities;
+import com.axiastudio.zoefx.core.beans.BeanClassAccess;
 import com.axiastudio.zoefx.core.beans.property.CallbackBuilder;
 import com.axiastudio.zoefx.core.db.DataSet;
 import com.axiastudio.zoefx.core.db.Database;
 import com.axiastudio.zoefx.core.db.Manager;
+import com.axiastudio.zoefx.core.view.*;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
@@ -16,8 +18,7 @@ import javafx.scene.control.TableView;
 import javafx.util.Callback;
 
 import java.net.URL;
-import java.util.List;
-import java.util.ResourceBundle;
+import java.util.*;
 
 /**
  * User: tiziano
@@ -50,6 +51,11 @@ public class SearchController<T> implements Initializable {
             TableColumn column = new TableColumn();
             Callback callback = CallbackBuilder.create().beanClass(entityClass).field(property).build(); /// XXX
             column.setCellValueFactory(callback);
+            // custom date order
+            BeanClassAccess beanClassAccess = new BeanClassAccess(entityClass, property);
+            if( Date.class.isAssignableFrom(beanClassAccess.getReturnType()) ) {
+                column.setComparator(Comparator.nullsFirst(Comparators.DateComparator));
+            }
             results.getColumns().add(column);
         }
     }
