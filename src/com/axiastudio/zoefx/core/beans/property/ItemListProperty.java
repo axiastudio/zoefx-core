@@ -36,9 +36,8 @@ public class ItemListProperty<E> extends ListPropertyBase<E> implements ZoeFXPro
     }
 
     @Override
-    public void set(ObservableList es) {
-        System.out.println("--");
-        //beanProperty.setValue(s);
+    public void set(ObservableList observableList) {
+        beanAccess.setValue(observableList);
     }
 
     @Override

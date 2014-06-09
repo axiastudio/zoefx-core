@@ -16,13 +16,17 @@ public class DataSetEvent extends Event {
 
     public static final EventType<DataSetEvent> GET_DIRTY = new EventType(ANY, "GET_DIRTY");
 
-    public static final EventType<DataSetEvent> COMMIT = new EventType(ANY, "COMMIT");
+    public static final EventType<DataSetEvent> COMMITED = new EventType(ANY, "COMMITED");
 
-    public static final EventType<DataSetEvent> REVERT = new EventType(ANY, "REVERT");
+    public static final EventType<DataSetEvent> REVERTED = new EventType(ANY, "REVERTED");
 
-    public static final EventType<DataSetEvent> CREATE = new EventType(ANY, "CREATE");
+    public static final EventType<DataSetEvent> CREATED = new EventType(ANY, "CREATE");
 
     public static final EventType<DataSetEvent> DELETE = new EventType(ANY, "DELETE");
+
+    public static final EventType<DataSetEvent> ROWS_CREATED = new EventType(ANY, "ROWS_CREATED");
+
+    public static final EventType<DataSetEvent> ROWS_DETETED = new EventType(ANY, "ROWS_DETETED");
 
     public static final EventType<DataSetEvent> STORE_CHANGED = new EventType(ANY, "STORE_CHANGED");
 

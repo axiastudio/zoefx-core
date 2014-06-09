@@ -89,7 +89,7 @@ public class DataSet<E> implements DataSetEventGenerator {
 
     public void revert() {
         dirty = Boolean.FALSE;
-        fireDataSetEvent(new DataSetEvent(DataSetEvent.REVERT));
+        fireDataSetEvent(new DataSetEvent(DataSetEvent.REVERTED));
     }
 
     public void commit() {
@@ -100,7 +100,7 @@ public class DataSet<E> implements DataSetEventGenerator {
             manager.commit(entity);
         }
         dirty = Boolean.FALSE;
-        fireDataSetEvent(new DataSetEvent(DataSetEvent.COMMIT));
+        fireDataSetEvent(new DataSetEvent(DataSetEvent.COMMITED));
     }
 
     private Class<E> getEntityClass() {
@@ -114,14 +114,14 @@ public class DataSet<E> implements DataSetEventGenerator {
             E entity = manager.create();
             store.add(entity);
             currentIndex = store.size()-1;
-            fireDataSetEvent(new DataSetEvent(DataSetEvent.CREATE));
+            fireDataSetEvent(new DataSetEvent(DataSetEvent.CREATED));
             return entity;
         } else {
             try {
                 E entity = getEntityClass().newInstance();
                 store.add(entity);
                 currentIndex = store.size()-1;
-                fireDataSetEvent(new DataSetEvent(DataSetEvent.CREATE));
+                fireDataSetEvent(new DataSetEvent(DataSetEvent.CREATED));
                 return entity;
             } catch (InstantiationException e) {
                 e.printStackTrace();
@@ -135,20 +135,22 @@ public class DataSet<E> implements DataSetEventGenerator {
     public Object create(String name) {
         Database db = Utilities.queryUtility(Database.class);
         E parentEntity = store.get(currentIndex);
-        BeanAccess<Collection> beanAccess = new BeanAccess<Collection>(parentEntity, name);
+        BeanAccess<Collection> beanAccess = new BeanAccess<>(parentEntity, name);
         Collection collection = beanAccess.getValue();
         Class<?> genericReturnType = beanAccess.getGenericReturnType();
         if( db != null ) {
             Manager<?> manager = db.createManager(genericReturnType);
             Object entity = manager.create();
             collection.add(entity);
-            fireDataSetEvent(new DataSetEvent(DataSetEvent.CREATE));
+            fireDataSetEvent(new DataSetEvent(DataSetEvent.ROWS_CREATED));
+            fireDataSetEvent(new DataSetEvent(DataSetEvent.GET_DIRTY));
             return entity;
         } else {
             try {
                 Object entity = genericReturnType.newInstance();
                 collection.add(entity);
-                fireDataSetEvent(new DataSetEvent(DataSetEvent.CREATE));
+                fireDataSetEvent(new DataSetEvent(DataSetEvent.ROWS_CREATED));
+                fireDataSetEvent(new DataSetEvent(DataSetEvent.GET_DIRTY));
                 return entity;
             } catch (InstantiationException e) {
                 e.printStackTrace();

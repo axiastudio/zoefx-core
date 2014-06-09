@@ -127,11 +127,11 @@ public class ZToolBar extends ToolBar implements DataSetEventListener {
             refresh();
         } else if( event.getEventType().equals(DataSetEvent.GET_DIRTY) ){
             refresh();
-        } else if( event.getEventType().equals(DataSetEvent.COMMIT) ){
+        } else if( event.getEventType().equals(DataSetEvent.COMMITED) ){
             refresh();
         } else if( event.getEventType().equals(DataSetEvent.STORE_CHANGED) ){
             refresh();
-        } else if( event.getEventType().equals(DataSetEvent.REVERT) ){
+        } else if( event.getEventType().equals(DataSetEvent.REVERTED) ){
             refresh();
         }
     }

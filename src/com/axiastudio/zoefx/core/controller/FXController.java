@@ -50,10 +50,12 @@ public class FXController extends BaseController implements DataSetEventListener
     private Behavior behavior = null;
     private TimeMachine timeMachine = null;
     private Map<String, Property> fxProperties = new HashMap<>();
+    private Map<String,TableView> tableViews;
 
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
+
     }
 
     public void setScene(Scene scene){
@@ -66,7 +68,6 @@ public class FXController extends BaseController implements DataSetEventListener
         scanFXProperties();
         initializeChoices();
         initializeColumns();
-
         // first show
         setModel(model);
         timeMachine.createSnapshot(fxProperties.values());
@@ -78,9 +79,11 @@ public class FXController extends BaseController implements DataSetEventListener
         Parent root = this.scene.getRoot();
         Pane container = (Pane) root;
         List<Node> nodes = findNodes(container, new ArrayList<Node>());
+        tableViews = new HashMap<>();
         for( Node node: nodes ){
             if( node instanceof TableView){
                 TableView tableView = (TableView) node;
+                tableViews.put(node.getId(), tableView);
                 ObservableList<TableColumn> columns = tableView.getColumns();
                 for( TableColumn column: columns ){
                     String name = node.getId();
@@ -100,7 +103,7 @@ public class FXController extends BaseController implements DataSetEventListener
                     }
                     // custom date order
                     BeanClassAccess beanClassAccess = new BeanClassAccess(model.getEntityClass(), columnId);
-                    if( Date.class.isAssignableFrom(beanClassAccess.getReturnType()) ) {
+                    if( beanClassAccess.getReturnType() != null && Date.class.isAssignableFrom(beanClassAccess.getReturnType()) ) {
                         column.setComparator(Comparator.nullsFirst(Comparators.DateComparator));
                     }
                     //tableView.getItems().addListener(listChangeListener);
@@ -172,7 +175,7 @@ public class FXController extends BaseController implements DataSetEventListener
     private void scanFXProperties(){
         Parent root = scene.getRoot();
         Pane container = (Pane) root;
-        List<Node> nodes = findNodes(container, new ArrayList<Node>());
+        List<Node> nodes = findNodes(container, new ArrayList<>());
         for( Node node: nodes ){
             String name = node.getId();
             Property property = null;
@@ -278,8 +281,8 @@ public class FXController extends BaseController implements DataSetEventListener
                             @Override
                             public Boolean call(List items) {
                                 for( Object item: items ){
-                                    Object relationEntity = dataset.create(collectionName);
-                                    BeanAccess<Object> ba = new BeanAccess<>(relationEntity, referenceName);
+                                    Object entity = dataset.create(collectionName);
+                                    BeanAccess<Object> ba = new BeanAccess<>(entity, referenceName);
                                     ba.setValue(item);
                                     refresh();
                                 }
@@ -292,9 +295,18 @@ public class FXController extends BaseController implements DataSetEventListener
                         e1.printStackTrace();
                     }
                 } else {
-                    dataset.create(collectionName);
+                    Object entity = dataset.create(collectionName);
+                    List<Object> newStore = new ArrayList<>();
+                    newStore.add(entity);
+                    ZScene newScene = SceneBuilders.queryZScene(newStore, ZSceneMode.DIALOG);
+                    if (newScene != null) {
+                        Stage newStage = new Stage();
+                        newStage.setScene(newScene.getScene());
+                        newStage.show();
+                    }
                 }
                 //refreshModel();
+                initializeColumns();
                 dataset.getDirty();
             }
         });
@@ -355,9 +367,16 @@ public class FXController extends BaseController implements DataSetEventListener
 
     public void refresh(){
         unsetModel();
-        setModel(dataset.newModel());
+        Model model = dataset.newModel();
+        setModel(model);
         timeMachine.resetAndcreateSnapshot(fxProperties.values());
-        // TODO: refresh sub model
+        for( TableView tableView: tableViews.values() ){
+            // XXX: workaround for https://javafx-jira.kenai.com/browse/RT-22599
+            ObservableList items = tableView.getItems();
+            tableView.setItems(null);
+            tableView.layout();
+            tableView.setItems(items);
+        }
     }
 
     private Stage searchStage(Class classToSearch, String searchcolumns, Callback callback) {
@@ -534,10 +553,13 @@ public class FXController extends BaseController implements DataSetEventListener
 
     @Override
     public void dataSetEventHandler(DataSetEvent event) {
+        System.out.println(event.getEventType());
         Logger.getLogger(this.getClass().getName()).log(Level.FINE, "{0} event handled", event.getEventType().getName());
         if( event.getEventType().equals(DataSetEvent.STORE_CHANGED) ){
             unsetModel();
             setModel();
+        } else if( event.getEventType().equals(DataSetEvent.ROWS_CREATED) ){
+            refresh();
         }
     }
 }
