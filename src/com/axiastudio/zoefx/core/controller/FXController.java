@@ -229,7 +229,9 @@ public class FXController extends BaseController implements DataSetEventListener
                     Stage newStage = new Stage();
                     newStage.setScene(newScene.getScene());
                     newStage.show();
+                    newStage.requestFocus();
                 }
+                dataset.getDirty(); /// XXX: to implement a callback?
             }
         });
         MenuItem openItem = new MenuItem("Open");
@@ -257,7 +259,9 @@ public class FXController extends BaseController implements DataSetEventListener
                             Stage newStage = new Stage();
                             newStage.setScene(newScene.getScene());
                             newStage.show();
+                            newStage.requestFocus();
                         }
+                        dataset.getDirty(); /// XXX: to implement a callback?
                     }
                 });
         MenuItem addItem = new MenuItem("Add");
@@ -303,11 +307,11 @@ public class FXController extends BaseController implements DataSetEventListener
                         Stage newStage = new Stage();
                         newStage.setScene(newScene.getScene());
                         newStage.show();
+                        newStage.requestFocus();
                     }
                 }
-                //refreshModel();
-                initializeColumns();
-                dataset.getDirty();
+                //initializeColumns();
+                dataset.getDirty(); /// XXX: to implement a callback?
             }
         });
         MenuItem delItem = new MenuItem("Delete");
