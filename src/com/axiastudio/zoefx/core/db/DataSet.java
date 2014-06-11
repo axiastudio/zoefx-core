@@ -97,7 +97,8 @@ public class DataSet<E> implements DataSetEventGenerator {
         Manager<E> manager = getManager();
         if( manager != null ) {
             E entity = store.get(currentIndex);
-            manager.commit(entity);
+            E merged = manager.commit(entity);
+            store.set(currentIndex, merged);
         }
         dirty = Boolean.FALSE;
         fireDataSetEvent(new DataSetEvent(DataSetEvent.COMMITED));
