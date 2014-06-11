@@ -19,6 +19,7 @@ import java.util.logging.Logger;
 public class DataSet<E> implements DataSetEventGenerator {
 
     private List<E> store;
+    private Manager<E> manager=null;
     private Integer currentIndex;
     private Model<E> currentModel=null;
     private Boolean dirty=Boolean.FALSE;
@@ -93,9 +94,8 @@ public class DataSet<E> implements DataSetEventGenerator {
     }
 
     public void commit() {
-        Database db = Utilities.queryUtility(Database.class);
-        if( db != null ) {
-            Manager<E> manager = db.createManager(getEntityClass());
+        Manager<E> manager = getManager();
+        if( manager != null ) {
             E entity = store.get(currentIndex);
             manager.commit(entity);
         }
@@ -103,14 +103,23 @@ public class DataSet<E> implements DataSetEventGenerator {
         fireDataSetEvent(new DataSetEvent(DataSetEvent.COMMITED));
     }
 
+    private Manager<E> getManager() {
+        if( manager == null ) {
+            Database db = Utilities.queryUtility(Database.class);
+            if (db != null) {
+                manager = db.createManager(getEntityClass());
+            }
+        }
+        return manager;
+    }
+
     private Class<E> getEntityClass() {
         return (Class<E>) store.get(0).getClass();
     }
 
     public E create() {
-        Database db = Utilities.queryUtility(Database.class);
-        if( db != null ) {
-            Manager<E> manager = db.createManager(getEntityClass());
+        Manager<E> manager = getManager();
+        if( manager != null ) {
             E entity = manager.create();
             store.add(entity);
             currentIndex = store.size()-1;
