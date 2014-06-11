@@ -512,6 +512,8 @@ public class FXController extends BaseController implements DataSetEventListener
         @Override
         public void handle(ActionEvent e) {
             dataset.delete();
+            unsetModel();
+            setModel(dataset.newModel());
         }
     };
     public EventHandler<ActionEvent> handlerRefresh = new EventHandler<ActionEvent>() {

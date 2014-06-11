@@ -22,7 +22,7 @@ public class DataSetEvent extends Event {
 
     public static final EventType<DataSetEvent> CREATED = new EventType(ANY, "CREATE");
 
-    public static final EventType<DataSetEvent> DELETE = new EventType(ANY, "DELETE");
+    public static final EventType<DataSetEvent> DELETED = new EventType(ANY, "DELETED");
 
     public static final EventType<DataSetEvent> ROWS_CREATED = new EventType(ANY, "ROWS_CREATED");
 

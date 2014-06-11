@@ -171,7 +171,17 @@ public class DataSet<E> implements DataSetEventGenerator {
     }
 
     public void delete() {
-        //fireDataSetEvent(new DataSetEvent(DataSetEvent.DELETE));
+        Manager<E> manager = getManager();
+        if( manager != null ) {
+            E entity = store.get(currentIndex);
+            manager.delete(entity);
+            store.remove(currentIndex);
+            currentIndex = store.size()-1;
+        } else {
+            store.remove(currentIndex);
+            currentIndex = store.size()-1;
+        }
+        fireDataSetEvent(new DataSetEvent(DataSetEvent.DELETED));
     }
 
     /*

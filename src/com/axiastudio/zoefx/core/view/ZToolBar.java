@@ -91,10 +91,11 @@ public class ZToolBar extends ToolBar implements DataSetEventListener {
             buttons.get("add").disableProperty().bind(isDirty);
             buttons.get("delete").disableProperty().bind(isDirty);
             buttons.get("save").setOnAction(this.controller.handlerSave);
+            buttons.get("delete").setOnAction(this.controller.handlerDelete);
         }
         else if( controller.getMode().equals(ZSceneMode.DIALOG) ){
             buttons.get("add").disableProperty().bind(new SimpleBooleanProperty(true));
-            buttons.get("delete").disableProperty().bind(new SimpleBooleanProperty(true));
+            buttons.get("delete").setDisable(true); //.disableProperty().bind(new SimpleBooleanProperty(true));
             buttons.get("save").setGraphic(new ImageView(new Image(getClass().getResourceAsStream("/com/axiastudio/zoefx/core/resources/checkmark.png"))));
             buttons.get("save").setOnAction(this.controller.handlerConfirm);
         }
@@ -132,6 +133,8 @@ public class ZToolBar extends ToolBar implements DataSetEventListener {
         } else if( event.getEventType().equals(DataSetEvent.STORE_CHANGED) ){
             refresh();
         } else if( event.getEventType().equals(DataSetEvent.REVERTED) ){
+            refresh();
+        } else if( event.getEventType().equals(DataSetEvent.DELETED) ){
             refresh();
         }
     }
