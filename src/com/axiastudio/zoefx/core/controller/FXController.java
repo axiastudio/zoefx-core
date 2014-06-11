@@ -545,6 +545,12 @@ public class FXController extends BaseController implements DataSetEventListener
             stage.show();
         }
     };
+    public EventHandler<ActionEvent> handlerInfo = new EventHandler<ActionEvent>() {
+        @Override
+        public void handle(ActionEvent e) {
+            System.out.println("Info");
+        }
+    };
 
 
     /*

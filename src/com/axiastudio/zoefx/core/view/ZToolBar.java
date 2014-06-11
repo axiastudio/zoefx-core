@@ -74,6 +74,7 @@ public class ZToolBar extends ToolBar implements DataSetEventListener {
         buttons.get("refresh").setOnAction(this.controller.handlerRefresh);
         buttons.get("search").setOnAction(this.controller.handlerSearch);
 
+        buttons.get("info").setOnAction(this.controller.handlerInfo);
         buttons.get("console").setOnAction(this.controller.handlerConsole);
 
         // status
