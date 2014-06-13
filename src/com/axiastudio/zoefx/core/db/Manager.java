@@ -11,6 +11,8 @@ public interface Manager<E> {
 
     E commit(E entity);
 
+    void commit(List<E> entities);
+
     void delete(E entity);
 
     void truncate();
