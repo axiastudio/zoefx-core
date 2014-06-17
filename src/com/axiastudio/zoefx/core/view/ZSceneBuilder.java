@@ -83,7 +83,7 @@ public class ZSceneBuilder {
         }
         Parent root=null;
         try {
-            root = (Parent) loader.load();
+            root = loader.load();
         } catch (IOException e) {
             e.printStackTrace();
         }
