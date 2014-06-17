@@ -8,11 +8,13 @@ import javafx.geometry.Pos;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.ToolBar;
+import javafx.scene.control.Tooltip;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.ResourceBundle;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -33,12 +35,12 @@ public class ZToolBar extends ToolBar implements DataSetEventListener {
     private SimpleBooleanProperty isBOF = new SimpleBooleanProperty(false);
     private SimpleBooleanProperty isEOF = new SimpleBooleanProperty(false);
 
-    public ZToolBar() {
+    public ZToolBar(ResourceBundle bundle) {
         this.setId("navigationBar");
-        initNavBar();
+        initNavBar(bundle);
     }
 
-    private void initNavBar(){
+    private void initNavBar(ResourceBundle bundle){
 
         for( String buttonName: buttonNames ){
             if( buttonName.equals("COUNTER") ){
@@ -52,6 +54,7 @@ public class ZToolBar extends ToolBar implements DataSetEventListener {
                 Button button = new Button();
                 button.setId(buttonName + "NavButton");
                 button.setGraphic(new ImageView(new Image(getClass().getResourceAsStream("/com/axiastudio/zoefx/core/resources/images/" + buttonName + ".png"))));
+                button.setTooltip(new Tooltip(bundle.getString("toolbar." + buttonName)));
                 buttons.put(buttonName, button);
                 getItems().add(button);
             }

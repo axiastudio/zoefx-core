@@ -13,6 +13,7 @@ import javafx.scene.layout.Pane;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.URL;
+import java.util.ResourceBundle;
 
 /**
  * User: tiziano
@@ -72,7 +73,9 @@ public class ZSceneBuilder {
     }
 
     public ZScene build(){
-        FXMLLoader loader = new FXMLLoader();
+        ResourceBundle bundle = ResourceBundle.getBundle("com.axiastudio.zoefx.core.resources.i18n");
+        FXMLLoader loader = new FXMLLoader(url, bundle);
+        loader.setResources(bundle);
         loader.setLocation(url);
         loader.setBuilderFactory(new JavaFXBuilderFactory());
         if( controller != null ) {
@@ -80,7 +83,7 @@ public class ZSceneBuilder {
         }
         Parent root=null;
         try {
-            root = (Parent) loader.load(url.openStream());
+            root = (Parent) loader.load();
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -90,7 +93,7 @@ public class ZSceneBuilder {
         if( controller instanceof FXController ) {
             FXController fxController = (FXController) controller;
             fxController.setMode(mode);
-            ZToolBar toolBar = new ZToolBar();
+            ZToolBar toolBar = new ZToolBar(bundle);
             Pane pane = (Pane) root;
             pane.getChildren().add(toolBar);
             toolBar.setController(fxController);
