@@ -37,7 +37,7 @@ public class ConsoleController implements Initializable {
 
         Button button = new Button();
         button.setId("executeConsoleButton");
-        button.setGraphic(new ImageView(new Image(getClass().getResourceAsStream("/com/axiastudio/zoefx/core/resources/cogs.png"))));
+        button.setGraphic(new ImageView(new Image(getClass().getResourceAsStream("/com/axiastudio/zoefx/core/resources/images/cogs.png"))));
         toolBar.getItems().add(button);
         button.setOnAction(this.handlerExecute);
 

@@ -51,7 +51,7 @@ public class ZToolBar extends ToolBar implements DataSetEventListener {
             } else {
                 Button button = new Button();
                 button.setId(buttonName + "NavButton");
-                button.setGraphic(new ImageView(new Image(getClass().getResourceAsStream("/com/axiastudio/zoefx/core/resources/" + buttonName + ".png"))));
+                button.setGraphic(new ImageView(new Image(getClass().getResourceAsStream("/com/axiastudio/zoefx/core/resources/images/" + buttonName + ".png"))));
                 buttons.put(buttonName, button);
                 getItems().add(button);
             }
@@ -97,7 +97,7 @@ public class ZToolBar extends ToolBar implements DataSetEventListener {
         else if( controller.getMode().equals(ZSceneMode.DIALOG) ){
             buttons.get("add").disableProperty().bind(new SimpleBooleanProperty(true));
             buttons.get("delete").setDisable(true); //.disableProperty().bind(new SimpleBooleanProperty(true));
-            buttons.get("save").setGraphic(new ImageView(new Image(getClass().getResourceAsStream("/com/axiastudio/zoefx/core/resources/checkmark.png"))));
+            buttons.get("save").setGraphic(new ImageView(new Image(getClass().getResourceAsStream("/com/axiastudio/zoefx/core/resources/images/checkmark.png"))));
             buttons.get("save").setOnAction(this.controller.handlerConfirm);
         }
 

@@ -62,6 +62,10 @@ public class FXController extends BaseController implements DataSetEventListener
         this.scene = scene;
     }
 
+    protected Scene getScene() {
+        return scene;
+    }
+
     public void bindDataSet(DataSet dataset){
         this.dataset = dataset;
         Model model = dataset.newModel();
@@ -213,7 +217,7 @@ public class FXController extends BaseController implements DataSetEventListener
         ContextMenu contextMenu = new ContextMenu();
 
         MenuItem infoItem = new MenuItem("Information");
-        infoItem.setGraphic(new ImageView(new Image(getClass().getResourceAsStream("/com/axiastudio/zoefx/core/resources/info.png"))));
+        infoItem.setGraphic(new ImageView(new Image(getClass().getResourceAsStream("/com/axiastudio/zoefx/core/resources/images/info.png"))));
         infoItem.setOnAction(new EventHandler<ActionEvent>() {
             public void handle(ActionEvent e) {
                 ObservableList selectedItems = tableView.getSelectionModel().getSelectedItems();
@@ -235,7 +239,7 @@ public class FXController extends BaseController implements DataSetEventListener
             }
         });
         MenuItem openItem = new MenuItem("Open");
-        openItem.setGraphic(new ImageView(new Image(getClass().getResourceAsStream("/com/axiastudio/zoefx/core/resources/open.png"))));
+        openItem.setGraphic(new ImageView(new Image(getClass().getResourceAsStream("/com/axiastudio/zoefx/core/resources/images/open.png"))));
                 openItem.setOnAction(new EventHandler<ActionEvent>() {
                     public void handle(ActionEvent e) {
                         ObservableList selectedItems = tableView.getSelectionModel().getSelectedItems();
@@ -265,7 +269,7 @@ public class FXController extends BaseController implements DataSetEventListener
                     }
                 });
         MenuItem addItem = new MenuItem("Add");
-        addItem.setGraphic(new ImageView(new Image(getClass().getResourceAsStream("/com/axiastudio/zoefx/core/resources/add.png"))));
+        addItem.setGraphic(new ImageView(new Image(getClass().getResourceAsStream("/com/axiastudio/zoefx/core/resources/images/add.png"))));
         addItem.setOnAction(new EventHandler<ActionEvent>() {
             public void handle(ActionEvent e) {
                 final String collectionName = tableView.getId();
@@ -315,7 +319,7 @@ public class FXController extends BaseController implements DataSetEventListener
             }
         });
         MenuItem delItem = new MenuItem("Delete");
-        delItem.setGraphic(new ImageView(new Image(getClass().getResourceAsStream("/com/axiastudio/zoefx/core/resources/delete.png"))));
+        delItem.setGraphic(new ImageView(new Image(getClass().getResourceAsStream("/com/axiastudio/zoefx/core/resources/images/delete.png"))));
         delItem.setOnAction(new EventHandler<ActionEvent>() {
             public void handle(ActionEvent e) {
                 System.out.println("Delete!");
