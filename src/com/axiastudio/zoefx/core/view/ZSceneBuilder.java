@@ -24,6 +24,7 @@ public class ZSceneBuilder {
 
     private DataSet dataset;
     private URL url;
+    private String title;
     private BaseController controller=null;
     private InputStream propertiesStrem=null;
     private Integer width=500;
@@ -45,6 +46,19 @@ public class ZSceneBuilder {
     public ZSceneBuilder dataset(DataSet dataset){
         this.dataset = dataset;
         return this;
+    }
+
+    public ZSceneBuilder title(String title){
+        this.title = title;
+        return this;
+    }
+
+    public String getTitle() {
+        if( title == null ) {
+            return url.getFile().substring(url.getFile().lastIndexOf("/")+1,
+                    url.getFile().lastIndexOf("."));
+        }
+        return title;
     }
 
     public ZSceneBuilder url(URL url){
