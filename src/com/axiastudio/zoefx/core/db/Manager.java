@@ -1,6 +1,7 @@
 package com.axiastudio.zoefx.core.db;
 
 import java.util.List;
+import java.util.Map;
 
 /**
  * User: tiziano
@@ -20,6 +21,8 @@ public interface Manager<E> {
     E get(Long id);
 
     List<E> getAll();
+
+    List<E> query(Map<String, Object> map);
 
     E create();
 
