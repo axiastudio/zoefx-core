@@ -322,7 +322,7 @@ public class FXController extends BaseController implements DataSetEventListener
         delItem.setGraphic(new ImageView(new Image(getClass().getResourceAsStream("/com/axiastudio/zoefx/core/resources/images/delete.png"))));
         delItem.setOnAction(new EventHandler<ActionEvent>() {
             public void handle(ActionEvent e) {
-                System.out.println("Delete!");
+                //System.out.println("Delete!");
             }
         });
 
@@ -552,7 +552,7 @@ public class FXController extends BaseController implements DataSetEventListener
     public EventHandler<ActionEvent> handlerInfo = new EventHandler<ActionEvent>() {
         @Override
         public void handle(ActionEvent e) {
-            System.out.println("Info");
+            //System.out.println("Info");
         }
     };
 
@@ -571,7 +571,7 @@ public class FXController extends BaseController implements DataSetEventListener
 
     @Override
     public void dataSetEventHandler(DataSetEvent event) {
-        System.out.println(event.getEventType());
+        //System.out.println(event.getEventType());
         Logger.getLogger(this.getClass().getName()).log(Level.FINE, "{0} event handled", event.getEventType().getName());
         if( event.getEventType().equals(DataSetEvent.STORE_CHANGED) ){
             unsetModel();

@@ -8,7 +8,10 @@ import javafx.fxml.FXMLLoader;
 import javafx.fxml.JavaFXBuilderFactory;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.control.MenuBar;
+import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.Pane;
+import javafx.scene.layout.VBox;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -108,8 +111,16 @@ public class ZSceneBuilder {
             FXController fxController = (FXController) controller;
             fxController.setMode(mode);
             ZToolBar toolBar = new ZToolBar(bundle);
-            Pane pane = (Pane) root;
-            pane.getChildren().add(toolBar);
+            if( root instanceof VBox ){
+                if( ((VBox) root).getChildren().get(0) instanceof MenuBar) {
+                    ((VBox) root).getChildren().add(1, toolBar);
+                } else {
+                    ((VBox) root).getChildren().add(0, toolBar);
+                }
+            } else {
+                ((Pane) root).getChildren().add(toolBar);
+            }
+
             toolBar.setController(fxController);
             fxController.setScene(scene);
             if( propertiesStrem != null ){
