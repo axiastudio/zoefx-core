@@ -70,11 +70,40 @@ public class SearchController<T> implements Initializable {
             HBox hBox = new HBox();
             Label label = new Label(property);
             label.setMinWidth(100.0);
-            TextField textField = new TextField();
-            textField.setMinWidth(200.0);
-            textField.setId(property);
-            hBox.getChildren().addAll(label, textField);
-            filterbox.getChildren().add(hBox);
+            Node node=null;
+            BeanClassAccess beanClassAccess = new BeanClassAccess(entityClass, property);
+            Class<?> returnType = beanClassAccess.getReturnType();
+            if( String.class.isAssignableFrom(beanClassAccess.getReturnType()) ) {
+                TextField textField = new TextField();
+                textField.setMinWidth(200.0);
+                textField.setId(property);
+                node = textField;
+            } else if( Object.class.isAssignableFrom(beanClassAccess.getReturnType()) ) {
+                List superset = new ArrayList();
+                if( returnType.isEnum() ) {
+                    for (Object obj : returnType.getEnumConstants() ) {
+                        superset.add(obj);
+                    }
+
+                } else {
+                    Database database = Utilities.queryUtility(Database.class);
+                    if( database != null ) {
+                        Manager<?> manager = database.createManager(returnType);
+                        for (Object obj : manager.getAll()) {
+                            superset.add(obj);
+                        }
+                    }
+                }
+                ChoiceBox choiceBox = new ChoiceBox();
+                choiceBox.setId(property);
+                ObservableList choices = FXCollections.observableArrayList(superset);
+                choiceBox.setItems(choices);
+                node = choiceBox;
+            }
+            if( node != null ) {
+                hBox.getChildren().addAll(label, node);
+                filterbox.getChildren().add(hBox);
+            }
         }
     }
 
@@ -90,6 +119,11 @@ public class SearchController<T> implements Initializable {
                 TextField criteriaField = (TextField) criteriaNode;
                 String fieldName = criteriaField.getId();
                 String value = criteriaField.getText();
+                map.put(fieldName, value);
+            } else if( criteriaNode instanceof ChoiceBox ){
+                ChoiceBox choiceBox = (ChoiceBox) criteriaNode;
+                String fieldName = choiceBox.getId();
+                Object value = choiceBox.getSelectionModel().getSelectedItem();
                 map.put(fieldName, value);
             }
         }
