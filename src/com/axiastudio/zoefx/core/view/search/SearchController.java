@@ -119,7 +119,9 @@ public class SearchController<T> implements Initializable {
                 TextField criteriaField = (TextField) criteriaNode;
                 String fieldName = criteriaField.getId();
                 String value = criteriaField.getText();
-                map.put(fieldName, value);
+                if( value.length()>0 ) {
+                    map.put(fieldName, value);
+                }
             } else if( criteriaNode instanceof ChoiceBox ){
                 ChoiceBox choiceBox = (ChoiceBox) criteriaNode;
                 String fieldName = choiceBox.getId();
@@ -133,9 +135,11 @@ public class SearchController<T> implements Initializable {
         } else {
             store = manager.getAll();
         }
-        DataSet<T> dataSet = new DataSet<>(store);
-        ObservableList<T> observableList = FXCollections.observableArrayList(store);
-        results.setItems(observableList);
+        if( store.size()>0 ) {
+            DataSet<T> dataSet = new DataSet<>(store);
+            ObservableList<T> observableList = FXCollections.observableArrayList(store);
+            results.setItems(observableList);
+        }
     }
 
     @FXML

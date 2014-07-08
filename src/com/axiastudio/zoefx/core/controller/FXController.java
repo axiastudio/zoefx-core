@@ -68,6 +68,9 @@ public class FXController extends BaseController implements DataSetEventListener
 
     public void bindDataSet(DataSet dataset){
         this.dataset = dataset;
+        if( dataset.size()== 0 ){
+            dataset.create();
+        }
         Model model = dataset.newModel();
         scanFXProperties();
         initializeChoices();
