@@ -130,7 +130,8 @@ public class ItemPropertyBuilder<T> {
                                 return new BigDecimal((Long) number);
                             }
                         } catch (ParseException e) {
-                            return null;
+                            // es. "12,00"
+                            return new BigDecimal(Double.parseDouble(s));
                         } catch (ClassCastException e) {
                             return null;
                         }
