@@ -390,6 +390,10 @@ public class FXController extends BaseController implements DataSetEventListener
     }
 
     private Stage searchStage(Class classToSearch, String searchcolumns, Callback callback) {
+        return searchStage(classToSearch, searchcolumns, callback, null);
+    }
+
+    private Stage searchStage(Class classToSearch, String searchcolumns, Callback callback, String searchcriteria) {
         URL url = getClass().getResource("/com/axiastudio/zoefx/core/view/search/search.fxml");
         FXMLLoader loader = new FXMLLoader();
         loader.setLocation(url);
@@ -401,6 +405,7 @@ public class FXController extends BaseController implements DataSetEventListener
             e1.printStackTrace();
         }
 
+        // search columns
         SearchController controller = loader.getController();
         controller.setEntityClass(classToSearch);
         List<String> columns = new ArrayList<>();
@@ -411,7 +416,20 @@ public class FXController extends BaseController implements DataSetEventListener
             }
         }
         controller.setColumns(columns);
+
+        // search criteria
+        List<String> criteria = new ArrayList<>();
+        if( searchcriteria != null ){
+            String[] split = searchcriteria.split(",");
+            for( int i=0; i<split.length; i++ ){
+                criteria.add(split[i]);
+            }
+        }
+        controller.setCriteria(criteria);
+
+        // callback
         controller.setCallback(callback);
+
         //controller.setParentDataSet(dataset);
 
         Stage stage = new Stage();
@@ -496,6 +514,8 @@ public class FXController extends BaseController implements DataSetEventListener
         public void handle(ActionEvent e) {
             Class classToSearch = dataset.getCurrentModel().getEntityClass();
             String searchcolumns = behavior.getProperties().getProperty("searchcolumns");
+            String searchcriteria = behavior.getProperties().getProperty("searchcriteria");
+
             Callback callback = new Callback<List, Boolean>() {
                 @Override
                 public Boolean call(List items) {
@@ -507,7 +527,7 @@ public class FXController extends BaseController implements DataSetEventListener
                     return true;
                 }
             };
-            Stage stage = searchStage(classToSearch, searchcolumns, callback);
+            Stage stage = searchStage(classToSearch, searchcolumns, callback, searchcriteria);
             stage.show();
         }
 
