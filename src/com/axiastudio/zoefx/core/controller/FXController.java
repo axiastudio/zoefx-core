@@ -355,6 +355,9 @@ public class FXController extends BaseController implements DataSetEventListener
     public DataSet getDataset() {
         return dataset;
     }
+    public Model getCurrentModel() {
+        return dataset.getCurrentModel();
+    }
 
     private FXController self(){
         return this;
