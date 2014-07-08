@@ -132,6 +132,11 @@ public class ZSceneBuilder {
             dataset.addDataSetEventListener(toolBar);
             dataset.addDataSetEventListener(fxController);
             fxController.bindDataSet(dataset);
+
+            toolBar.canSelectProperty().bind(dataset.canSelectProperty());
+            toolBar.canInsertProperty().bind(dataset.canInsertProperty());
+            toolBar.canUpdateProperty().bind(dataset.canUpdateProperty());
+            toolBar.canDeleteProperty().bind(dataset.canDeleteProperty());
         }
         return zScene;
     }

@@ -30,10 +30,15 @@ public class ZToolBar extends ToolBar implements DataSetEventListener {
     private String[] buttonNames = {"first", "previous", "COUNTER", "next", "last", "add", "delete", "save", "cancel", "refresh", "search", "info", "console"};
     private Label counterLabel;
 
-    private SimpleBooleanProperty isOnlyOne = new SimpleBooleanProperty(false);
-    private SimpleBooleanProperty isDirty = new SimpleBooleanProperty(false);
-    private SimpleBooleanProperty isBOF = new SimpleBooleanProperty(false);
-    private SimpleBooleanProperty isEOF = new SimpleBooleanProperty(false);
+    private SimpleBooleanProperty isOnlyOne = new SimpleBooleanProperty(Boolean.FALSE);
+    private SimpleBooleanProperty isDirty = new SimpleBooleanProperty(Boolean.FALSE);
+    private SimpleBooleanProperty isBOF = new SimpleBooleanProperty(Boolean.FALSE);
+    private SimpleBooleanProperty isEOF = new SimpleBooleanProperty(Boolean.FALSE);
+
+    private SimpleBooleanProperty canSelect = new SimpleBooleanProperty(Boolean.TRUE);
+    private SimpleBooleanProperty canInsert = new SimpleBooleanProperty(Boolean.TRUE);
+    private SimpleBooleanProperty canUpdate = new SimpleBooleanProperty(Boolean.TRUE);
+    private SimpleBooleanProperty canDelete = new SimpleBooleanProperty(Boolean.TRUE);
 
     public ZToolBar(ResourceBundle bundle) {
         this.setId("navigationBar");
@@ -59,6 +64,38 @@ public class ZToolBar extends ToolBar implements DataSetEventListener {
                 getItems().add(button);
             }
         }
+    }
+
+    public boolean getCanSelectProperty() {
+        return canSelect.get();
+    }
+
+    public SimpleBooleanProperty canSelectProperty() {
+        return canSelect;
+    }
+
+    public boolean getCanInsert() {
+        return canInsert.get();
+    }
+
+    public SimpleBooleanProperty canInsertProperty() {
+        return canInsert;
+    }
+
+    public boolean getCanUpdate() {
+        return canUpdate.get();
+    }
+
+    public SimpleBooleanProperty canUpdateProperty() {
+        return canUpdate;
+    }
+
+    public boolean getCanDelete() {
+        return canDelete.get();
+    }
+
+    public SimpleBooleanProperty canDeleteProperty() {
+        return canDelete;
     }
 
     public void setController(FXController controller){
@@ -87,19 +124,19 @@ public class ZToolBar extends ToolBar implements DataSetEventListener {
         buttons.get("last").disableProperty().bind(isDirty.or(isOnlyOne).or(isEOF));
 
         buttons.get("cancel").disableProperty().bind(isDirty.not());
-        buttons.get("save").disableProperty().bind(isDirty.not());
-
+        buttons.get("save").disableProperty().bind(isDirty.not().or(canUpdateProperty().not()));
+        buttons.get("search").disableProperty().bind(canSelectProperty().not());
 
         // ZScene mode customs
         if( controller.getMode().equals(ZSceneMode.WINDOW) ){
-            buttons.get("add").disableProperty().bind(isDirty);
-            buttons.get("delete").disableProperty().bind(isDirty);
+            buttons.get("add").disableProperty().bind(isDirty.or(canInsertProperty().not()));
+            buttons.get("delete").disableProperty().bind(isDirty.or(canDeleteProperty().not()));
             buttons.get("save").setOnAction(this.controller.handlerSave);
             buttons.get("delete").setOnAction(this.controller.handlerDelete);
         }
         else if( controller.getMode().equals(ZSceneMode.DIALOG) ){
-            buttons.get("add").disableProperty().bind(new SimpleBooleanProperty(true));
-            buttons.get("delete").setDisable(true); //.disableProperty().bind(new SimpleBooleanProperty(true));
+            buttons.get("add").setDisable(Boolean.TRUE); //.disableProperty().bind(new SimpleBooleanProperty(Boolean.TRUE));
+            buttons.get("delete").setDisable(Boolean.TRUE); //.disableProperty().bind(new SimpleBooleanProperty(Boolean.TRUE));
             buttons.get("save").setGraphic(new ImageView(new Image(getClass().getResourceAsStream("/com/axiastudio/zoefx/core/resources/images/checkmark.png"))));
             buttons.get("save").setOnAction(this.controller.handlerConfirm);
         }

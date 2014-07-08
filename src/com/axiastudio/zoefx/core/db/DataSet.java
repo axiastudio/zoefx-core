@@ -6,6 +6,7 @@ import com.axiastudio.zoefx.core.events.DataSetEvent;
 import com.axiastudio.zoefx.core.events.DataSetEventGenerator;
 import com.axiastudio.zoefx.core.events.DataSetEventListener;
 import com.axiastudio.zoefx.core.view.Model;
+import javafx.beans.property.SimpleBooleanProperty;
 
 import java.util.*;
 import java.util.logging.Level;
@@ -19,16 +20,81 @@ import java.util.logging.Logger;
 public class DataSet<E> implements DataSetEventGenerator {
 
     private List<E> store;
+    private Class<E> entityClass;
     private Manager<E> manager=null;
     private Integer currentIndex;
     private Model<E> currentModel=null;
     private Boolean dirty=Boolean.FALSE;
     private List<DataSetEventListener> dataSetEventListeners = new ArrayList<DataSetEventListener>();
 
+    // access policy
+    private SimpleBooleanProperty canSelect = new SimpleBooleanProperty(Boolean.TRUE);
+    private SimpleBooleanProperty canInsert = new SimpleBooleanProperty(Boolean.TRUE);
+    private SimpleBooleanProperty canUpdate = new SimpleBooleanProperty(Boolean.TRUE);
+    private SimpleBooleanProperty canDelete = new SimpleBooleanProperty(Boolean.TRUE);
+
 
     public DataSet(List<E> store) {
+        if( store.size()==0 ){
+            Logger.getLogger(this.getClass().getName()).log(Level.WARNING, "The size of the store is 0, and the entity class is not defined!");
+        }
+        entityClass = (Class<E>) store.get(0).getClass();
         this.store = store;
         goFirst();
+    }
+
+    public DataSet(List<E> store, Class<E> klass) {
+        entityClass = klass;
+        this.store = store;
+        goFirst();
+    }
+
+    public boolean getCanSelect() {
+        return canSelect.get();
+    }
+
+    public SimpleBooleanProperty canSelectProperty() {
+        return canSelect;
+    }
+
+    public void setCanSelect(boolean canSelect) {
+        this.canSelect.set(canSelect);
+    }
+
+    public boolean getCanInsert() {
+        return canInsert.get();
+    }
+
+    public SimpleBooleanProperty canInsertProperty() {
+        return canInsert;
+    }
+
+    public void setCanInsert(boolean canInsert) {
+        this.canInsert.set(canInsert);
+    }
+
+    public boolean getCanUpdate() {
+        return canUpdate.get();
+    }
+
+    public SimpleBooleanProperty canUpdateProperty() {
+        return canUpdate;
+    }
+
+    public void setCanUpdate(boolean canUpdate) {
+        this.canUpdate.set(canUpdate);
+    }
+
+    public boolean getCanDelete() {
+        return canDelete.get();
+    }
+
+    public SimpleBooleanProperty canDeleteProperty() {
+        return canDelete;
+    }
+
+    public void setCanDelete(boolean canDelete) {
+        this.canDelete.set(canDelete);
     }
 
     public void setStore(List<E> store) {
