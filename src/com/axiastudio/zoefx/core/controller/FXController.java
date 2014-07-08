@@ -161,6 +161,8 @@ public class FXController extends BaseController implements DataSetEventListener
                     zoeFXProperty = model.getProperty(name, String.class);
                 } else if( node instanceof TextArea ){
                     zoeFXProperty = model.getProperty(name, String.class);
+                } else if( node instanceof Label ){
+                    zoeFXProperty = model.getProperty(name, String.class);
                 } else if( node instanceof CheckBox ){
                     zoeFXProperty = model.getProperty(name, Boolean.class);
                 } else if( node instanceof ChoiceBox ){
@@ -190,6 +192,8 @@ public class FXController extends BaseController implements DataSetEventListener
                 property = ((TextField) node).textProperty();
             } else if( node instanceof TextArea ){
                 property = ((TextArea) node).textProperty();
+            } else if( node instanceof Label ){
+                property = ((Label) node).textProperty();
             } else if( node instanceof CheckBox ){
                 property = ((CheckBox) node).selectedProperty();
             } else if( node instanceof ChoiceBox ){
