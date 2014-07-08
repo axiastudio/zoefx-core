@@ -1,6 +1,7 @@
 package com.axiastudio.zoefx.core.db;
 
 import java.util.List;
+import java.util.Map;
 
 /**
  * User: tiziano
@@ -49,6 +50,12 @@ public class WithoutDatabaseManagerImpl<E> implements Manager<E> {
     }
 
     @Override
+    public List<E> query(Map<String, Object> map) {
+        // not implemented
+        return getAll();
+    }
+
+    @Override
     public E create() {
         try {
             return entityClass.newInstance();
@@ -59,4 +66,6 @@ public class WithoutDatabaseManagerImpl<E> implements Manager<E> {
         }
         return null;
     }
+
+
 }
