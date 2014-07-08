@@ -115,7 +115,14 @@ public class DataSet<E> implements DataSetEventGenerator {
     }
 
     private Class<E> getEntityClass() {
-        return (Class<E>) store.get(0).getClass();
+        if( entityClass == null ){
+            if( store.size()==0 ) {
+                Logger.getLogger(this.getClass().getName()).log(Level.WARNING, "The entity class is not defined and the size of the store is 0!");
+            } else {
+                return (Class<E>) store.get(0).getClass();
+            }
+        }
+        return entityClass;
     }
 
     public E create() {
