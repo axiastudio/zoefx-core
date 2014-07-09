@@ -333,6 +333,12 @@ public class FXController extends BaseController implements DataSetEventListener
             }
         });
 
+        // accesso policy
+        addItem.disableProperty().bind(dataset.canUpdateProperty().not());
+        delItem.disableProperty().bind(dataset.canUpdateProperty().not());
+        infoItem.disableProperty().bind(dataset.canUpdateProperty().not());
+        openItem.disableProperty().bind(dataset.canUpdateProperty().not());
+
         contextMenu.getItems().addAll(infoItem, openItem, addItem, delItem);
         return contextMenu;
     }
