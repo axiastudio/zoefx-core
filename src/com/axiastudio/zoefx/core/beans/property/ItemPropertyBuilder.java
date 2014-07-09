@@ -116,10 +116,11 @@ public class ItemPropertyBuilder<T> {
                 item.setFromStringFunction(new Callback<String, BigDecimal>() {
                     @Override
                     public BigDecimal call(String s) {
-                        if (s == null) {
+                        NumberFormat numberFormat = NumberFormat.getCurrencyInstance();
+                        String symbol = numberFormat.getCurrency().getSymbol();
+                        if( s == null || s.equals(symbol) || s.equals(symbol + " ") || s.endsWith(",") || s.endsWith(",0") ) {
                             return null;
                         }
-                        NumberFormat numberFormat = NumberFormat.getCurrencyInstance();
                         try {
                             Number number = numberFormat.parse(s);
                             if (number instanceof Double) {
@@ -130,8 +131,8 @@ public class ItemPropertyBuilder<T> {
                                 return new BigDecimal((Long) number);
                             }
                         } catch (ParseException e) {
-                            // es. "12,00"
-                            return new BigDecimal(Double.parseDouble(s));
+                            // es. "12,0"
+                            return new BigDecimal(Double.parseDouble(s.replace(",", ".")));
                         } catch (ClassCastException e) {
                             return null;
                         }

@@ -47,7 +47,10 @@ public class ItemStringProperty<P> extends StringPropertyBase implements ZoeFXPr
         if( returnType == String.class ){
             beanAccess.setValue(s);
         } else {
-            beanAccess.setValue(fromStringFuction.call(s));
+            P value = fromStringFuction.call(s);
+            if( value != null ) {
+                beanAccess.setValue(value);
+            }
         }
     }
 
