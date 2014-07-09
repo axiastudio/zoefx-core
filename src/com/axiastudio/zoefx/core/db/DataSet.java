@@ -258,6 +258,21 @@ public class DataSet<E> implements DataSetEventGenerator {
         fireDataSetEvent(new DataSetEvent(DataSetEvent.DELETED));
     }
 
+    public void delete(String name, E entity) {
+        Database db = Utilities.queryUtility(Database.class);
+        E parentEntity = store.get(currentIndex);
+        BeanAccess<Collection> beanAccess = new BeanAccess<>(parentEntity, name);
+        Class<E> genericReturnType = (Class<E>) beanAccess.getGenericReturnType();
+        Collection collection = beanAccess.getValue();
+        if( db != null ) {
+            Manager<E> manager = db.createManager(genericReturnType);
+            manager.delete(entity);
+        }
+        collection.remove(entity);
+        fireDataSetEvent(new DataSetEvent(DataSetEvent.ROWS_DETETED));
+        fireDataSetEvent(new DataSetEvent(DataSetEvent.GET_DIRTY));
+    }
+
     /*
      *  EVENTS
      */
