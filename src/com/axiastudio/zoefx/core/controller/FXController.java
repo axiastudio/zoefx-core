@@ -329,7 +329,10 @@ public class FXController extends BaseController implements DataSetEventListener
         delItem.setGraphic(new ImageView(new Image(getClass().getResourceAsStream("/com/axiastudio/zoefx/core/resources/images/delete.png"))));
         delItem.setOnAction(new EventHandler<ActionEvent>() {
             public void handle(ActionEvent e) {
-                //System.out.println("Delete!");
+                ObservableList items = tableView.getItems();
+                List selectedItems =  new ArrayList (tableView.getSelectionModel().getSelectedItems());
+                items.removeAll(selectedItems);
+                dataset.getDirty(); /// XXX: to implement a callback?
             }
         });
 
