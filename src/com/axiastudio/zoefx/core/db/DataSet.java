@@ -34,6 +34,10 @@ public class DataSet<E> implements DataSetEventGenerator {
     private SimpleBooleanProperty canDelete = new SimpleBooleanProperty(Boolean.TRUE);
 
 
+    public DataSet() {
+    }
+
+    /*
     public DataSet(List<E> store) {
         if( store.size()==0 ){
             Logger.getLogger(this.getClass().getName()).log(Level.WARNING, "The size of the store is 0, and the entity class is not defined!");
@@ -42,12 +46,14 @@ public class DataSet<E> implements DataSetEventGenerator {
         this.store = store;
         goFirst();
     }
+    */
 
+    /*
     public DataSet(List<E> store, Class<E> klass) {
         entityClass = klass;
         this.store = store;
         goFirst();
-    }
+    }*/
 
     public boolean getCanSelect() {
         return canSelect.get();
@@ -174,7 +180,7 @@ public class DataSet<E> implements DataSetEventGenerator {
         fireDataSetEvent(new DataSetEvent(DataSetEvent.COMMITED));
     }
 
-    private Manager<E> getManager() {
+    public Manager<E> getManager() {
         if( manager == null ) {
             Database db = Utilities.queryUtility(Database.class);
             if (db != null) {
@@ -184,7 +190,11 @@ public class DataSet<E> implements DataSetEventGenerator {
         return manager;
     }
 
-    private Class<E> getEntityClass() {
+    public void setManager(Manager<E> manager) {
+        this.manager = manager;
+    }
+
+    public Class<E> getEntityClass() {
         if( entityClass == null ){
             if( store.size()==0 ) {
                 Logger.getLogger(this.getClass().getName()).log(Level.WARNING, "The entity class is not defined and the size of the store is 0!");
@@ -193,6 +203,10 @@ public class DataSet<E> implements DataSetEventGenerator {
             }
         }
         return entityClass;
+    }
+
+    public void setEntityClass(Class<E> entityClass) {
+        this.entityClass = entityClass;
     }
 
     public E create() {

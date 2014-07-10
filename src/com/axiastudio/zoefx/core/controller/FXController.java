@@ -4,6 +4,7 @@ import com.axiastudio.zoefx.core.beans.BeanAccess;
 import com.axiastudio.zoefx.core.beans.BeanClassAccess;
 import com.axiastudio.zoefx.core.beans.property.ItemObjectProperty;
 import com.axiastudio.zoefx.core.beans.property.ZoeFXProperty;
+import com.axiastudio.zoefx.core.db.DataSetBuilder;
 import com.axiastudio.zoefx.core.db.TimeMachine;
 import com.axiastudio.zoefx.core.events.DataSetEvent;
 import com.axiastudio.zoefx.core.events.DataSetEventListener;
@@ -231,11 +232,12 @@ public class FXController extends BaseController implements DataSetEventListener
                 if( selectedItems.size()==0 ) {
                     return;
                 }
-                List<Object> newStore = new ArrayList<>();
+                List newStore = new ArrayList<>();
                 for( int i=0; i<selectedItems.size(); i++ ) {
                     newStore.add(selectedItems.get(i));
                 }
-                ZScene newScene = SceneBuilders.queryZScene(newStore, ZSceneMode.DIALOG);
+                DataSet dataSet = DataSetBuilder.create(newStore.get(0).getClass()).store(newStore).manager(getDataset().getManager()).build();
+                ZScene newScene = SceneBuilders.queryZScene(dataSet, ZSceneMode.DIALOG);
                 if( newScene != null ) {
                     Stage newStage = new Stage();
                     newStage.setScene(newScene.getScene());
@@ -253,7 +255,7 @@ public class FXController extends BaseController implements DataSetEventListener
                         if (selectedItems.size() == 0) {
                             return;
                         }
-                        List<Object> newStore = new ArrayList<>();
+                        List newStore = new ArrayList<>();
                         String referenceProperty = tableView.getId() + ".reference";
                         String reference = behavior.getProperties().getProperty(referenceProperty, null);
                         for (int i = 0; i < selectedItems.size(); i++) {
@@ -265,7 +267,8 @@ public class FXController extends BaseController implements DataSetEventListener
                                 newStore.add(item);
                             }
                         }
-                        ZScene newScene = SceneBuilders.queryZScene(newStore, ZSceneMode.WINDOW);
+                        DataSet dataSet = DataSetBuilder.create(newStore.get(0).getClass()).store(newStore).manager(getDataset().getManager()).build();
+                        ZScene newScene = SceneBuilders.queryZScene(dataSet, ZSceneMode.WINDOW);
                         if (newScene != null) {
                             Stage newStage = new Stage();
                             newStage.setScene(newScene.getScene());
@@ -311,9 +314,10 @@ public class FXController extends BaseController implements DataSetEventListener
                     }
                 } else {
                     Object entity = dataset.create(collectionName);
-                    List<Object> newStore = new ArrayList<>();
+                    List newStore = new ArrayList<>();
                     newStore.add(entity);
-                    ZScene newScene = SceneBuilders.queryZScene(newStore, ZSceneMode.DIALOG);
+                    DataSet dataSet = DataSetBuilder.create(newStore.get(0).getClass()).store(newStore).manager(getDataset().getManager()).build();
+                    ZScene newScene = SceneBuilders.queryZScene(dataSet, ZSceneMode.DIALOG);
                     if (newScene != null) {
                         Stage newStage = new Stage();
                         newStage.setScene(newScene.getScene());

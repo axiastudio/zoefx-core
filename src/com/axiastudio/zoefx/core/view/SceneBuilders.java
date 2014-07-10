@@ -3,6 +3,7 @@ package com.axiastudio.zoefx.core.view;
 import com.axiastudio.zoefx.core.controller.Controllers;
 import com.axiastudio.zoefx.core.controller.FXController;
 import com.axiastudio.zoefx.core.db.DataSet;
+import com.axiastudio.zoefx.core.db.DataSetBuilder;
 import javafx.scene.Scene;
 
 import java.util.ArrayList;
@@ -41,49 +42,32 @@ public class SceneBuilders {
     }
 
     /**
-     * Query the scene builder for the given store.
+     * Query the scene builder for the given dataSet.
      *
-     * @param store The store
+     * @param dataSet The DataSet
      * @return  The ZSceneBuilder
      *
      */
-    public static ZSceneBuilder querySceneBuilder(List<Object> store){
-        if( store != null && store.size()>0 ) {
-            return querySceneBuilder(store.get(0).getClass());
+    public static ZSceneBuilder querySceneBuilder(DataSet<Object> dataSet){
+        if( dataSet != null && dataSet.size()>0 ) {
+            return querySceneBuilder(dataSet.getEntityClass());
         }
         return null;
     }
 
-    /**
-     * Query the ZScene for the given entity.
-     *
-     * @param entity The entity
-     * @return  The ZScene
-     *
-     */
-    public static ZScene queryZScene(Object entity) {
-        ZSceneBuilder sceneBuilder = SceneBuilders.querySceneBuilder(entity.getClass());
-        FXController controller = Controllers.queryController(sceneBuilder);
-        List<Object> store = new ArrayList<>();
-        store.add(entity);
-        DataSet<Object> dataSet = new DataSet<>(store);
-        ZScene zScene = sceneBuilder.dataset(dataSet).controller(controller).build();
-        return zScene;
-    }
 
     /**
-     * Query the ZScene for the given store.
+     * Query the ZScene for the given dataSet.
      *
-     * @param store The store
+     * @param dataSet The DataSet
      * @param mode is the ZScene mode (Window or dialog)
      * @return  The ZScene
      *
      */
-    public static ZScene queryZScene(List<Object> store, ZSceneMode mode) {
-        ZSceneBuilder zsb = SceneBuilders.querySceneBuilder(store);
+    public static ZScene queryZScene(DataSet<Object> dataSet, ZSceneMode mode) {
+        ZSceneBuilder zsb = SceneBuilders.querySceneBuilder(dataSet);
         if( zsb != null ){
             FXController controller = Controllers.queryController(zsb);
-            DataSet<Object> dataSet = new DataSet<>(store);
             zsb = zsb.dataset(dataSet);
             zsb = zsb.controller(controller);
             zsb.mode(mode);
@@ -92,8 +76,8 @@ public class SceneBuilders {
         }
         return null;
     }
-    public static ZScene queryZScene(List<Object> store) {
-        return queryZScene(store, ZSceneMode.WINDOW);
+    public static ZScene queryZScene(DataSet<Object> dataSet) {
+        return queryZScene(dataSet, ZSceneMode.WINDOW);
     }
 
 }

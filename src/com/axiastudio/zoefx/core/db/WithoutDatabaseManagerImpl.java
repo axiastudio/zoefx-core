@@ -46,7 +46,7 @@ public class WithoutDatabaseManagerImpl<E> implements Manager<E> {
 
     @Override
     public DataSet<E> getAll() {
-        return new DataSet<E>(store);
+        return DataSetBuilder.create(entityClass).store(store).manager(this).build();
     }
 
     @Override
