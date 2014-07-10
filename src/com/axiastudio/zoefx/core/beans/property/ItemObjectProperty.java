@@ -54,7 +54,7 @@ public class ItemObjectProperty<P> extends ObjectPropertyBase implements ZoeFXPr
             Database database = Utilities.queryUtility(Database.class);
             if( database != null ) {
                 Manager<?> manager = database.createManager(returnType);
-                for (Object obj : manager.getAll()) {
+                for (Object obj : manager.getAll().getStore()) {
                     superset.add((P) obj);
                 }
             }

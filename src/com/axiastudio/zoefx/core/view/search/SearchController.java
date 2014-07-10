@@ -89,7 +89,7 @@ public class SearchController<T> implements Initializable {
                     Database database = Utilities.queryUtility(Database.class);
                     if( database != null ) {
                         Manager<?> manager = database.createManager(returnType);
-                        for (Object obj : manager.getAll()) {
+                        for (Object obj : manager.getAll().getStore()) {
                             superset.add(obj);
                         }
                     }
@@ -129,15 +129,14 @@ public class SearchController<T> implements Initializable {
                 map.put(fieldName, value);
             }
         }
-        List<T> store;
+        DataSet<T> dataSet;
         if( map.keySet().size()>0 ){
-            store = manager.query(map);
+            dataSet = manager.query(map);
         } else {
-            store = manager.getAll();
+            dataSet = manager.getAll();
         }
-        if( store.size()>0 ) {
-            DataSet<T> dataSet = new DataSet<>(store);
-            ObservableList<T> observableList = FXCollections.observableArrayList(store);
+        if( dataSet.size()>0 ) {
+            ObservableList<T> observableList = FXCollections.observableArrayList(dataSet.getStore());
             results.setItems(observableList);
         }
     }
