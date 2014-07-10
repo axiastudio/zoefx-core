@@ -104,6 +104,10 @@ public class DataSet<E> implements DataSetEventGenerator {
         dirty = Boolean.FALSE;
     }
 
+    public List<E> getStore() {
+        return store;
+    }
+
     public Integer getCurrentIndex() {
         return currentIndex;
     }

@@ -35,18 +35,18 @@ public class StartDemo extends Application {
         Validators.bindValidator(Book.class, "title", ValidatorBuilder.create().minLength(2).maxLength(5).build());
 
         ZSceneBuilder zsbBook = ZSceneBuilder.create().url(StartDemo.class.getResource("/com/axiastudio/zoefx/demo/books.fxml"))
-                .controller(new FXController()).dataset(new DataSet<>(database.createManager(Book.class).getAll()));
+                .controller(new FXController()).dataset(database.createManager(Book.class).getAll());
         zsbBook = zsbBook.properties(StartDemo.class.getResourceAsStream("book.properties"));
         SceneBuilders.registerSceneBuilder(Book.class, zsbBook);
 
         ZSceneBuilder zsbPerson = ZSceneBuilder.create().url(StartDemo.class.getResource("/com/axiastudio/zoefx/demo/persons.fxml"))
                 .properties(StartDemo.class.getResourceAsStream("person.properties"))
-                .controller(new FXController()).dataset(new DataSet<>(database.createManager(Person.class).getAll()));
+                .controller(new FXController()).dataset(database.createManager(Person.class).getAll());
         SceneBuilders.registerSceneBuilder(Person.class, zsbPerson);
 
 
         ZSceneBuilder zsbAuthor = ZSceneBuilder.create().url(StartDemo.class.getResource("/com/axiastudio/zoefx/demo/authors.fxml"))
-                .controller(new FXController()).dataset(new DataSet<>(database.createManager(Author.class).getAll()));
+                .controller(new FXController()).dataset(database.createManager(Author.class).getAll());
         SceneBuilders.registerSceneBuilder(Author.class, zsbAuthor);
 
         ZScene personsScene = zsbPerson.build();
