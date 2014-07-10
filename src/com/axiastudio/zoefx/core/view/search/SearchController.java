@@ -20,6 +20,8 @@ import javafx.util.Callback;
 
 import java.net.URL;
 import java.util.*;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  * User: tiziano
@@ -54,10 +56,15 @@ public class SearchController<T> implements Initializable {
     public void setColumns(List<String> columns) {
         for( String property: columns ) {
             TableColumn column = new TableColumn();
+            column.setText(property);
             Callback callback = CallbackBuilder.create().beanClass(entityClass).field(property).build(); /// XXX
             column.setCellValueFactory(callback);
             // custom date order
             BeanClassAccess beanClassAccess = new BeanClassAccess(entityClass, property);
+            if( beanClassAccess.getReturnType() == null ){
+                Logger.getLogger(this.getClass().getName()).log(Level.SEVERE, "Unable to set search column '" + property + "' (maybe wrong searchcolumns property?))");
+                return;
+            }
             if( Date.class.isAssignableFrom(beanClassAccess.getReturnType()) ) {
                 column.setComparator(Comparator.nullsFirst(Comparators.DateComparator));
             }
