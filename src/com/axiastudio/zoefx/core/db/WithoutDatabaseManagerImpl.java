@@ -36,6 +36,11 @@ public class WithoutDatabaseManagerImpl<E> implements Manager<E> {
     }
 
     @Override
+    public void deleteRow(Object row) {
+        // nothing to do
+    }
+
+    @Override
     public void truncate() {
         store.clear();
 

@@ -336,7 +336,7 @@ public class FXController extends BaseController implements DataSetEventListener
                 final String collectionName = tableView.getId();
                 List selectedItems =  new ArrayList (tableView.getSelectionModel().getSelectedItems());
                 for( Object item: selectedItems ) {
-                    dataset.delete(collectionName, item);
+                    dataset.deleteRow(collectionName, item);
                 }
                 dataset.getDirty(); /// XXX: to implement a callback?
             }

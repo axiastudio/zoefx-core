@@ -16,6 +16,8 @@ public interface Manager<E> {
 
     void delete(E entity);
 
+    void deleteRow(Object row);
+
     void truncate();
 
     E get(Long id);
