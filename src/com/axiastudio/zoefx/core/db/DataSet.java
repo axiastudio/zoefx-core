@@ -37,24 +37,6 @@ public class DataSet<E> implements DataSetEventGenerator {
     public DataSet() {
     }
 
-    /*
-    public DataSet(List<E> store) {
-        if( store.size()==0 ){
-            Logger.getLogger(this.getClass().getName()).log(Level.WARNING, "The size of the store is 0, and the entity class is not defined!");
-        }
-        entityClass = (Class<E>) store.get(0).getClass();
-        this.store = store;
-        goFirst();
-    }
-    */
-
-    /*
-    public DataSet(List<E> store, Class<E> klass) {
-        entityClass = klass;
-        this.store = store;
-        goFirst();
-    }*/
-
     public boolean getCanSelect() {
         return canSelect.get();
     }
@@ -233,19 +215,18 @@ public class DataSet<E> implements DataSetEventGenerator {
         return null;
     }
 
-    public Object create(String name) {
+    public Object createRow(String collectionName) {
         Database db = Utilities.queryUtility(Database.class);
         E parentEntity = store.get(currentIndex);
-        BeanAccess<Collection> beanAccess = new BeanAccess<>(parentEntity, name);
+        BeanAccess<Collection> beanAccess = new BeanAccess<>(parentEntity, collectionName);
         Collection collection = beanAccess.getValue();
         Class<?> genericReturnType = beanAccess.getGenericReturnType();
         if( db != null ) {
-            Manager<?> manager = db.createManager(genericReturnType);
-            Object entity = manager.create();
-            collection.add(entity);
+            Object row = getManager().createRow(collectionName);
+            collection.add(row);
             fireDataSetEvent(new DataSetEvent(DataSetEvent.ROWS_CREATED));
             fireDataSetEvent(new DataSetEvent(DataSetEvent.GET_DIRTY));
-            return entity;
+            return row;
         } else {
             try {
                 Object entity = genericReturnType.newInstance();

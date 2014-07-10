@@ -1,5 +1,7 @@
 package com.axiastudio.zoefx.core.db;
 
+import com.axiastudio.zoefx.core.beans.BeanClassAccess;
+
 import java.util.List;
 import java.util.Map;
 
@@ -59,6 +61,20 @@ public class WithoutDatabaseManagerImpl<E> implements Manager<E> {
     public E create() {
         try {
             return entityClass.newInstance();
+        } catch (InstantiationException e) {
+            e.printStackTrace();
+        } catch (IllegalAccessException e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
+    @Override
+    public Object createRow(String collectionName) {
+        BeanClassAccess beanClassAccess = new BeanClassAccess(entityClass, collectionName);
+        Class<?> genericReturnType = beanClassAccess.getGenericReturnType();
+        try {
+            return genericReturnType.newInstance();
         } catch (InstantiationException e) {
             e.printStackTrace();
         } catch (IllegalAccessException e) {

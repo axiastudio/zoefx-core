@@ -299,7 +299,7 @@ public class FXController extends BaseController implements DataSetEventListener
                             @Override
                             public Boolean call(List items) {
                                 for( Object item: items ){
-                                    Object entity = dataset.create(collectionName);
+                                    Object entity = dataset.createRow(collectionName);
                                     BeanAccess<Object> ba = new BeanAccess<>(entity, referenceName);
                                     ba.setValue(item);
                                     refresh();
@@ -313,7 +313,7 @@ public class FXController extends BaseController implements DataSetEventListener
                         e1.printStackTrace();
                     }
                 } else {
-                    Object entity = dataset.create(collectionName);
+                    Object entity = dataset.createRow(collectionName);
                     List newStore = new ArrayList<>();
                     newStore.add(entity);
                     DataSet dataSet = DataSetBuilder.create(newStore.get(0).getClass()).store(newStore).manager(getDataset().getManager()).build();

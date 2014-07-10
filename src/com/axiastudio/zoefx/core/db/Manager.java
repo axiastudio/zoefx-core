@@ -26,4 +26,6 @@ public interface Manager<E> {
 
     E create();
 
+    Object createRow(String collectionName);
+
 }
