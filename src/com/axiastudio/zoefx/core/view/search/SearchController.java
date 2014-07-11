@@ -19,6 +19,7 @@ import javafx.scene.layout.VBox;
 import javafx.util.Callback;
 
 import java.net.URL;
+import java.time.LocalDate;
 import java.util.*;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -80,11 +81,29 @@ public class SearchController<T> implements Initializable {
             Node node=null;
             BeanClassAccess beanClassAccess = new BeanClassAccess(entityClass, property);
             Class<?> returnType = beanClassAccess.getReturnType();
+            if( beanClassAccess.getReturnType() == null ){
+                Logger.getLogger(this.getClass().getName()).log(Level.SEVERE, "Unable to set search criteria '" + property + "' (maybe wrong searchcriteria property?))");
+                return;
+            }
             if( String.class.isAssignableFrom(beanClassAccess.getReturnType()) ) {
                 TextField textField = new TextField();
                 textField.setMinWidth(200.0);
                 textField.setId(property);
                 node = textField;
+            } else if( Boolean.class.isAssignableFrom(beanClassAccess.getReturnType()) ) {
+                CheckBox checkBox = new CheckBox();
+                checkBox.setAllowIndeterminate(true);
+                checkBox.setIndeterminate(true);
+                checkBox.setMinWidth(200.0);
+                checkBox.setId(property);
+                node = checkBox;
+            } else if( Date.class.isAssignableFrom(beanClassAccess.getReturnType()) ) {
+                HBox dateHBox = new HBox();
+                dateHBox.setId(property);
+                DatePicker fromDatePicker = new DatePicker();
+                DatePicker toDatePicker = new DatePicker();
+                dateHBox.getChildren().addAll(fromDatePicker, toDatePicker);
+                node = dateHBox;
             } else if( Object.class.isAssignableFrom(beanClassAccess.getReturnType()) ) {
                 List superset = new ArrayList();
                 if( returnType.isEnum() ) {
@@ -134,6 +153,34 @@ public class SearchController<T> implements Initializable {
                 String fieldName = choiceBox.getId();
                 Object value = choiceBox.getSelectionModel().getSelectedItem();
                 map.put(fieldName, value);
+            } else if( criteriaNode instanceof CheckBox ){
+                CheckBox criteriaField = (CheckBox) criteriaNode;
+                String fieldName = criteriaField.getId();
+                if( !criteriaField.isIndeterminate() ) {
+                    Boolean value = criteriaField.isSelected();
+                    if (value != null) {
+                        map.put(fieldName, value);
+                    }
+                }
+            } else if( criteriaNode instanceof HBox ){
+                String fieldName = criteriaNode.getId();
+                HBox criteriaHBox = (HBox) criteriaNode;
+                Node firstCriteriaNode = criteriaHBox.getChildren().get(0);
+                if( firstCriteriaNode instanceof DatePicker ){
+                    Node secondCriteriaNode = criteriaHBox.getChildren().get(1);
+                    List<Date> value = new ArrayList<>();
+                    LocalDate fromLocalDate = ((DatePicker) firstCriteriaNode).getValue();
+                    if( fromLocalDate != null ) {
+                        value.add(localDateToDate(fromLocalDate));
+                        LocalDate toLocalDate = ((DatePicker) secondCriteriaNode).getValue();
+                        if( toLocalDate != null ) {
+                            value.add(localDateToDate(toLocalDate));
+                        } else {
+                            value.add(localDateToDate(fromLocalDate));
+                        }
+                        map.put(fieldName, value);
+                    }
+                }
             }
         }
         DataSet<T> dataSet;
@@ -153,4 +200,12 @@ public class SearchController<T> implements Initializable {
         ObservableList<T> items = results.getSelectionModel().getSelectedItems();
         callback.call(items);
     }
+
+    private Date localDateToDate(LocalDate localDate){
+        Calendar calendar =  Calendar.getInstance();
+        calendar.set(localDate.getYear(), localDate.getMonthValue()-1, localDate.getDayOfMonth());
+        Date date = calendar.getTime();
+        return date;
+    }
+
 }
