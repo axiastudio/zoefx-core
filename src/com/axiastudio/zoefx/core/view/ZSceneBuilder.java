@@ -3,6 +3,8 @@ package com.axiastudio.zoefx.core.view;
 import com.axiastudio.zoefx.core.controller.BaseController;
 import com.axiastudio.zoefx.core.controller.FXController;
 import com.axiastudio.zoefx.core.db.DataSet;
+import com.axiastudio.zoefx.core.db.DataSetBuilder;
+import com.axiastudio.zoefx.core.db.Manager;
 import com.axiastudio.zoefx.core.db.TimeMachine;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.JavaFXBuilderFactory;
@@ -16,6 +18,7 @@ import javafx.scene.layout.VBox;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.URL;
+import java.util.List;
 import java.util.ResourceBundle;
 
 /**
@@ -23,9 +26,11 @@ import java.util.ResourceBundle;
  * Date: 20/03/14
  * Time: 22:52
  */
-public class ZSceneBuilder {
+public class ZSceneBuilder<E> {
 
-    private DataSet dataset;
+    private Manager<E> manager=null;
+    private List<E> store=null;
+    private Class entityClass=null;
     private URL url;
     private String title;
     private BaseController controller=null;
@@ -41,13 +46,28 @@ public class ZSceneBuilder {
         return new ZSceneBuilder();
     }
 
+    public static ZSceneBuilder create(Class<?> entityClass) {
+        ZSceneBuilder builder = new ZSceneBuilder();
+        builder.setEntityClass(entityClass);
+        return builder;
+    }
+
     public ZSceneBuilder properties(InputStream stream){
         propertiesStrem = stream;
         return this;
     }
 
-    public ZSceneBuilder dataset(DataSet dataset){
-        this.dataset = dataset;
+    public void setEntityClass(Class entityClass) {
+        this.entityClass = entityClass;
+    }
+
+    public ZSceneBuilder manager(Manager manager){
+        this.manager = manager;
+        return this;
+    }
+
+    public ZSceneBuilder store(List<E> store) {
+        this.store = store;
         return this;
     }
 
@@ -129,6 +149,10 @@ public class ZSceneBuilder {
             }
             TimeMachine timeMachine = new TimeMachine();
             fxController.setTimeMachine(timeMachine);
+            if( store == null && manager != null ) {
+                store = manager.getAll();
+            }
+            DataSet<E> dataset =  DataSetBuilder.create(entityClass).store(store).manager(manager).build();
             dataset.addDataSetEventListener(toolBar);
             dataset.addDataSetEventListener(fxController);
             fxController.bindDataSet(dataset);

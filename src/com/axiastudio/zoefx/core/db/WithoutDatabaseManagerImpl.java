@@ -52,12 +52,12 @@ public class WithoutDatabaseManagerImpl<E> implements Manager<E> {
     }
 
     @Override
-    public DataSet<E> getAll() {
-        return DataSetBuilder.create(entityClass).store(store).manager(this).build();
+    public List<E> getAll() {
+        return store;
     }
 
     @Override
-    public DataSet<E> query(Map<String, Object> map) {
+    public List<E> query(Map<String, Object> map) {
         // not implemented
         return getAll();
     }

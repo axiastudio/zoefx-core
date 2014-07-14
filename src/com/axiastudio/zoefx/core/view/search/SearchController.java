@@ -4,6 +4,7 @@ import com.axiastudio.zoefx.core.Utilities;
 import com.axiastudio.zoefx.core.beans.BeanClassAccess;
 import com.axiastudio.zoefx.core.beans.property.CallbackBuilder;
 import com.axiastudio.zoefx.core.db.DataSet;
+import com.axiastudio.zoefx.core.db.DataSetBuilder;
 import com.axiastudio.zoefx.core.db.Database;
 import com.axiastudio.zoefx.core.db.Manager;
 import com.axiastudio.zoefx.core.view.*;
@@ -115,7 +116,7 @@ public class SearchController<T> implements Initializable {
                     Database database = Utilities.queryUtility(Database.class);
                     if( database != null ) {
                         Manager<?> manager = database.createManager(returnType);
-                        for (Object obj : manager.getAll().getStore()) {
+                        for (Object obj : manager.getAll()) {
                             superset.add(obj);
                         }
                     }
@@ -185,9 +186,9 @@ public class SearchController<T> implements Initializable {
         }
         DataSet<T> dataSet;
         if( map.keySet().size()>0 ){
-            dataSet = manager.query(map);
+            dataSet = DataSetBuilder.create(entityClass).store(manager.query(map)).manager(manager).build();
         } else {
-            dataSet = manager.getAll();
+            dataSet = DataSetBuilder.create(entityClass).store(manager.getAll()).manager(manager).build();
         }
         if( dataSet.size()>0 ) {
             ObservableList<T> observableList = FXCollections.observableArrayList(dataSet.getStore());

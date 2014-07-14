@@ -22,9 +22,9 @@ public interface Manager<E> {
 
     E get(Long id);
 
-    DataSet<E> getAll();
+    List<E> getAll();
 
-    DataSet<E> query(Map<String, Object> map);
+    List<E> query(Map<String, Object> map);
 
     E create();
 

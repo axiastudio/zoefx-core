@@ -93,6 +93,9 @@ public class DataSet<E> implements DataSetEventGenerator {
     }
 
     public List<E> getStore() {
+        if( store == null ){
+            store = manager.getAll();
+        }
         return store;
     }
 
@@ -101,7 +104,7 @@ public class DataSet<E> implements DataSetEventGenerator {
     }
 
     public Model<E> newModel() {
-        E entity = store.get(currentIndex);
+        E entity = getStore().get(currentIndex);
         currentModel = new Model(entity);
         fireDataSetEvent(new DataSetEvent(DataSetEvent.INDEX_CHANGED));
         return currentModel;
@@ -116,11 +119,11 @@ public class DataSet<E> implements DataSetEventGenerator {
     }
 
     public void goLast() {
-        currentIndex = store.size()-1;
+        currentIndex = getStore().size()-1;
     }
 
     public void goNext() {
-        if( currentIndex < store.size()-1 ){
+        if( currentIndex < getStore().size()-1 ){
             currentIndex++;
         }
     }
@@ -132,7 +135,7 @@ public class DataSet<E> implements DataSetEventGenerator {
     }
 
     public Integer size() {
-        return store.size();
+        return getStore().size();
     }
 
     public Boolean isDirty() {
@@ -154,9 +157,9 @@ public class DataSet<E> implements DataSetEventGenerator {
     public void commit() {
         Manager<E> manager = getManager();
         if( manager != null ) {
-            E entity = store.get(currentIndex);
+            E entity = getStore().get(currentIndex);
             E merged = manager.commit(entity);
-            store.set(currentIndex, merged);
+            getStore().set(currentIndex, merged);
         }
         dirty = Boolean.FALSE;
         fireDataSetEvent(new DataSetEvent(DataSetEvent.COMMITED));
@@ -178,10 +181,10 @@ public class DataSet<E> implements DataSetEventGenerator {
 
     public Class<E> getEntityClass() {
         if( entityClass == null ){
-            if( store.size()==0 ) {
+            if( getStore().size()==0 ) {
                 Logger.getLogger(this.getClass().getName()).log(Level.WARNING, "The entity class is not defined and the size of the store is 0!");
             } else {
-                return (Class<E>) store.get(0).getClass();
+                return (Class<E>) getStore().get(0).getClass();
             }
         }
         return entityClass;
@@ -195,15 +198,15 @@ public class DataSet<E> implements DataSetEventGenerator {
         Manager<E> manager = getManager();
         if( manager != null ) {
             E entity = manager.create();
-            store.add(entity);
-            currentIndex = store.size()-1;
+            getStore().add(entity);
+            currentIndex = getStore().size()-1;
             fireDataSetEvent(new DataSetEvent(DataSetEvent.CREATED));
             return entity;
         } else {
             try {
                 E entity = getEntityClass().newInstance();
-                store.add(entity);
-                currentIndex = store.size()-1;
+                getStore().add(entity);
+                currentIndex = getStore().size()-1;
                 fireDataSetEvent(new DataSetEvent(DataSetEvent.CREATED));
                 return entity;
             } catch (InstantiationException e) {
@@ -217,7 +220,7 @@ public class DataSet<E> implements DataSetEventGenerator {
 
     public Object createRow(String collectionName) {
         Database db = Utilities.queryUtility(Database.class);
-        E parentEntity = store.get(currentIndex);
+        E parentEntity = getStore().get(currentIndex);
         BeanAccess<Collection> beanAccess = new BeanAccess<>(parentEntity, collectionName);
         Collection collection = beanAccess.getValue();
         Class<?> genericReturnType = beanAccess.getGenericReturnType();
@@ -246,20 +249,20 @@ public class DataSet<E> implements DataSetEventGenerator {
     public void delete() {
         Manager<E> manager = getManager();
         if( manager != null ) {
-            E entity = store.get(currentIndex);
+            E entity = getStore().get(currentIndex);
             manager.delete(entity);
-            store.remove(currentIndex);
-            currentIndex = store.size()-1;
+            getStore().remove(currentIndex);
+            currentIndex = getStore().size()-1;
         } else {
-            store.remove(currentIndex);
-            currentIndex = store.size()-1;
+            getStore().remove(currentIndex);
+            currentIndex = getStore().size()-1;
         }
         fireDataSetEvent(new DataSetEvent(DataSetEvent.DELETED));
     }
 
     public void deleteRow(String collectionName, E row) {
         Database db = Utilities.queryUtility(Database.class);
-        E parentEntity = store.get(currentIndex);
+        E parentEntity = getStore().get(currentIndex);
         BeanAccess<Collection> beanAccess = new BeanAccess<>(parentEntity, collectionName);
         Collection collection = beanAccess.getValue();
         collection.remove(row);

@@ -37,7 +37,7 @@ public class WithoutDatabaseImplTest {
         Database db = Utilities.queryUtility(Database.class);
         Manager<Author> manager = db.createManager(Author.class);
 
-        DataSet<Author> all = manager.getAll();
+        DataSet<Author> all = DataSetBuilder.create(Author.class).store(manager.getAll()).manager(manager).build();
 
         assert all.size()==2;
 

@@ -236,8 +236,10 @@ public class FXController extends BaseController implements DataSetEventListener
                 for( int i=0; i<selectedItems.size(); i++ ) {
                     newStore.add(selectedItems.get(i));
                 }
-                DataSet dataSet = DataSetBuilder.create(newStore.get(0).getClass()).store(newStore).manager(getDataset().getManager()).build();
-                ZScene newScene = SceneBuilders.queryZScene(dataSet, ZSceneMode.DIALOG);
+                ZSceneBuilder sceneBuilder = SceneBuilders.querySceneBuilder(newStore.get(0).getClass());
+                FXController controller = Controllers.queryController(sceneBuilder);
+                ZScene newScene = sceneBuilder.manager(getDataset().getManager()).store(newStore).controller(controller)
+                        .mode(ZSceneMode.DIALOG).build();
                 if( newScene != null ) {
                     Stage newStage = new Stage();
                     newStage.setScene(newScene.getScene());
@@ -267,8 +269,10 @@ public class FXController extends BaseController implements DataSetEventListener
                                 newStore.add(item);
                             }
                         }
-                        DataSet dataSet = DataSetBuilder.create(newStore.get(0).getClass()).store(newStore).manager(getDataset().getManager()).build();
-                        ZScene newScene = SceneBuilders.queryZScene(dataSet, ZSceneMode.WINDOW);
+                        ZSceneBuilder sceneBuilder = SceneBuilders.querySceneBuilder(newStore.get(0).getClass());
+                        FXController controller = Controllers.queryController(sceneBuilder);
+                        ZScene newScene = sceneBuilder.manager(getDataset().getManager()).store(newStore).controller(controller)
+                                .mode(ZSceneMode.WINDOW).build();
                         if (newScene != null) {
                             Stage newStage = new Stage();
                             newStage.setScene(newScene.getScene());
@@ -316,8 +320,10 @@ public class FXController extends BaseController implements DataSetEventListener
                     Object entity = dataset.createRow(collectionName);
                     List newStore = new ArrayList<>();
                     newStore.add(entity);
-                    DataSet dataSet = DataSetBuilder.create(newStore.get(0).getClass()).store(newStore).manager(getDataset().getManager()).build();
-                    ZScene newScene = SceneBuilders.queryZScene(dataSet, ZSceneMode.DIALOG);
+                    ZSceneBuilder sceneBuilder = SceneBuilders.querySceneBuilder(newStore.get(0).getClass());
+                    FXController controller = Controllers.queryController(sceneBuilder);
+                    ZScene newScene = sceneBuilder.manager(getDataset().getManager()).store(newStore).controller(controller)
+                            .mode(ZSceneMode.DIALOG).build();
                     if (newScene != null) {
                         Stage newStage = new Stage();
                         newStage.setScene(newScene.getScene());
