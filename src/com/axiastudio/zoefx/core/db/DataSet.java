@@ -22,6 +22,7 @@ public class DataSet<E> implements DataSetEventGenerator {
     private List<E> store;
     private Class<E> entityClass;
     private Manager<E> manager=null;
+    private EntityListener<E> listener =null;
     private Integer currentIndex;
     private Model<E> currentModel=null;
     private Boolean dirty=Boolean.FALSE;
@@ -180,6 +181,10 @@ public class DataSet<E> implements DataSetEventGenerator {
         this.manager = manager;
     }
 
+    public void setListener(EntityListener<E> listener) {
+        this.listener = listener;
+    }
+
     public Class<E> getEntityClass() {
         if( entityClass == null ){
             if( getStore().size()==0 ) {
@@ -284,8 +289,16 @@ public class DataSet<E> implements DataSetEventGenerator {
 
     private void fireDataSetEvent(DataSetEvent event){
         Logger.getLogger(this.getClass().getName()).log(Level.FINE, "{0} event fired", event.getEventType().getName());
-        for(DataSetEventListener listener: dataSetEventListeners) {
-            listener.dataSetEventHandler(event);
+        for(DataSetEventListener dataSetEventListener: dataSetEventListeners) {
+            dataSetEventListener.dataSetEventHandler(event);
+        }
+        // EntityLister events
+        if( listener!= null ){
+            E entity = getStore().get(currentIndex);
+            if( event.getEventType().equals(DataSetEvent.BEFORE_COMMIT) ){
+                listener.beforeCommit(entity);
+            }
+            // TODO
         }
     }
 }

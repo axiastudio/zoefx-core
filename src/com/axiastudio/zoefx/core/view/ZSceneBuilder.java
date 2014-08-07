@@ -2,16 +2,12 @@ package com.axiastudio.zoefx.core.view;
 
 import com.axiastudio.zoefx.core.controller.BaseController;
 import com.axiastudio.zoefx.core.controller.FXController;
-import com.axiastudio.zoefx.core.db.DataSet;
-import com.axiastudio.zoefx.core.db.DataSetBuilder;
-import com.axiastudio.zoefx.core.db.Manager;
-import com.axiastudio.zoefx.core.db.TimeMachine;
+import com.axiastudio.zoefx.core.db.*;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.JavaFXBuilderFactory;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.MenuBar;
-import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
 
@@ -29,6 +25,7 @@ import java.util.ResourceBundle;
 public class ZSceneBuilder<E> {
 
     private Manager<E> manager=null;
+    private EntityListener<E> listener=null;
     private List<E> store=null;
     private Class entityClass=null;
     private URL url;
@@ -109,6 +106,11 @@ public class ZSceneBuilder<E> {
         return this;
     }
 
+    public ZSceneBuilder<E> listener(EntityListener<E> listener) {
+        this.listener = listener;
+        return this;
+    }
+
     public ZScene build(){
         ResourceBundle bundle = ResourceBundle.getBundle("com.axiastudio.zoefx.core.resources.i18n");
         FXMLLoader loader = new FXMLLoader(url, bundle);
@@ -155,6 +157,9 @@ public class ZSceneBuilder<E> {
             DataSet<E> dataset =  DataSetBuilder.create(entityClass).store(store).manager(manager).build();
             dataset.addDataSetEventListener(toolBar);
             dataset.addDataSetEventListener(fxController);
+            if( listener!= null ){
+                dataset.setListener(listener);
+            }
             fxController.bindDataSet(dataset);
 
             toolBar.canSelectProperty().bind(dataset.canSelectProperty());
