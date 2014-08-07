@@ -16,6 +16,8 @@ public class DataSetEvent extends Event {
 
     public static final EventType<DataSetEvent> GET_DIRTY = new EventType(ANY, "GET_DIRTY");
 
+    public static final EventType<DataSetEvent> BEFORE_COMMIT = new EventType(ANY, "BEFORE_COMMIT");
+
     public static final EventType<DataSetEvent> COMMITED = new EventType(ANY, "COMMITED");
 
     public static final EventType<DataSetEvent> REVERTED = new EventType(ANY, "REVERTED");

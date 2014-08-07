@@ -624,12 +624,34 @@ public class FXController extends BaseController implements DataSetEventListener
         //System.out.println(event.getEventType());
         Logger.getLogger(this.getClass().getName()).log(Level.FINE, "{0} event handled", event.getEventType().getName());
         if( event.getEventType().equals(DataSetEvent.STORE_CHANGED) ){
+            storeChanged();
             unsetModel();
             setModel();
         } else if( event.getEventType().equals(DataSetEvent.ROWS_CREATED) ){
+            rowsCreated();
             refresh();
         } else if( event.getEventType().equals(DataSetEvent.ROWS_DETETED) ){
+            rowsDeleted();
             refresh();
+        } else if( event.getEventType().equals(DataSetEvent.GET_DIRTY) ){
+            getDirty();
+        } else if( event.getEventType().equals(DataSetEvent.BEFORE_COMMIT) ){
+            beforeCommit();
+        } else if( event.getEventType().equals(DataSetEvent.COMMITED) ){
+            committed();
+        } else if( event.getEventType().equals(DataSetEvent.INDEX_CHANGED) ){
+            indexChanged();
         }
     }
+
+    /*
+     * Methods to implement in a custom controller.
+     */
+    protected void storeChanged(){}
+    protected void rowsCreated(){}
+    protected void rowsDeleted(){}
+    protected void getDirty(){}
+    protected void beforeCommit(){}
+    protected void committed(){}
+    protected void indexChanged(){}
 }

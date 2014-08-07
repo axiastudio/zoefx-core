@@ -155,6 +155,7 @@ public class DataSet<E> implements DataSetEventGenerator {
     }
 
     public void commit() {
+        fireDataSetEvent(new DataSetEvent(DataSetEvent.BEFORE_COMMIT));
         Manager<E> manager = getManager();
         if( manager != null ) {
             E entity = getStore().get(currentIndex);
