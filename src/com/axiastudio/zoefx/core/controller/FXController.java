@@ -2,6 +2,7 @@ package com.axiastudio.zoefx.core.controller;
 
 import com.axiastudio.zoefx.core.beans.BeanAccess;
 import com.axiastudio.zoefx.core.beans.BeanClassAccess;
+import com.axiastudio.zoefx.core.beans.LookupStringConverter;
 import com.axiastudio.zoefx.core.beans.property.ItemObjectProperty;
 import com.axiastudio.zoefx.core.beans.property.ZoeFXProperty;
 import com.axiastudio.zoefx.core.db.TimeMachine;
@@ -130,7 +131,14 @@ public class FXController extends BaseController implements DataSetEventListener
                 Property property = model.getProperty(name, Object.class);
                 List superset = ((ItemObjectProperty) property).getSuperset();
                 ObservableList choices = FXCollections.observableArrayList(superset);
-                ((ChoiceBox) node).setItems(choices);
+                ChoiceBox choiceBox = (ChoiceBox) node;
+                choiceBox.setItems(choices);
+                if( behavior != null ) {
+                    String lookup = behavior.getProperties().getProperty(name + ".lookup");
+                    if (lookup != null) {
+                        choiceBox.setConverter(new LookupStringConverter<>(lookup));
+                    }
+                }
             }
         }
     }
