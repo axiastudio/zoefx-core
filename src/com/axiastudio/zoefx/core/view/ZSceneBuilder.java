@@ -14,6 +14,7 @@ import javafx.scene.layout.VBox;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.URL;
+import java.util.EnumSet;
 import java.util.List;
 import java.util.ResourceBundle;
 
@@ -25,6 +26,7 @@ import java.util.ResourceBundle;
 public class ZSceneBuilder<E> {
 
     private Manager<E> manager=null;
+    private EnumSet<Permission> permissions=null;
     private EntityListener<E> listener=null;
     private List<E> store=null;
     private Class entityClass=null;
@@ -51,6 +53,17 @@ public class ZSceneBuilder<E> {
 
     public ZSceneBuilder properties(InputStream stream){
         propertiesStrem = stream;
+        return this;
+    }
+
+    public ZSceneBuilder permission(Permission permission){
+        if( permissions==null ){
+            permissions = EnumSet.of(permission);
+        } else {
+            if( !permissions.contains(permission) ) {
+                permissions.add(permission);
+            }
+        }
         return this;
     }
 
@@ -162,6 +175,12 @@ public class ZSceneBuilder<E> {
             }
             fxController.bindDataSet(dataset);
 
+            if( permissions!=null ){
+                dataset.setCanSelect(permissions.contains(Permission.SELECT));
+                dataset.setCanInsert(permissions.contains(Permission.INSERT));
+                dataset.setCanUpdate(permissions.contains(Permission.UPDATE));
+                dataset.setCanDelete(permissions.contains(Permission.DELETE));
+            }
             toolBar.canSelectProperty().bind(dataset.canSelectProperty());
             toolBar.canInsertProperty().bind(dataset.canInsertProperty());
             toolBar.canUpdateProperty().bind(dataset.canUpdateProperty());
