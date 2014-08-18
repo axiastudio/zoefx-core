@@ -10,12 +10,12 @@ import java.util.Map;
  * Date: 27/06/14
  * Time: 10:33
  */
-public class WithoutDatabaseManagerImpl<E> implements Manager<E> {
+public class NoPersistenceDatabaseManagerImpl<E> implements Manager<E> {
 
     private List<E> store;
     private Class<E> entityClass;
 
-    public WithoutDatabaseManagerImpl(List<E> store) {
+    public NoPersistenceDatabaseManagerImpl(List<E> store) {
         this.store = store;
         entityClass = (Class<E>) store.get(0).getClass();
     }

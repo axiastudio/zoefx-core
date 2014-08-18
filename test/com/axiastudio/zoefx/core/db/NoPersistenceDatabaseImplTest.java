@@ -3,16 +3,13 @@ package com.axiastudio.zoefx.core.db;
 import com.axiastudio.zoefx.core.Utilities;
 import com.axiastudio.zoefx.core.beans.EntityBuilder;
 import com.axiastudio.zoefx.demo.Author;
-import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
 import java.util.ArrayList;
 import java.util.List;
 
-import static org.junit.Assert.*;
-
-public class WithoutDatabaseImplTest {
+public class NoPersistenceDatabaseImplTest {
 
     @BeforeClass
     public static void setUpClass() throws Exception {
@@ -24,7 +21,7 @@ public class WithoutDatabaseImplTest {
         authors.add(lev);
         authors.add(marquez);
 
-        WithoutDatabaseImpl database = new WithoutDatabaseImpl();
+        NoPersistenceDatabaseImpl database = new NoPersistenceDatabaseImpl();
         database.putStore(authors, Author.class);
 
         Utilities.registerUtility(database, Database.class);

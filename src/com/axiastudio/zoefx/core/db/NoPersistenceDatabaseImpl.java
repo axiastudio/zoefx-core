@@ -9,9 +9,9 @@ import java.util.Map;
  * Date: 27/06/14
  * Time: 10:33
  */
-public class WithoutDatabaseImpl implements Database {
+public class NoPersistenceDatabaseImpl implements Database {
 
-    Map<Class, WithoutDatabaseManagerImpl> managers = new HashMap<>();
+    Map<Class, NoPersistenceDatabaseManagerImpl> managers = new HashMap<>();
 
     @Override
     public void open(String persistenceUnit) {
@@ -32,7 +32,7 @@ public class WithoutDatabaseImpl implements Database {
      *  Without Database store
      */
     public <E> void putStore(List<E> store, Class<E> klass){
-        WithoutDatabaseManagerImpl<E> manager = new WithoutDatabaseManagerImpl<>(store);
+        NoPersistenceDatabaseManagerImpl<E> manager = new NoPersistenceDatabaseManagerImpl<>(store);
         managers.put(klass, manager);
     }
 

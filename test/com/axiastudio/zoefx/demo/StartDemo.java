@@ -4,7 +4,7 @@ import com.axiastudio.zoefx.core.Utilities;
 import com.axiastudio.zoefx.core.beans.EntityBuilder;
 import com.axiastudio.zoefx.core.controller.FXController;
 import com.axiastudio.zoefx.core.db.Database;
-import com.axiastudio.zoefx.core.db.WithoutDatabaseImpl;
+import com.axiastudio.zoefx.core.db.NoPersistenceDatabaseImpl;
 import com.axiastudio.zoefx.core.validators.ValidatorBuilder;
 import com.axiastudio.zoefx.core.validators.Validators;
 import com.axiastudio.zoefx.core.view.SceneBuilders;
@@ -26,7 +26,7 @@ public class StartDemo extends Application {
     @Override
     public void start(Stage primaryStage) throws Exception{
 
-        WithoutDatabaseImpl database = new WithoutDatabaseImpl();
+        NoPersistenceDatabaseImpl database = new NoPersistenceDatabaseImpl();
         Utilities.registerUtility(database, Database.class);
 
         initData();
@@ -61,7 +61,7 @@ public class StartDemo extends Application {
 
     private static void initData(){
 
-        WithoutDatabaseImpl database = (WithoutDatabaseImpl) Utilities.queryUtility(Database.class);
+        NoPersistenceDatabaseImpl database = (NoPersistenceDatabaseImpl) Utilities.queryUtility(Database.class);
 
 
         Author lev = EntityBuilder.create(Author.class).set("name", "Lev").set("surname", "Tolstoj").build();
