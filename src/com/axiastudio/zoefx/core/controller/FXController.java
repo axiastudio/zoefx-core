@@ -9,6 +9,9 @@ import com.axiastudio.zoefx.core.db.TimeMachine;
 import com.axiastudio.zoefx.core.events.DataSetEvent;
 import com.axiastudio.zoefx.core.events.DataSetEventListener;
 import com.axiastudio.zoefx.core.db.DataSet;
+import com.axiastudio.zoefx.core.listeners.TextFieldListener;
+import com.axiastudio.zoefx.core.validators.Validator;
+import com.axiastudio.zoefx.core.validators.Validators;
 import com.axiastudio.zoefx.core.view.*;
 import com.axiastudio.zoefx.core.console.ConsoleController;
 import com.axiastudio.zoefx.core.view.search.SearchController;
@@ -217,14 +220,13 @@ public class FXController extends BaseController implements DataSetEventListener
             if( property != null ){
                 fxProperties.put(name, property);
             }
+            /*
+            Validator validator = Validators.getValidator(dataset.getCurrentModel().getEntityClass(), name);
+            if( validator != null ) {
+                property.addListener(new TextFieldListener(validator));
+            }
+            */
         }
-
-        /*
-        Validator validator = Validators.getValidator(model.getEntityClass(), name);
-                if( validator != null ) {
-                    fxProperty.addListener(new TextFieldListener(validator));
-                }
-         */
     }
 
 

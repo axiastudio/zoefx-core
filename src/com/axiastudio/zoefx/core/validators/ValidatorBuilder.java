@@ -11,6 +11,7 @@ public class ValidatorBuilder {
     private Boolean notNull=Boolean.FALSE;
     private Integer minLength=0;
     private Integer maxLength=-1;
+    private String code=null;
 
     public ValidatorBuilder() {
     }
@@ -24,7 +25,6 @@ public class ValidatorBuilder {
         return this;
     }
 
-
     public ValidatorBuilder minLength(Integer min){
         minLength = min;
         return this;
@@ -35,12 +35,18 @@ public class ValidatorBuilder {
         return this;
     }
 
+    public ValidatorBuilder code(String src){
+        code = src;
+        return this;
+    }
+
     public Validator build() {
         if( type.equals(ValidatorType.STRING) ) {
             StringValidator validator = new StringValidator();
             validator.setMinLength(minLength);
             validator.setMaxLength(maxLength);
             validator.setNotNull(notNull);
+            validator.setCode(code);
             return validator;
         }
         return null;
