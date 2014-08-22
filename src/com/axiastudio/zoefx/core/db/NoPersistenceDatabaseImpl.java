@@ -25,12 +25,17 @@ public class NoPersistenceDatabaseImpl implements Database {
 
     @Override
     public <E> Manager<E> createManager(Class<E> klass) {
+        if( !managers.keySet().contains(klass) ) {
+            NoPersistenceDatabaseManagerImpl<E> manager = new NoPersistenceDatabaseManagerImpl<>(klass);
+            managers.put(klass, manager);
+        }
         return managers.get(klass);
     }
 
     /*
      *  Without Database store
      */
+
     public <E> void putStore(List<E> store, Class<E> klass){
         NoPersistenceDatabaseManagerImpl<E> manager = new NoPersistenceDatabaseManagerImpl<>(store);
         managers.put(klass, manager);
