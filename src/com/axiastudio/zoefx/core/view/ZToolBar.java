@@ -1,8 +1,12 @@
 package com.axiastudio.zoefx.core.view;
 
+import com.axiastudio.zoefx.core.Utilities;
 import com.axiastudio.zoefx.core.controller.FXController;
 import com.axiastudio.zoefx.core.events.DataSetEvent;
 import com.axiastudio.zoefx.core.events.DataSetEventListener;
+import com.axiastudio.zoefx.core.skins.Black;
+import com.axiastudio.zoefx.core.skins.Skins;
+import com.axiastudio.zoefx.core.skins.ZSkin;
 import javafx.beans.property.SimpleBooleanProperty;
 import javafx.geometry.Pos;
 import javafx.scene.control.Button;
@@ -58,7 +62,7 @@ public class ZToolBar extends ToolBar implements DataSetEventListener {
             } else {
                 Button button = new Button();
                 button.setId(buttonName + "NavButton");
-                button.setGraphic(new ImageView(new Image(getClass().getResourceAsStream("/com/axiastudio/zoefx/core/resources/images/" + buttonName + ".png"))));
+                button.setGraphic(new ImageView(new Image(getClass().getResourceAsStream(Skins.getActiveSkin().resourcesFolder() + buttonName + ".png"))));
                 button.setTooltip(new Tooltip(bundle.getString("toolbar." + buttonName)));
                 buttons.put(buttonName, button);
                 getItems().add(button);
@@ -137,7 +141,7 @@ public class ZToolBar extends ToolBar implements DataSetEventListener {
         else if( controller.getMode().equals(ZSceneMode.DIALOG) ){
             buttons.get("add").setDisable(Boolean.TRUE); //.disableProperty().bind(new SimpleBooleanProperty(Boolean.TRUE));
             buttons.get("delete").setDisable(Boolean.TRUE); //.disableProperty().bind(new SimpleBooleanProperty(Boolean.TRUE));
-            buttons.get("save").setGraphic(new ImageView(new Image(getClass().getResourceAsStream("/com/axiastudio/zoefx/core/resources/images/checkmark.png"))));
+            buttons.get("save").setGraphic(new ImageView(new Image(getClass().getResourceAsStream(Skins.getActiveSkin().resourcesFolder() + "accept.png"))));
             buttons.get("save").setOnAction(this.controller.handlerConfirm);
         }
 

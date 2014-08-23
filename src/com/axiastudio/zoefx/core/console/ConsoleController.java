@@ -4,6 +4,7 @@ import com.axiastudio.zoefx.core.Utilities;
 import com.axiastudio.zoefx.core.controller.FXController;
 import com.axiastudio.zoefx.core.script.ScriptEngine;
 import com.axiastudio.zoefx.core.script.JSEngineImpl;
+import com.axiastudio.zoefx.core.skins.Skins;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
@@ -37,7 +38,7 @@ public class ConsoleController implements Initializable {
 
         Button button = new Button();
         button.setId("executeConsoleButton");
-        button.setGraphic(new ImageView(new Image(getClass().getResourceAsStream("/com/axiastudio/zoefx/core/resources/images/cogs.png"))));
+        button.setGraphic(new ImageView(new Image(getClass().getResourceAsStream(Skins.getActiveSkin().resourcesFolder() + "cogs.png"))));
         toolBar.getItems().add(button);
         button.setOnAction(this.handlerExecute);
 
