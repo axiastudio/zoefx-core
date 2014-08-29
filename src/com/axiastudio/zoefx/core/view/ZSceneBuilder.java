@@ -30,10 +30,10 @@ public class ZSceneBuilder<E> {
     private EntityListener<E> listener=null;
     private List<E> store=null;
     private Class entityClass=null;
-    private URL url;
+    private URL fxmlUrl;
+    private URL propertiesUrl=null;
     private String title;
     private BaseController controller=null;
-    private InputStream propertiesStrem=null;
     private Integer width=500;
     private Integer height=375;
     private ZSceneMode mode=ZSceneMode.WINDOW;
@@ -51,8 +51,8 @@ public class ZSceneBuilder<E> {
         return builder;
     }
 
-    public ZSceneBuilder properties(InputStream stream){
-        propertiesStrem = stream;
+    public ZSceneBuilder properties(URL url){
+        propertiesUrl = url;
         return this;
     }
 
@@ -88,14 +88,14 @@ public class ZSceneBuilder<E> {
 
     public String getTitle() {
         if( title == null ) {
-            return url.getFile().substring(url.getFile().lastIndexOf("/")+1,
-                    url.getFile().lastIndexOf("."));
+            return fxmlUrl.getFile().substring(fxmlUrl.getFile().lastIndexOf("/")+1,
+                    fxmlUrl.getFile().lastIndexOf("."));
         }
         return title;
     }
 
     public ZSceneBuilder url(URL url){
-        this.url = url;
+        this.fxmlUrl = url;
         return this;
     }
 
@@ -126,9 +126,9 @@ public class ZSceneBuilder<E> {
 
     public ZScene build(){
         ResourceBundle bundle = ResourceBundle.getBundle("com.axiastudio.zoefx.core.resources.i18n");
-        FXMLLoader loader = new FXMLLoader(url, bundle);
+        FXMLLoader loader = new FXMLLoader(fxmlUrl, bundle);
         loader.setResources(bundle);
-        loader.setLocation(url);
+        loader.setLocation(fxmlUrl);
         loader.setBuilderFactory(new JavaFXBuilderFactory());
         if( controller != null ) {
             loader.setController(controller);
@@ -158,9 +158,12 @@ public class ZSceneBuilder<E> {
 
             toolBar.setController(fxController);
             fxController.setScene(scene);
-            if( propertiesStrem != null ){
-                Behavior behavior = new Behavior(propertiesStrem);
-                fxController.setBehavior(behavior);
+            if( propertiesUrl != null ){
+                try {
+                    fxController.setBehavior(new Behavior(propertiesUrl.openStream()));
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
             }
             TimeMachine timeMachine = new TimeMachine();
             fxController.setTimeMachine(timeMachine);

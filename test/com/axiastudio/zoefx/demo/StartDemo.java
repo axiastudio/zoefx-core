@@ -41,13 +41,15 @@ public class StartDemo extends Application {
 
         Validators.bindValidator(Book.class, "title", ValidatorBuilder.create().minLength(2).maxLength(5).build());
 
-        ZSceneBuilder zsbBook = ZSceneBuilder.create().url(StartDemo.class.getResource("/com/axiastudio/zoefx/demo/books.fxml"))
-                .controller(new FXController()).manager(database.createManager(Book.class));
-        zsbBook = zsbBook.properties(StartDemo.class.getResourceAsStream("book.properties"));
+        ZSceneBuilder zsbBook = ZSceneBuilder.create()
+                .url(StartDemo.class.getResource("/com/axiastudio/zoefx/demo/books.fxml"))
+                .controller(new FXController())
+                .manager(database.createManager(Book.class));
+        zsbBook = zsbBook.properties(StartDemo.class.getResource("/com/axiastudio/zoefx/demo/book.properties"));
         SceneBuilders.registerSceneBuilder(Book.class, zsbBook);
 
         ZSceneBuilder zsbPerson = ZSceneBuilder.create().url(StartDemo.class.getResource("/com/axiastudio/zoefx/demo/persons.fxml"))
-                .properties(StartDemo.class.getResourceAsStream("person.properties"))
+                .properties(StartDemo.class.getResource("/com/axiastudio/zoefx/demo/person.properties"))
                 .controller(new FXController()).manager(database.createManager(Person.class));
         SceneBuilders.registerSceneBuilder(Person.class, zsbPerson);
 
@@ -56,9 +58,10 @@ public class StartDemo extends Application {
                 .controller(new FXController()).manager(database.createManager(Author.class));
         SceneBuilders.registerSceneBuilder(Author.class, zsbAuthor);
 
-        ZScene personsScene = zsbPerson.build();
-        primaryStage.setTitle("Zoe FX Framework - Persons");
-        primaryStage.setScene(personsScene.getScene());
+        primaryStage.setTitle("Zoe FX Framework - Authors");
+        //primaryStage.setScene(zsbPerson.build().getScene());
+        //primaryStage.setScene(zsbAuthor.build().getScene());
+        primaryStage.setScene(zsbBook.build().getScene());
         primaryStage.show();
 
     }
