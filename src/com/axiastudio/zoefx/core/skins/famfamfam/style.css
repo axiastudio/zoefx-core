@@ -1,0 +1,9 @@
+.button, .tool-bar {
+    -fx-border-color: #ffffff;
+    -fx-background-color: #ffffff;
+    -fx-spacing: 0;
+}
+
+.button:hover {
+    -fx-border-color: #999999;
+}

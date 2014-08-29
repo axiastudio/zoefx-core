@@ -1,5 +1,7 @@
 package com.axiastudio.zoefx.core.skins;
 
+import java.util.Optional;
+
 /**
  * User: tiziano
  * Date: 23/08/14
@@ -9,5 +11,8 @@ public interface ZSkin {
 
     public String getName();
     public String resourcesFolder();
+    public default Optional<String> getStyle(){
+        return Optional.empty();
+    };
 
 }

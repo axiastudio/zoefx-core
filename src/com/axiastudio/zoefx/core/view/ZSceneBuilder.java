@@ -3,6 +3,7 @@ package com.axiastudio.zoefx.core.view;
 import com.axiastudio.zoefx.core.controller.BaseController;
 import com.axiastudio.zoefx.core.controller.FXController;
 import com.axiastudio.zoefx.core.db.*;
+import com.axiastudio.zoefx.core.skins.Skins;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.JavaFXBuilderFactory;
 import javafx.scene.Parent;
@@ -140,6 +141,7 @@ public class ZSceneBuilder<E> {
             e.printStackTrace();
         }
         Scene scene = new Scene(root, width, height);
+        Skins.getActiveSkin().getStyle().ifPresent(s -> scene.getStylesheets().add(s));
         ZScene zScene = new ZScene();
         zScene.setScene(scene);
         if( controller instanceof FXController ) {
