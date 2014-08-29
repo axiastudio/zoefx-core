@@ -27,8 +27,8 @@ public class StartDemo extends Application {
     @Override
     public void start(Stage primaryStage) throws Exception{
 
-        //ZSkin skin = new Black();
-        ZSkin skin = new FamFamFam();
+        ZSkin skin = new Black();
+        //ZSkin skin = new FamFamFam();
         //ZSkin skin = new NoIcons();
         Skins.registerSkin(skin);
 

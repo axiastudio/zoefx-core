@@ -1,5 +1,7 @@
 package com.axiastudio.zoefx.core.skins;
 
+import java.util.Optional;
+
 /**
  * User: tiziano
  * Date: 23/08/14
@@ -16,4 +18,10 @@ public class Black implements ZSkin {
     public String getName() {
         return "black";
     }
+
+    @Override
+    public Optional<String> getStyle() {
+        return Optional.of("/com/axiastudio/zoefx/core/skins/black/style.css");
+    }
+
 }

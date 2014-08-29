@@ -1,6 +1,6 @@
 .button, .tool-bar {
-    -fx-border-color: #ffffff;
-    -fx-background-color: #ffffff;
+    -fx-border-color: transparent;
+    -fx-background-color: transparent;
     -fx-spacing: 0;
 }
 
