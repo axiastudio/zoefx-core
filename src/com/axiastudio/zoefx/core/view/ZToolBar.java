@@ -1,12 +1,9 @@
 package com.axiastudio.zoefx.core.view;
 
-import com.axiastudio.zoefx.core.Utilities;
 import com.axiastudio.zoefx.core.controller.FXController;
 import com.axiastudio.zoefx.core.events.DataSetEvent;
 import com.axiastudio.zoefx.core.events.DataSetEventListener;
-import com.axiastudio.zoefx.core.skins.Black;
 import com.axiastudio.zoefx.core.skins.Skins;
-import com.axiastudio.zoefx.core.skins.ZSkin;
 import javafx.beans.property.SimpleBooleanProperty;
 import javafx.geometry.Pos;
 import javafx.scene.control.Button;
@@ -31,7 +28,7 @@ public class ZToolBar extends ToolBar implements DataSetEventListener {
 
     private FXController controller;
     private Map<String, Button> buttons = new HashMap<String, Button>();
-    private String[] buttonNames = {"first", "previous", "COUNTER", "next", "last", "add", "delete", "save", "cancel", "refresh", "search", "info", "console"};
+    private String[] buttonNames = {"first", "previous", "COUNTER", "next", "last", "add", "delete", "save", "cancel", "refresh", "search", "info"}; //, "console"};
     private Label counterLabel;
 
     private SimpleBooleanProperty isOnlyOne = new SimpleBooleanProperty(Boolean.FALSE);
@@ -43,9 +40,11 @@ public class ZToolBar extends ToolBar implements DataSetEventListener {
     private SimpleBooleanProperty canInsert = new SimpleBooleanProperty(Boolean.TRUE);
     private SimpleBooleanProperty canUpdate = new SimpleBooleanProperty(Boolean.TRUE);
     private SimpleBooleanProperty canDelete = new SimpleBooleanProperty(Boolean.TRUE);
+    private String resourcesFolder;
 
     public ZToolBar(ResourceBundle bundle) {
         this.setId("navigationBar");
+        resourcesFolder = Skins.getActiveSkin().resourcesFolder();
         initNavBar(bundle);
     }
 
@@ -62,8 +61,14 @@ public class ZToolBar extends ToolBar implements DataSetEventListener {
             } else {
                 Button button = new Button();
                 button.setId(buttonName + "NavButton");
-                button.setGraphic(new ImageView(new Image(getClass().getResourceAsStream(Skins.getActiveSkin().resourcesFolder() + buttonName + ".png"))));
-                button.setTooltip(new Tooltip(bundle.getString("toolbar." + buttonName)));
+                if( resourcesFolder != null ) {
+                    button.setGraphic(new ImageView(new Image(getClass().getResourceAsStream(resourcesFolder + buttonName + ".png"))));
+                } else {
+                    button.setMinWidth(70.0);
+                    button.setText(bundle.getString("toolbar." + buttonName + "_short"));
+                }
+                String tooltipText = bundle.getString("toolbar." + buttonName);
+                button.setTooltip(new Tooltip(tooltipText));
                 buttons.put(buttonName, button);
                 getItems().add(button);
             }
@@ -119,7 +124,7 @@ public class ZToolBar extends ToolBar implements DataSetEventListener {
         buttons.get("search").setOnAction(this.controller.handlerSearch);
 
         buttons.get("info").setOnAction(this.controller.handlerInfo);
-        buttons.get("console").setOnAction(this.controller.handlerConsole);
+        //buttons.get("console").setOnAction(this.controller.handlerConsole);
 
         // status
         buttons.get("first").disableProperty().bind(isDirty.or(isOnlyOne).or(isBOF));
@@ -141,7 +146,11 @@ public class ZToolBar extends ToolBar implements DataSetEventListener {
         else if( controller.getMode().equals(ZSceneMode.DIALOG) ){
             buttons.get("add").setDisable(Boolean.TRUE); //.disableProperty().bind(new SimpleBooleanProperty(Boolean.TRUE));
             buttons.get("delete").setDisable(Boolean.TRUE); //.disableProperty().bind(new SimpleBooleanProperty(Boolean.TRUE));
-            buttons.get("save").setGraphic(new ImageView(new Image(getClass().getResourceAsStream(Skins.getActiveSkin().resourcesFolder() + "accept.png"))));
+            if( resourcesFolder!=null ) {
+                buttons.get("save").setGraphic(new ImageView(new Image(getClass().getResourceAsStream(resourcesFolder + "accept.png"))));
+            } else {
+                buttons.get("save").setText("OK");
+            }
             buttons.get("save").setOnAction(this.controller.handlerConfirm);
         }
 

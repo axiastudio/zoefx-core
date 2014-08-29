@@ -53,11 +53,12 @@ public class FXController extends BaseController implements DataSetEventListener
     private TimeMachine timeMachine = null;
     private Map<String, Property> fxProperties = new HashMap<>();
     private Map<String,TableView> tableViews;
+    private ResourceBundle resourceBundle;
 
 
     @Override
-    public void initialize(URL url, ResourceBundle resourceBundle) {
-
+    public void initialize(URL url, ResourceBundle resource) {
+        resourceBundle = resource;
     }
 
     public void setScene(Scene scene){
@@ -235,7 +236,12 @@ public class FXController extends BaseController implements DataSetEventListener
         ContextMenu contextMenu = new ContextMenu();
 
         MenuItem infoItem = new MenuItem("Information");
-        infoItem.setGraphic(new ImageView(new Image(getClass().getResourceAsStream(Skins.getActiveSkin().resourcesFolder() + "info.png"))));
+        String resourcesFolder = Skins.getActiveSkin().resourcesFolder();
+        if( resourcesFolder!=null ) {
+            infoItem.setGraphic(new ImageView(new Image(getClass().getResourceAsStream(resourcesFolder + "info.png"))));
+        } else {
+            infoItem.setText(resourceBundle.getString("toolbar.info_short"));
+        }
         infoItem.setOnAction(new EventHandler<ActionEvent>() {
             public void handle(ActionEvent e) {
                 ObservableList selectedItems = tableView.getSelectionModel().getSelectedItems();
@@ -260,40 +266,48 @@ public class FXController extends BaseController implements DataSetEventListener
             }
         });
         MenuItem openItem = new MenuItem("Open");
-        openItem.setGraphic(new ImageView(new Image(getClass().getResourceAsStream(Skins.getActiveSkin().resourcesFolder() + "open.png"))));
-                openItem.setOnAction(new EventHandler<ActionEvent>() {
-                    public void handle(ActionEvent e) {
-                        ObservableList selectedItems = tableView.getSelectionModel().getSelectedItems();
-                        if (selectedItems.size() == 0) {
-                            return;
-                        }
-                        List newStore = new ArrayList<>();
-                        String referenceProperty = tableView.getId() + ".reference";
-                        String reference = behavior.getProperties().getProperty(referenceProperty, null);
-                        for (int i = 0; i < selectedItems.size(); i++) {
-                            Object item = selectedItems.get(i);
-                            if (reference != null) {
-                                BeanAccess<Object> ba = new BeanAccess<>(item, reference);
-                                newStore.add(ba.getValue());
-                            } else {
-                                newStore.add(item);
-                            }
-                        }
-                        ZSceneBuilder sceneBuilder = SceneBuilders.querySceneBuilder(newStore.get(0).getClass());
-                        FXController controller = Controllers.queryController(sceneBuilder);
-                        ZScene newScene = sceneBuilder.manager(getDataset().getManager()).store(newStore).controller(controller)
-                                .mode(ZSceneMode.WINDOW).build();
-                        if (newScene != null) {
-                            Stage newStage = new Stage();
-                            newStage.setScene(newScene.getScene());
-                            newStage.show();
-                            newStage.requestFocus();
-                        }
-                        dataset.getDirty(); /// XXX: to implement a callback?
+        if( resourcesFolder!=null ) {
+            openItem.setGraphic(new ImageView(new Image(getClass().getResourceAsStream(resourcesFolder + "open.png"))));
+        } else {
+            openItem.setText(resourceBundle.getString("toolbar.open_short"));
+        }
+        openItem.setOnAction(new EventHandler<ActionEvent>() {
+            public void handle(ActionEvent e) {
+                ObservableList selectedItems = tableView.getSelectionModel().getSelectedItems();
+                if (selectedItems.size() == 0) {
+                    return;
+                }
+                List newStore = new ArrayList<>();
+                String referenceProperty = tableView.getId() + ".reference";
+                String reference = behavior.getProperties().getProperty(referenceProperty, null);
+                for (int i = 0; i < selectedItems.size(); i++) {
+                    Object item = selectedItems.get(i);
+                    if (reference != null) {
+                        BeanAccess<Object> ba = new BeanAccess<>(item, reference);
+                        newStore.add(ba.getValue());
+                    } else {
+                        newStore.add(item);
                     }
-                });
+                }
+                ZSceneBuilder sceneBuilder = SceneBuilders.querySceneBuilder(newStore.get(0).getClass());
+                FXController controller = Controllers.queryController(sceneBuilder);
+                ZScene newScene = sceneBuilder.manager(getDataset().getManager()).store(newStore).controller(controller)
+                        .mode(ZSceneMode.WINDOW).build();
+                if (newScene != null) {
+                    Stage newStage = new Stage();
+                    newStage.setScene(newScene.getScene());
+                    newStage.show();
+                    newStage.requestFocus();
+                }
+                dataset.getDirty(); /// XXX: to implement a callback?
+            }
+        });
         MenuItem addItem = new MenuItem("Add");
-        addItem.setGraphic(new ImageView(new Image(getClass().getResourceAsStream(Skins.getActiveSkin().resourcesFolder() + "add.png"))));
+        if( resourcesFolder!=null ) {
+            addItem.setGraphic(new ImageView(new Image(getClass().getResourceAsStream(resourcesFolder + "add.png"))));
+        } else {
+            addItem.setText(resourceBundle.getString("toolbar.add_short"));
+        }
         addItem.setOnAction(new EventHandler<ActionEvent>() {
             public void handle(ActionEvent e) {
                 final String collectionName = tableView.getId();
@@ -346,7 +360,11 @@ public class FXController extends BaseController implements DataSetEventListener
             }
         });
         MenuItem delItem = new MenuItem("Delete");
-        delItem.setGraphic(new ImageView(new Image(getClass().getResourceAsStream(Skins.getActiveSkin().resourcesFolder() + "delete.png"))));
+        if( resourcesFolder!=null ) {
+            delItem.setGraphic(new ImageView(new Image(getClass().getResourceAsStream(resourcesFolder + "delete.png"))));
+        } else {
+            delItem.setText(resourceBundle.getString("toolbar.delete_short"));
+        }
         delItem.setOnAction(new EventHandler<ActionEvent>() {
             public void handle(ActionEvent e) {
                 final String collectionName = tableView.getId();

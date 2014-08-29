@@ -5,10 +5,7 @@ import com.axiastudio.zoefx.core.beans.EntityBuilder;
 import com.axiastudio.zoefx.core.controller.FXController;
 import com.axiastudio.zoefx.core.db.Database;
 import com.axiastudio.zoefx.core.db.NoPersistenceDatabaseImpl;
-import com.axiastudio.zoefx.core.skins.Black;
-import com.axiastudio.zoefx.core.skins.FamFamFam;
-import com.axiastudio.zoefx.core.skins.Skins;
-import com.axiastudio.zoefx.core.skins.ZSkin;
+import com.axiastudio.zoefx.core.skins.*;
 import com.axiastudio.zoefx.core.validators.ValidatorBuilder;
 import com.axiastudio.zoefx.core.validators.Validators;
 import com.axiastudio.zoefx.core.view.SceneBuilders;
@@ -30,9 +27,10 @@ public class StartDemo extends Application {
     @Override
     public void start(Stage primaryStage) throws Exception{
 
-        //ZSkin ZSkin = new Black();
-        ZSkin ZSkin = new FamFamFam();
-        Skins.registerSkin(ZSkin);
+        //ZSkin skin = new Black();
+        ZSkin skin = new FamFamFam();
+        //ZSkin skin = new NoIcons();
+        Skins.registerSkin(skin);
 
         NoPersistenceDatabaseImpl database = new NoPersistenceDatabaseImpl();
         Utilities.registerUtility(database, Database.class);
