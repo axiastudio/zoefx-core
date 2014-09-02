@@ -467,6 +467,7 @@ public class FXController extends BaseController implements DataSetEventListener
         // search columns
         SearchController controller = loader.getController();
         controller.setEntityClass(classToSearch);
+        controller.setBehavior(behavior);
         List<String> columns = new ArrayList<>();
         if( searchcolumns != null ){
             String[] split = searchcolumns.split(",");

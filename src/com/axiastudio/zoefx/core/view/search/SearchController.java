@@ -2,6 +2,7 @@ package com.axiastudio.zoefx.core.view.search;
 
 import com.axiastudio.zoefx.core.Utilities;
 import com.axiastudio.zoefx.core.beans.BeanClassAccess;
+import com.axiastudio.zoefx.core.beans.LookupStringConverter;
 import com.axiastudio.zoefx.core.beans.property.CallbackBuilder;
 import com.axiastudio.zoefx.core.db.DataSet;
 import com.axiastudio.zoefx.core.db.DataSetBuilder;
@@ -39,6 +40,7 @@ public class SearchController<T> implements Initializable {
     private VBox filterbox;
 
     private Class entityClass;
+    private Behavior behavior;
     private Callback<List<T>, Boolean> callback=null;
     private List<String> criteria = new ArrayList<>();
 
@@ -49,6 +51,10 @@ public class SearchController<T> implements Initializable {
 
     public void setEntityClass(Class<? extends T> entityClass) {
         this.entityClass = entityClass;
+    }
+
+    public void setBehavior(Behavior behavior) {
+        this.behavior = behavior;
     }
 
     public void setCallback(Callback<List<T>, Boolean> callback) {
@@ -123,6 +129,12 @@ public class SearchController<T> implements Initializable {
                 }
                 ChoiceBox choiceBox = new ChoiceBox();
                 choiceBox.setId(property);
+                if( behavior != null ) {
+                    String lookup = behavior.getProperties().getProperty(property + ".lookup");
+                    if (lookup != null) {
+                        choiceBox.setConverter(new LookupStringConverter<>(lookup));
+                    }
+                }
                 ObservableList choices = FXCollections.observableArrayList(superset);
                 choiceBox.setItems(choices);
                 node = choiceBox;
@@ -190,10 +202,13 @@ public class SearchController<T> implements Initializable {
         } else {
             dataSet = DataSetBuilder.create(entityClass).store(manager.getAll()).manager(manager).build();
         }
+        ObservableList<T> observableList;
         if( dataSet.size()>0 ) {
-            ObservableList<T> observableList = FXCollections.observableArrayList(dataSet.getStore());
-            results.setItems(observableList);
+            observableList = FXCollections.observableArrayList(dataSet.getStore());
+        } else {
+            observableList = FXCollections.observableArrayList(new ArrayList<T>());
         }
+        results.setItems(observableList);
     }
 
     @FXML
