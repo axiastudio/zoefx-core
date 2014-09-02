@@ -1,7 +1,6 @@
 package com.axiastudio.zoefx.core.beans.property;
 
 import com.axiastudio.zoefx.core.beans.BeanAccess;
-import javafx.util.Callback;
 
 import java.math.BigDecimal;
 import java.text.DateFormat;
@@ -10,6 +9,7 @@ import java.text.ParseException;
 import java.util.Collection;
 import java.util.Date;
 import java.util.Locale;
+import java.util.regex.Pattern;
 
 /**
  * User: tiziano
@@ -68,101 +68,74 @@ public class ItemPropertyBuilder<T> {
             } else if( Integer.class.isAssignableFrom(fieldType) ) {
                 // Integer field -> String property
                 ItemStringProperty<Integer> item = new ItemStringProperty(beanAccess);
-                item.setToStringFunction(new Callback<Integer, String>() {
-                    @Override
-                    public String call(Integer i) {
-                        return i.toString();
+                item.setToStringFunction(Object::toString);
+                item.setFromStringFunction(s -> {
+                    if( s == null ){
+                        return null;
                     }
-                });
-                item.setFromStringFunction(new Callback<String, Integer>() {
-                    @Override
-                    public Integer call(String s) {
-                        if( s == null ){
-                            return null;
-                        }
-                        return Integer.parseInt(s);
-                    }
+                    return Integer.parseInt(s);
                 });
                 return item;
             } else if( Double.class.isAssignableFrom(fieldType) ) {
                 // Double field -> String property
                 ItemStringProperty<Double> item = new ItemStringProperty(beanAccess);
-                item.setToStringFunction(new Callback<Double, String>() {
-                    @Override
-                    public String call(Double d) {
-                        return d.toString();
+                item.setToStringFunction(Object::toString);
+                item.setFromStringFunction(s -> {
+                    if( s == null ){
+                        return null;
                     }
-                });
-                item.setFromStringFunction(new Callback<String, Double>() {
-                    @Override
-                    public Double call(String s) {
-                        if( s == null ){
-                            return null;
-                        }
-                        return Double.parseDouble(s);
-                    }
+                    return Double.parseDouble(s);
                 });
                 return item;
             } else if( BigDecimal.class.isAssignableFrom(fieldType) ) {
                 // BigDecimal field -> String property
                 ItemStringProperty<BigDecimal> item = new ItemStringProperty(beanAccess);
-                item.setToStringFunction(new Callback<BigDecimal, String>() {
-                    @Override
-                    public String call(BigDecimal i) {
-                        NumberFormat numberFormat = NumberFormat.getCurrencyInstance();
-                        return numberFormat.format(i);
-                    }
+                item.setToStringFunction(i -> {
+                    NumberFormat numberFormat = NumberFormat.getCurrencyInstance();
+                    return numberFormat.format(i);
                 });
-                item.setFromStringFunction(new Callback<String, BigDecimal>() {
-                    @Override
-                    public BigDecimal call(String s) {
-                        NumberFormat numberFormat = NumberFormat.getCurrencyInstance();
-                        String symbol = numberFormat.getCurrency().getSymbol();
-                        if( s == null || s.equals(symbol) || s.equals(symbol + " ") || s.endsWith(",") || s.endsWith(",0") ) {
-                            return null;
-                        }
-                        try {
-                            Number number = numberFormat.parse(s);
-                            if (number instanceof Double) {
-                                // es. "€ 12,99"
-                                return new BigDecimal((Double) number);
-                            } else if (number instanceof Long) {
-                                // es. "€ 12"
-                                return new BigDecimal((Long) number);
-                            }
-                        } catch (ParseException e) {
-                            // es. "12,0"
-                            return new BigDecimal(Double.parseDouble(s.replace(",", ".")));
-                        } catch (ClassCastException e) {
-                            return null;
-                        }
+                item.setFromStringFunction(s -> {
+                    NumberFormat numberFormat = NumberFormat.getCurrencyInstance();
+                    String symbol = numberFormat.getCurrency().getSymbol();
+                    String regex = "(" + symbol + "|-|-" + symbol + ") ?[0-9]{1,3}(\\.?[0-9]{3})*(,[0-9]{2})?";
+                    if (!Pattern.matches(regex, s)) {
                         return null;
                     }
+                    try {
+                        Number number = numberFormat.parse(s);
+                        if (number instanceof Double) {
+                            // es. "€ 12,99"
+                            return new BigDecimal((Double) number);
+                        } else if (number instanceof Long) {
+                            // es. "€ 12"
+                            return new BigDecimal((Long) number);
+                        }
+                    } catch (ParseException e) {
+                        // es. "12,0"
+                        return new BigDecimal(Double.parseDouble(s.replace(",", ".")));
+                    } catch (ClassCastException e) {
+                        return null;
+                    }
+                    return null;
                 });
                 return item;
             } else if( Date.class.isAssignableFrom(fieldType) ){
                 // Date field -> String property
                 ItemStringProperty<Date> item = new ItemStringProperty(beanAccess);
-                item.setToStringFunction(new Callback<Date, String>() {
-                    @Override
-                    public String call(Date date) {
-                        DateFormat dateFormat = DateFormat.getDateInstance(DateFormat.SHORT, Locale.getDefault());
-                        return dateFormat.format(date);
-                    }
+                item.setToStringFunction(date -> {
+                    DateFormat dateFormat = DateFormat.getDateInstance(DateFormat.SHORT, Locale.getDefault());
+                    return dateFormat.format(date);
                 });
                 return item;
             } else if( Object.class.isAssignableFrom(fieldType) ){
                 // Object field -> String property
                 ItemStringProperty<Object> item = new ItemStringProperty(beanAccess);
-                item.setToStringFunction(new Callback<Object, String>() {
-                    @Override
-                    public String call(Object o) {
-                        if( lookup != null ) {
-                            BeanAccess ba = new BeanAccess(o, lookup);
-                            return (String) ba.getValue();
-                        }
-                        return o.toString();
+                item.setToStringFunction(o -> {
+                    if( lookup != null ) {
+                        BeanAccess ba = new BeanAccess(o, lookup);
+                        return (String) ba.getValue();
                     }
+                    return o.toString();
                 });
                 return item;
             }
