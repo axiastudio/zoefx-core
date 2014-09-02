@@ -1,10 +1,32 @@
 .button, .tool-bar {
+    -fx-padding: 7;
     -fx-border-color: transparent;
     -fx-background-color: transparent;
-    -fx-spacing: 0;
-    -fx-border-radius: 8;
+    -fx-spacing: 3;
+    -fx-border-radius: 18;
 }
 
 .button:hover {
-    -fx-border-color: #999999;
+    -fx-border-color: gray;
+}
+
+.text-field {
+    -fx-border-radius: 18;
+    -fx-background-radius: 18;
+    -fx-background-color: white;
+    -fx-border-color: gray;
+}
+
+.text-field:focused {
+    -fx-border-color: dimgray;
+    -fx-border-width: 2;
+}
+
+.check-box {
+    -fx-border-radius: 0;
+}
+
+.tooltip {
+    -fx-border-radius: 18;
+    -fx-background-radius: 18;
 }
