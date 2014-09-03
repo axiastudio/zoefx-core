@@ -46,7 +46,6 @@ import java.util.logging.Logger;
  */
 public class FXController extends BaseController implements DataSetEventListener {
 
-    private Scene scene;
     private DataSet dataset = null;
     private ZSceneMode mode;
     private Behavior behavior = null;
@@ -59,14 +58,6 @@ public class FXController extends BaseController implements DataSetEventListener
     @Override
     public void initialize(URL url, ResourceBundle resource) {
         resourceBundle = resource;
-    }
-
-    public void setScene(Scene scene){
-        this.scene = scene;
-    }
-
-    protected Scene getScene() {
-        return scene;
     }
 
     public void bindDataSet(DataSet dataset){
@@ -86,7 +77,7 @@ public class FXController extends BaseController implements DataSetEventListener
 
     private void initializeColumns(){
         Model model = dataset.getCurrentModel();
-        Parent root = this.scene.getRoot();
+        Parent root = getScene().getRoot();
         Pane container = (Pane) root;
         List<Node> nodes = findNodes(container, new ArrayList<Node>());
         tableViews = new HashMap<>();
@@ -127,7 +118,7 @@ public class FXController extends BaseController implements DataSetEventListener
 
     private void initializeChoices(){
         Model model = dataset.getCurrentModel();
-        Parent root = this.scene.getRoot();
+        Parent root = getScene().getRoot();
         Pane container = (Pane) root;
         List<Node> nodes = findNodes(container, new ArrayList<Node>());
         for( Node node: nodes ){
@@ -169,7 +160,7 @@ public class FXController extends BaseController implements DataSetEventListener
             Property fxProperty = fxProperties.get(name);
             ZoeFXProperty zoeFXProperty = model.getProperty(name);
             if( zoeFXProperty == null ){
-                Node node = scene.lookup("#"+name);
+                Node node = getScene().lookup("#"+name);
                 if( node instanceof TextField ){
                     zoeFXProperty = model.getProperty(name, String.class);
                 } else if( node instanceof TextArea ){
@@ -195,7 +186,7 @@ public class FXController extends BaseController implements DataSetEventListener
     }
 
     private void scanFXProperties(){
-        Parent root = scene.getRoot();
+        Parent root = getScene().getRoot();
         Pane container = (Pane) root;
         List<Node> nodes = findNodes(container, new ArrayList<>());
         for( Node node: nodes ){
@@ -548,7 +539,7 @@ public class FXController extends BaseController implements DataSetEventListener
     public EventHandler<ActionEvent> handlerConfirm = new EventHandler<ActionEvent>() {
         @Override
         public void handle(ActionEvent e) {
-            ((Stage) scene.getWindow()).close();
+            ((Stage) getScene().getWindow()).close();
             // TODO: get the parent dirty
         }
     };

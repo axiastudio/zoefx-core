@@ -144,6 +144,7 @@ public class ZSceneBuilder<E> {
         Skins.getActiveSkin().getStyle().ifPresent(s -> scene.getStylesheets().add(s));
         ZScene zScene = new ZScene();
         zScene.setScene(scene);
+        controller.setScene(scene);
         if( controller instanceof FXController ) {
             FXController fxController = (FXController) controller;
             fxController.setMode(mode);
@@ -159,7 +160,6 @@ public class ZSceneBuilder<E> {
             }
 
             toolBar.setController(fxController);
-            fxController.setScene(scene);
             if( propertiesUrl != null ){
                 try {
                     fxController.setBehavior(new Behavior(propertiesUrl.openStream()));
