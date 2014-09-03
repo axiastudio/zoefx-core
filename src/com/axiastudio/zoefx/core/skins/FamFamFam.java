@@ -14,7 +14,7 @@ public class FamFamFam implements ZSkin {
 
     @Override
     public String getName() {
-        return "famfamfam";
+        return "FamFamFam";
     }
 
 }

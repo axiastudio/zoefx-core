@@ -2,6 +2,10 @@ package com.axiastudio.zoefx.core.skins;
 
 import com.axiastudio.zoefx.core.Utilities;
 
+import java.util.ArrayList;
+import java.util.List;
+import java.util.stream.Collectors;
+
 /**
  * User: tiziano
  * Date: 23/08/14
@@ -10,9 +14,11 @@ import com.axiastudio.zoefx.core.Utilities;
 public class Skins {
 
     private static String activeSkinName=null;
+    private static List<String> skins = new ArrayList<>();
 
     public static void registerSkin(ZSkin skin){
         Utilities.registerUtility(skin, ZSkin.class, skin.getName());
+        skins.add(skin.getName());
         if( activeSkinName == null ){
             activeSkinName = skin.getName();
         }
@@ -33,6 +39,10 @@ public class Skins {
         if( Utilities.queryUtility(ZSkin.class, name) != null ){
             activeSkinName = name;
         }
+    }
+
+    public static List<ZSkin> getSkins(){
+        return skins.stream().map(name -> Utilities.queryUtility(ZSkin.class, name)).collect(Collectors.toList());
     }
 
 }

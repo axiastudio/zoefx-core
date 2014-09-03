@@ -16,7 +16,7 @@ public class Black implements ZSkin {
 
     @Override
     public String getName() {
-        return "black";
+        return "Black";
     }
 
     @Override
