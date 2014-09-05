@@ -14,12 +14,12 @@
     -fx-border-radius: 18;
     -fx-background-radius: 18;
     -fx-background-color: white;
-    -fx-border-color: gray;
+    -fx-border-color: transparent;
 }
 
 .text-field:focused {
-    -fx-border-color: dimgray;
-    -fx-border-width: 2;
+    -fx-border-color: gray;
+    -fx-border-width: 1;
 }
 
 .check-box {
@@ -30,3 +30,36 @@
     -fx-border-radius: 18;
     -fx-background-radius: 18;
 }
+
+.choice-box {
+    -fx-background-image: url("arrow-down2.png");
+    -fx-background-insets: 0.0 -8.0 0.0 0.0;
+    -fx-background-color: gainsboro;
+    -fx-background-repeat: no-repeat;
+    -fx-background-position: right;
+    -fx-border-radius: 18;
+    -fx-background-radius: 18;
+}
+
+.choice-box .arrow {
+    -fx-background-color: transparent;
+}
+
+.combo-box-base {
+    -fx-background-color: transparent;
+}
+
+.combo-box-base > .arrow-button {
+    -fx-border-color: transparent;
+    -fx-background-color: transparent;
+}
+
+.combo-box-base > .arrow-button > .arrow {
+    /*-fx-background-color: transparent;*/
+}
+
+
+
+/* */
+verdolino #B6CAC2
+scuro #033549
