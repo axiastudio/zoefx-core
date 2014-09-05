@@ -1,5 +1,6 @@
 package com.axiastudio.zoefx.core.controller;
 
+import com.axiastudio.zoefx.core.Utilities;
 import com.axiastudio.zoefx.core.beans.BeanAccess;
 import com.axiastudio.zoefx.core.beans.BeanClassAccess;
 import com.axiastudio.zoefx.core.beans.LookupStringConverter;
@@ -9,9 +10,11 @@ import com.axiastudio.zoefx.core.db.TimeMachine;
 import com.axiastudio.zoefx.core.events.DataSetEvent;
 import com.axiastudio.zoefx.core.events.DataSetEventListener;
 import com.axiastudio.zoefx.core.db.DataSet;
+import com.axiastudio.zoefx.core.report.ReportEngine;
 import com.axiastudio.zoefx.core.skins.Skins;
 import com.axiastudio.zoefx.core.view.*;
 import com.axiastudio.zoefx.core.console.ConsoleController;
+import com.axiastudio.zoefx.core.view.report.ReportController;
 import com.axiastudio.zoefx.core.view.search.SearchController;
 import javafx.beans.*;
 import javafx.beans.Observable;
@@ -439,6 +442,25 @@ public class FXController extends BaseController implements DataSetEventListener
         }
     }
 
+    private Stage reportStage(Class classToReport) {
+        URL url = getClass().getResource("/com/axiastudio/zoefx/core/view/report/report.fxml");
+        FXMLLoader loader = new FXMLLoader();
+        loader.setLocation(url);
+        loader.setBuilderFactory(new JavaFXBuilderFactory());
+        Parent root = null;
+        try {
+            root = loader.load(url.openStream());
+        } catch (IOException e1) {
+            e1.printStackTrace();
+        }
+        ReportController controller = loader.getController();
+        controller.setEntityClass(classToReport);
+        Stage stage = new Stage();
+        stage.setTitle("Print report");
+        stage.setScene(new Scene(root, 450, 450));
+        return stage;
+    }
+
     private Stage searchStage(Class classToSearch, String searchcolumns, Callback callback) {
         return searchStage(classToSearch, searchcolumns, callback, null);
     }
@@ -555,6 +577,14 @@ public class FXController extends BaseController implements DataSetEventListener
         dataset.delete();
         unsetModel();
         setModel(dataset.newModel());
+    };
+    public EventHandler<ActionEvent> handlerPrint = e -> {
+        ReportEngine reportEngine = Utilities.queryUtility(ReportEngine.class);
+        if( reportEngine!=null ){
+            Class classToReport = dataset.getCurrentModel().getEntityClass();
+            Stage stage = reportStage(classToReport);
+            stage.show();
+        }
     };
     public EventHandler<ActionEvent> handlerRefresh = e -> refresh();
     public EventHandler<ActionEvent> handlerConsole = new EventHandler<ActionEvent>() {
