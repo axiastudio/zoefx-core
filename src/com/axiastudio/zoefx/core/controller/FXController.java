@@ -493,110 +493,70 @@ public class FXController extends BaseController implements DataSetEventListener
      *  Navigation Bar
      */
 
-    public EventHandler<ActionEvent> handlerGoFirst = new EventHandler<ActionEvent>() {
-        @Override
-        public void handle(ActionEvent e) {
-            unsetModel();
-            dataset.goFirst();
-            setModel(dataset.newModel());
-            timeMachine.resetAndcreateSnapshot(fxProperties.values());
-        }
+    public EventHandler<ActionEvent> handlerGoFirst = e -> {
+        unsetModel();
+        dataset.goFirst();
+        setModel(dataset.newModel());
+        timeMachine.resetAndcreateSnapshot(fxProperties.values());
     };
-    public EventHandler<ActionEvent> handlerGoPrevious = new EventHandler<ActionEvent>() {
-        @Override
-        public void handle(ActionEvent e) {
-            unsetModel();
-            dataset.goPrevious();
-            setModel(dataset.newModel());
-            timeMachine.resetAndcreateSnapshot(fxProperties.values());
-        }
+    public EventHandler<ActionEvent> handlerGoPrevious = e -> {
+        unsetModel();
+        dataset.goPrevious();
+        setModel(dataset.newModel());
+        timeMachine.resetAndcreateSnapshot(fxProperties.values());
     };
-    public EventHandler<ActionEvent> handlerGoNext = new EventHandler<ActionEvent>() {
-        @Override
-        public void handle(ActionEvent e) {
-            unsetModel();
-            dataset.goNext();
-            setModel(dataset.newModel());
-            timeMachine.resetAndcreateSnapshot(fxProperties.values());
-        }
+    public EventHandler<ActionEvent> handlerGoNext = e -> {
+        unsetModel();
+        dataset.goNext();
+        setModel(dataset.newModel());
+        timeMachine.resetAndcreateSnapshot(fxProperties.values());
     };
-    public EventHandler<ActionEvent> handlerGoLast = new EventHandler<ActionEvent>() {
-        @Override
-        public void handle(ActionEvent e) {
-            unsetModel();
-            dataset.goLast();
-            setModel(dataset.newModel());
-            timeMachine.resetAndcreateSnapshot(fxProperties.values());
-        }
+    public EventHandler<ActionEvent> handlerGoLast = e -> {
+        unsetModel();
+        dataset.goLast();
+        setModel(dataset.newModel());
+        timeMachine.resetAndcreateSnapshot(fxProperties.values());
     };
-    public EventHandler<ActionEvent> handlerSave = new EventHandler<ActionEvent>() {
-        @Override
-        public void handle(ActionEvent e) {
-            dataset.commit();
-            timeMachine.resetAndcreateSnapshot(fxProperties.values());
-        }
+    public EventHandler<ActionEvent> handlerSave = e -> {
+        dataset.commit();
+        timeMachine.resetAndcreateSnapshot(fxProperties.values());
     };
-    public EventHandler<ActionEvent> handlerConfirm = new EventHandler<ActionEvent>() {
-        @Override
-        public void handle(ActionEvent e) {
-            ((Stage) getScene().getWindow()).close();
-            // TODO: get the parent dirty
-        }
+    public EventHandler<ActionEvent> handlerConfirm = e -> ((Stage) getScene().getWindow()).close();
+    public EventHandler<ActionEvent> handlerCancel = e -> {
+        timeMachine.rollback();
+        dataset.revert();
+        timeMachine.resetAndcreateSnapshot(fxProperties.values());
     };
-    public EventHandler<ActionEvent> handlerCancel = new EventHandler<ActionEvent>() {
-        @Override
-        public void handle(ActionEvent e)
-        {
-            timeMachine.rollback();
-            dataset.revert();
-            timeMachine.resetAndcreateSnapshot(fxProperties.values());
-        }
+    public EventHandler<ActionEvent> handlerAdd = e -> {
+        dataset.create();
+        unsetModel();
+        setModel(dataset.newModel());
     };
-    public EventHandler<ActionEvent> handlerAdd = new EventHandler<ActionEvent>() {
-        @Override
-        public void handle(ActionEvent e) {
-            dataset.create();
-            unsetModel();
-            setModel(dataset.newModel());
-        }
-    };
-    public EventHandler<ActionEvent> handlerSearch = new EventHandler<ActionEvent>() {
-        @Override
-        public void handle(ActionEvent e) {
-            Class classToSearch = dataset.getCurrentModel().getEntityClass();
-            String searchcolumns = behavior.getProperties().getProperty("searchcolumns");
-            String searchcriteria = behavior.getProperties().getProperty("searchcriteria");
+    public EventHandler<ActionEvent> handlerSearch = e -> {
+        Class classToSearch = dataset.getCurrentModel().getEntityClass();
+        String searchcolumns = behavior.getProperties().getProperty("searchcolumns");
+        String searchcriteria = behavior.getProperties().getProperty("searchcriteria");
 
-            Callback callback = new Callback<List, Boolean>() {
-                @Override
-                public Boolean call(List items) {
-                    List store = new ArrayList();
-                    for( Object item: items ){
-                        store.add(item);
-                    }
-                    dataset.setStore(store);
-                    return true;
+        Callback callback = new Callback<List, Boolean>() {
+            @Override
+            public Boolean call(List items) {
+                List store = new ArrayList();
+                for( Object item: items ){
+                    store.add(item);
                 }
-            };
-            Stage stage = searchStage(classToSearch, searchcolumns, callback, searchcriteria);
-            stage.show();
-        }
-
+                dataset.setStore(store);
+                return true;
+            }
+        };
+        Stage stage = searchStage(classToSearch, searchcolumns, callback, searchcriteria);
+        stage.show();
     };
-    public EventHandler<ActionEvent> handlerDelete = new EventHandler<ActionEvent>() {
-        @Override
-        public void handle(ActionEvent e) {
-            dataset.delete();
-            unsetModel();
-            setModel(dataset.newModel());
-        }
+    public EventHandler<ActionEvent> handlerDelete = e -> {
+        dataset.delete();
+        unsetModel();
+        setModel(dataset.newModel());
     };
-    public EventHandler<ActionEvent> handlerRefresh = new EventHandler<ActionEvent>() {
-        @Override
-        public void handle(ActionEvent e) {
-            refresh();
-        }
-    };
+    public EventHandler<ActionEvent> handlerRefresh = e -> refresh();
     public EventHandler<ActionEvent> handlerConsole = new EventHandler<ActionEvent>() {
         @Override
         public void handle(ActionEvent e) {
@@ -620,11 +580,8 @@ public class FXController extends BaseController implements DataSetEventListener
             stage.show();
         }
     };
-    public EventHandler<ActionEvent> handlerInfo = new EventHandler<ActionEvent>() {
-        @Override
-        public void handle(ActionEvent e) {
-            //System.out.println("Info");
-        }
+    public EventHandler<ActionEvent> handlerInfo = e -> {
+        //System.out.println("Info");
     };
 
 
@@ -632,12 +589,7 @@ public class FXController extends BaseController implements DataSetEventListener
      *  Listeners
      */
 
-    public InvalidationListener invalidationListener = new InvalidationListener() {
-        @Override
-        public void invalidated(Observable observable) {
-            dataset.getDirty();
-        }
-    };
+    public InvalidationListener invalidationListener = observable -> dataset.getDirty();
 
 
     @Override
