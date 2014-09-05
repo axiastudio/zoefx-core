@@ -9,7 +9,5 @@ import java.util.List;
  */
 public interface ReportEngine {
 
-    public List<ReportTemplate> getTemplates();
-
-    public void printTemplate(ReportTemplate template);
+    public void printTemplate(ReportTemplate template, List store);
 }

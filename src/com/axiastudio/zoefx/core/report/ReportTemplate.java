@@ -9,4 +9,5 @@ public interface ReportTemplate {
 
     public String getTitle();
 
+    public void setTitle(String title);
 }

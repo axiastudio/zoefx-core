@@ -455,6 +455,7 @@ public class FXController extends BaseController implements DataSetEventListener
         }
         ReportController controller = loader.getController();
         controller.setEntityClass(classToReport);
+        controller.setStore(getDataset().getStore());
         Stage stage = new Stage();
         stage.setTitle("Print report");
         stage.setScene(new Scene(root, 450, 450));
