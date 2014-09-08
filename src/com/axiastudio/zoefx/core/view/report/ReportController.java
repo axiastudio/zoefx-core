@@ -10,9 +10,10 @@ import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
-import javafx.scene.control.Button;
 import javafx.scene.control.ChoiceBox;
+import javafx.stage.FileChooser;
 
+import java.io.File;
 import java.net.URL;
 import java.util.List;
 import java.util.ResourceBundle;
@@ -48,8 +49,14 @@ public class ReportController<T> implements Initializable {
 
     @FXML
     void print(ActionEvent event) {
+
+        FileChooser fileChooser = new FileChooser();
+        fileChooser.setTitle("Save to...");
+        fileChooser.getExtensionFilters().add(new FileChooser.ExtensionFilter("PDF file", "*.pdf"));
+        File file = fileChooser.showSaveDialog(null);
+
         ReportTemplate reportTemplate = templates.getValue();
         ReportEngine reportEngine = Utilities.queryUtility(ReportEngine.class);
-        reportEngine.printTemplate(reportTemplate, store);
+        reportEngine.toPdf(reportTemplate, store, file);
     }
 }

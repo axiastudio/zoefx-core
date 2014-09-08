@@ -1,5 +1,6 @@
 package com.axiastudio.zoefx.core.report;
 
+import java.io.File;
 import java.util.List;
 
 /**
@@ -9,5 +10,12 @@ import java.util.List;
  */
 public interface ReportEngine {
 
-    public void printTemplate(ReportTemplate template, List store);
+    public default Boolean canPrint(){ return Boolean.FALSE; };
+
+    public default Boolean canExportToPdf(){ return Boolean.FALSE; }
+
+    public default void toPdf(ReportTemplate template, List store, File file){};
+
+    public default void toPrint(ReportTemplate template, List store, File file){};
+
 }
