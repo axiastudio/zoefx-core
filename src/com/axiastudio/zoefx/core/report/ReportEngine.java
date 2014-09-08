@@ -16,6 +16,6 @@ public interface ReportEngine {
 
     public default void toPdf(ReportTemplate template, List store, File file){};
 
-    public default void toPrint(ReportTemplate template, List store, File file){};
+    public default void toPrinter(ReportTemplate template, List store){};
 
 }

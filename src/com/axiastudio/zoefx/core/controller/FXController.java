@@ -444,7 +444,7 @@ public class FXController extends BaseController implements DataSetEventListener
 
     private Stage reportStage(Class classToReport) {
         URL url = getClass().getResource("/com/axiastudio/zoefx/core/view/report/report.fxml");
-        FXMLLoader loader = new FXMLLoader();
+        FXMLLoader loader = new FXMLLoader(url, resourceBundle);
         loader.setLocation(url);
         loader.setBuilderFactory(new JavaFXBuilderFactory());
         Parent root = null;
@@ -457,8 +457,10 @@ public class FXController extends BaseController implements DataSetEventListener
         controller.setEntityClass(classToReport);
         controller.setStore(getDataset().getStore());
         Stage stage = new Stage();
-        stage.setTitle("Print report");
-        stage.setScene(new Scene(root, 450, 450));
+        stage.setTitle(resourceBundle.getString("report.title"));
+        Scene scene = new Scene(root, 350, 100);
+        controller.setScene(scene);
+        stage.setScene(scene);
         return stage;
     }
 
