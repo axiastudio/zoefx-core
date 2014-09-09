@@ -28,7 +28,7 @@ public class ZToolBar extends ToolBar implements DataSetEventListener {
 
     private FXController controller;
     private Map<String, Button> buttons = new HashMap<String, Button>();
-    private String[] buttonNames = {"first", "previous", "COUNTER", "next", "last", "add", "delete", "save", "cancel", "refresh", "search", "info"}; //, "console"};
+    private String[] buttonNames = {"first", "previous", "COUNTER", "next", "last", "add", "delete", "save", "cancel", "print", "refresh", "search", "info"}; //, "console"};
     private Label counterLabel;
 
     private SimpleBooleanProperty isOnlyOne = new SimpleBooleanProperty(Boolean.FALSE);
@@ -119,6 +119,8 @@ public class ZToolBar extends ToolBar implements DataSetEventListener {
 
         buttons.get("cancel").setOnAction(this.controller.handlerCancel);
         buttons.get("add").setOnAction(this.controller.handlerAdd);
+
+        buttons.get("print").setOnAction(this.controller.handlerPrint);
 
         buttons.get("refresh").setOnAction(this.controller.handlerRefresh);
         buttons.get("search").setOnAction(this.controller.handlerSearch);
