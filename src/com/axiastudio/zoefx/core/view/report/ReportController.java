@@ -51,9 +51,10 @@ public class ReportController<T> extends BaseController {
 
     public void setEntityClass(Class entityClass) {
         this.entityClass = entityClass;
-        ObservableList choices = FXCollections.observableArrayList(Reports.getTemplates(entityClass));
+        ObservableList<ReportTemplate> choices = FXCollections.observableArrayList(Reports.getTemplates(entityClass));
         templates.setConverter(new LookupStringConverter<>("title"));
         templates.setItems(choices);
+        templates.setValue(choices.get(0));
     }
 
     public void setStore(List<T> store){
