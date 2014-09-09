@@ -10,7 +10,7 @@ import java.util.Optional;
 public interface ZSkin {
 
     public String getName();
-    public String resourcesFolder();
+    public default Boolean noIcons() { return Boolean.FALSE; };
     public default Optional<String> getStyle(){
         return Optional.empty();
     };

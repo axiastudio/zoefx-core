@@ -11,13 +11,11 @@ import com.axiastudio.zoefx.core.events.DataSetEvent;
 import com.axiastudio.zoefx.core.events.DataSetEventListener;
 import com.axiastudio.zoefx.core.db.DataSet;
 import com.axiastudio.zoefx.core.report.ReportEngine;
-import com.axiastudio.zoefx.core.skins.Skins;
 import com.axiastudio.zoefx.core.view.*;
 import com.axiastudio.zoefx.core.console.ConsoleController;
 import com.axiastudio.zoefx.core.view.report.ReportController;
 import com.axiastudio.zoefx.core.view.search.SearchController;
 import javafx.beans.*;
-import javafx.beans.Observable;
 import javafx.beans.binding.Bindings;
 import javafx.beans.property.Property;
 import javafx.collections.FXCollections;
@@ -30,8 +28,6 @@ import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
-import javafx.scene.image.Image;
-import javafx.scene.image.ImageView;
 import javafx.scene.layout.Pane;
 import javafx.stage.Stage;
 import javafx.util.Callback;
@@ -227,147 +223,125 @@ public class FXController extends BaseController implements DataSetEventListener
 
 
     private ContextMenu createContextMenu(TableView tableView){
+
         ContextMenu contextMenu = new ContextMenu();
+        contextMenu.setId("tableViewContextMenu");
 
         MenuItem infoItem = new MenuItem("Information");
-        String resourcesFolder = Skins.getActiveSkin().resourcesFolder();
-        if( resourcesFolder!=null ) {
-            infoItem.setGraphic(new ImageView(new Image(getClass().getResourceAsStream(resourcesFolder + "info.png"))));
-        } else {
-            infoItem.setText(resourceBundle.getString("toolbar.info_short"));
-        }
-        infoItem.setOnAction(new EventHandler<ActionEvent>() {
-            public void handle(ActionEvent e) {
-                ObservableList selectedItems = tableView.getSelectionModel().getSelectedItems();
-                if( selectedItems.size()==0 ) {
-                    return;
+        infoItem.setId("infoContextMenu");
+        infoItem.setOnAction(e -> {
+            ObservableList selectedItems = tableView.getSelectionModel().getSelectedItems();
+            if (selectedItems.size() == 0) {
+                return;
+            }
+            List newStore = new ArrayList<>();
+            for (int i = 0; i < selectedItems.size(); i++) {
+                newStore.add(selectedItems.get(i));
+            }
+            ZSceneBuilder sceneBuilder = SceneBuilders.querySceneBuilder(newStore.get(0).getClass());
+            FXController controller = Controllers.queryController(sceneBuilder);
+            ZScene newScene = sceneBuilder.manager(getDataset().getManager()).store(newStore).controller(controller)
+                    .mode(ZSceneMode.DIALOG).build();
+            if (newScene != null) {
+                Stage newStage = new Stage();
+                newStage.setScene(newScene.getScene());
+                newStage.show();
+                newStage.requestFocus();
+            }
+            dataset.getDirty(); /// XXX: to implement a callback?
+        });
+        MenuItem openItem = new MenuItem("Open");
+        openItem.setId("openContextMenu");
+
+        openItem.setOnAction(e -> {
+            ObservableList selectedItems = tableView.getSelectionModel().getSelectedItems();
+            if (selectedItems.size() == 0) {
+                return;
+            }
+            List newStore = new ArrayList<>();
+            String referenceProperty = tableView.getId() + ".reference";
+            String reference = behavior.getProperties().getProperty(referenceProperty, null);
+            for (int i = 0; i < selectedItems.size(); i++) {
+                Object item = selectedItems.get(i);
+                if (reference != null) {
+                    BeanAccess<Object> ba = new BeanAccess<>(item, reference);
+                    newStore.add(ba.getValue());
+                } else {
+                    newStore.add(item);
                 }
+            }
+            ZSceneBuilder sceneBuilder = SceneBuilders.querySceneBuilder(newStore.get(0).getClass());
+            FXController controller = Controllers.queryController(sceneBuilder);
+            ZScene newScene = sceneBuilder.manager(getDataset().getManager()).store(newStore).controller(controller)
+                    .mode(ZSceneMode.WINDOW).build();
+            if (newScene != null) {
+                Stage newStage = new Stage();
+                newStage.setScene(newScene.getScene());
+                newStage.show();
+                newStage.requestFocus();
+            }
+            dataset.getDirty(); /// XXX: to implement a callback?
+        });
+        MenuItem addItem = new MenuItem("Add");
+        addItem.setId("addContextMenu");
+        addItem.setOnAction(e -> {
+            final String collectionName = tableView.getId();
+            String referenceProperty = collectionName + ".reference";
+            String searchcolumnsProperty = collectionName + ".searchcolumns";
+            String referenceName = behavior.getProperties().getProperty(referenceProperty, null);
+            String searchcolumns = behavior.getProperties().getProperty(searchcolumnsProperty, "caption"); // XXX: default caption?
+            if (referenceName != null) {
+                Class classToSearch = null;
+                try {
+                    Class parentEntityClass = dataset.getCurrentModel().getEntityClass();
+                    Class<?> collectionGenericReturnType = (new BeanClassAccess(parentEntityClass, collectionName)).getGenericReturnType();
+                    Class<?> referenceReturnType = (new BeanClassAccess(collectionGenericReturnType, referenceName)).getReturnType();
+                    String className = referenceReturnType.getName();
+                    classToSearch = Class.forName(className);
+                    Callback callback = new Callback<List, Boolean>() {
+                        @Override
+                        public Boolean call(List items) {
+                            for( Object item: items ){
+                                Object entity = dataset.createRow(collectionName);
+                                BeanAccess<Object> ba = new BeanAccess<>(entity, referenceName);
+                                ba.setValue(item);
+                                refresh();
+                            }
+                            return true;
+                        }
+                    };
+                    Stage stage = searchStage(classToSearch, searchcolumns, callback);
+                    stage.show();
+                } catch (ClassNotFoundException e1) {
+                    e1.printStackTrace();
+                }
+            } else {
+                Object entity = dataset.createRow(collectionName);
                 List newStore = new ArrayList<>();
-                for( int i=0; i<selectedItems.size(); i++ ) {
-                    newStore.add(selectedItems.get(i));
-                }
+                newStore.add(entity);
                 ZSceneBuilder sceneBuilder = SceneBuilders.querySceneBuilder(newStore.get(0).getClass());
                 FXController controller = Controllers.queryController(sceneBuilder);
                 ZScene newScene = sceneBuilder.manager(getDataset().getManager()).store(newStore).controller(controller)
                         .mode(ZSceneMode.DIALOG).build();
-                if( newScene != null ) {
-                    Stage newStage = new Stage();
-                    newStage.setScene(newScene.getScene());
-                    newStage.show();
-                    newStage.requestFocus();
-                }
-                dataset.getDirty(); /// XXX: to implement a callback?
-            }
-        });
-        MenuItem openItem = new MenuItem("Open");
-        if( resourcesFolder!=null ) {
-            openItem.setGraphic(new ImageView(new Image(getClass().getResourceAsStream(resourcesFolder + "open.png"))));
-        } else {
-            openItem.setText(resourceBundle.getString("toolbar.open_short"));
-        }
-        openItem.setOnAction(new EventHandler<ActionEvent>() {
-            public void handle(ActionEvent e) {
-                ObservableList selectedItems = tableView.getSelectionModel().getSelectedItems();
-                if (selectedItems.size() == 0) {
-                    return;
-                }
-                List newStore = new ArrayList<>();
-                String referenceProperty = tableView.getId() + ".reference";
-                String reference = behavior.getProperties().getProperty(referenceProperty, null);
-                for (int i = 0; i < selectedItems.size(); i++) {
-                    Object item = selectedItems.get(i);
-                    if (reference != null) {
-                        BeanAccess<Object> ba = new BeanAccess<>(item, reference);
-                        newStore.add(ba.getValue());
-                    } else {
-                        newStore.add(item);
-                    }
-                }
-                ZSceneBuilder sceneBuilder = SceneBuilders.querySceneBuilder(newStore.get(0).getClass());
-                FXController controller = Controllers.queryController(sceneBuilder);
-                ZScene newScene = sceneBuilder.manager(getDataset().getManager()).store(newStore).controller(controller)
-                        .mode(ZSceneMode.WINDOW).build();
                 if (newScene != null) {
                     Stage newStage = new Stage();
                     newStage.setScene(newScene.getScene());
                     newStage.show();
                     newStage.requestFocus();
                 }
-                dataset.getDirty(); /// XXX: to implement a callback?
             }
-        });
-        MenuItem addItem = new MenuItem("Add");
-        if( resourcesFolder!=null ) {
-            addItem.setGraphic(new ImageView(new Image(getClass().getResourceAsStream(resourcesFolder + "add.png"))));
-        } else {
-            addItem.setText(resourceBundle.getString("toolbar.add_short"));
-        }
-        addItem.setOnAction(new EventHandler<ActionEvent>() {
-            public void handle(ActionEvent e) {
-                final String collectionName = tableView.getId();
-                String referenceProperty = collectionName + ".reference";
-                String searchcolumnsProperty = collectionName + ".searchcolumns";
-                String referenceName = behavior.getProperties().getProperty(referenceProperty, null);
-                String searchcolumns = behavior.getProperties().getProperty(searchcolumnsProperty, "caption"); // XXX: default caption?
-                if (referenceName != null) {
-                    Class classToSearch = null;
-                    try {
-                        Class parentEntityClass = dataset.getCurrentModel().getEntityClass();
-                        Class<?> collectionGenericReturnType = (new BeanClassAccess(parentEntityClass, collectionName)).getGenericReturnType();
-                        Class<?> referenceReturnType = (new BeanClassAccess(collectionGenericReturnType, referenceName)).getReturnType();
-                        String className = referenceReturnType.getName();
-                        classToSearch = Class.forName(className);
-                        Callback callback = new Callback<List, Boolean>() {
-                            @Override
-                            public Boolean call(List items) {
-                                for( Object item: items ){
-                                    Object entity = dataset.createRow(collectionName);
-                                    BeanAccess<Object> ba = new BeanAccess<>(entity, referenceName);
-                                    ba.setValue(item);
-                                    refresh();
-                                }
-                                return true;
-                            }
-                        };
-                        Stage stage = searchStage(classToSearch, searchcolumns, callback);
-                        stage.show();
-                    } catch (ClassNotFoundException e1) {
-                        e1.printStackTrace();
-                    }
-                } else {
-                    Object entity = dataset.createRow(collectionName);
-                    List newStore = new ArrayList<>();
-                    newStore.add(entity);
-                    ZSceneBuilder sceneBuilder = SceneBuilders.querySceneBuilder(newStore.get(0).getClass());
-                    FXController controller = Controllers.queryController(sceneBuilder);
-                    ZScene newScene = sceneBuilder.manager(getDataset().getManager()).store(newStore).controller(controller)
-                            .mode(ZSceneMode.DIALOG).build();
-                    if (newScene != null) {
-                        Stage newStage = new Stage();
-                        newStage.setScene(newScene.getScene());
-                        newStage.show();
-                        newStage.requestFocus();
-                    }
-                }
-                //initializeColumns();
-                dataset.getDirty(); /// XXX: to implement a callback?
-            }
+            //initializeColumns();
+            dataset.getDirty(); /// XXX: to implement a callback?
         });
         MenuItem delItem = new MenuItem("Delete");
-        if( resourcesFolder!=null ) {
-            delItem.setGraphic(new ImageView(new Image(getClass().getResourceAsStream(resourcesFolder + "delete.png"))));
-        } else {
-            delItem.setText(resourceBundle.getString("toolbar.delete_short"));
-        }
-        delItem.setOnAction(new EventHandler<ActionEvent>() {
-            public void handle(ActionEvent e) {
-                final String collectionName = tableView.getId();
-                List selectedItems =  new ArrayList (tableView.getSelectionModel().getSelectedItems());
-                for( Object item: selectedItems ) {
-                    dataset.deleteRow(collectionName, item);
-                }
-                dataset.getDirty(); /// XXX: to implement a callback?
+        delItem.setId("delContextMenu");
+        delItem.setOnAction(e -> {
+            final String collectionName = tableView.getId();
+            List selectedItems =  new ArrayList (tableView.getSelectionModel().getSelectedItems());
+            for( Object item: selectedItems ) {
+                dataset.deleteRow(collectionName, item);
             }
+            dataset.getDirty(); /// XXX: to implement a callback?
         });
 
         // accesso policy
@@ -404,6 +378,10 @@ public class FXController extends BaseController implements DataSetEventListener
     }
     public Model getCurrentModel() {
         return dataset.getCurrentModel();
+    }
+
+    public Behavior getBehavior() {
+        return behavior;
     }
 
     private FXController self(){
@@ -464,7 +442,7 @@ public class FXController extends BaseController implements DataSetEventListener
         return stage;
     }
 
-    private Stage searchStage(Class classToSearch, String searchcolumns, Callback callback) {
+    public Stage searchStage(Class classToSearch, String searchcolumns, Callback callback) {
         return searchStage(classToSearch, searchcolumns, callback, null);
     }
 

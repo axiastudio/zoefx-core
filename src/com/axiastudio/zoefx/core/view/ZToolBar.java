@@ -10,8 +10,6 @@ import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.ToolBar;
 import javafx.scene.control.Tooltip;
-import javafx.scene.image.Image;
-import javafx.scene.image.ImageView;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -40,11 +38,9 @@ public class ZToolBar extends ToolBar implements DataSetEventListener {
     private SimpleBooleanProperty canInsert = new SimpleBooleanProperty(Boolean.TRUE);
     private SimpleBooleanProperty canUpdate = new SimpleBooleanProperty(Boolean.TRUE);
     private SimpleBooleanProperty canDelete = new SimpleBooleanProperty(Boolean.TRUE);
-    private String resourcesFolder;
 
     public ZToolBar(ResourceBundle bundle) {
         this.setId("navigationBar");
-        resourcesFolder = Skins.getActiveSkin().resourcesFolder();
         initNavBar(bundle);
     }
 
@@ -61,9 +57,13 @@ public class ZToolBar extends ToolBar implements DataSetEventListener {
             } else {
                 Button button = new Button();
                 button.setId(buttonName + "NavButton");
-                if( resourcesFolder != null ) {
-                    button.setGraphic(new ImageView(new Image(getClass().getResourceAsStream(resourcesFolder + buttonName + ".png"))));
-                } else {
+
+                if( false ) {
+                    button.setMinWidth(70.0);
+                    button.setText(bundle.getString("toolbar." + buttonName + "_short"));
+                }
+
+                if( Skins.getActiveSkin().noIcons() ) {
                     button.setMinWidth(70.0);
                     button.setText(bundle.getString("toolbar." + buttonName + "_short"));
                 }
@@ -148,11 +148,7 @@ public class ZToolBar extends ToolBar implements DataSetEventListener {
         else if( controller.getMode().equals(ZSceneMode.DIALOG) ){
             buttons.get("add").setDisable(Boolean.TRUE); //.disableProperty().bind(new SimpleBooleanProperty(Boolean.TRUE));
             buttons.get("delete").setDisable(Boolean.TRUE); //.disableProperty().bind(new SimpleBooleanProperty(Boolean.TRUE));
-            if( resourcesFolder!=null ) {
-                buttons.get("save").setGraphic(new ImageView(new Image(getClass().getResourceAsStream(resourcesFolder + "accept.png"))));
-            } else {
-                buttons.get("save").setText("OK");
-            }
+            buttons.get("save").setId("acceptNavButton");
             buttons.get("save").setOnAction(this.controller.handlerConfirm);
         }
 
@@ -173,7 +169,6 @@ public class ZToolBar extends ToolBar implements DataSetEventListener {
         // counter
         String text = (controller.getDataset().getCurrentIndex() + 1) + "/" + controller.getDataset().size();
         counterLabel.setText(text);
-
 
     }
 

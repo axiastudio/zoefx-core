@@ -1,5 +1,7 @@
 package com.axiastudio.zoefx.core.skins;
 
+import java.util.Optional;
+
 /**
  * User: tiziano
  * Date: 23/08/14
@@ -8,13 +10,13 @@ package com.axiastudio.zoefx.core.skins;
 public class FamFamFam implements ZSkin {
 
     @Override
-    public String resourcesFolder() {
-        return "/com/axiastudio/zoefx/core/skins/famfamfam/";
+    public String getName() {
+        return "FamFamFam";
     }
 
     @Override
-    public String getName() {
-        return "FamFamFam";
+    public Optional<String> getStyle() {
+        return Optional.of("/com/axiastudio/zoefx/core/skins/famfamfam/style.css");
     }
 
 }

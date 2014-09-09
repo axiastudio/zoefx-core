@@ -38,7 +38,6 @@ public class ConsoleController implements Initializable {
 
         Button button = new Button();
         button.setId("executeConsoleButton");
-        button.setGraphic(new ImageView(new Image(getClass().getResourceAsStream(Skins.getActiveSkin().resourcesFolder() + "cogs.png"))));
         toolBar.getItems().add(button);
         button.setOnAction(this.handlerExecute);
 

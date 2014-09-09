@@ -8,14 +8,15 @@ import java.util.Optional;
  * Time: 14:23
  */
 public class NoIcons implements ZSkin {
+
     @Override
     public String getName() {
         return "NoIcons";
     }
 
     @Override
-    public String resourcesFolder() {
-        return null;
+    public Boolean noIcons() {
+        return Boolean.TRUE;
     }
 
     @Override

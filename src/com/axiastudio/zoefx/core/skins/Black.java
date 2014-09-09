@@ -10,11 +10,6 @@ import java.util.Optional;
 public class Black implements ZSkin {
 
     @Override
-    public String resourcesFolder() {
-        return "/com/axiastudio/zoefx/core/skins/black/";
-    }
-
-    @Override
     public String getName() {
         return "Black";
     }
