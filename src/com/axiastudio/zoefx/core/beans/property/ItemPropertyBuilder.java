@@ -97,7 +97,7 @@ public class ItemPropertyBuilder<T> {
                 item.setFromStringFunction(s -> {
                     NumberFormat numberFormat = NumberFormat.getCurrencyInstance();
                     String symbol = numberFormat.getCurrency().getSymbol();
-                    String regex = "(" + symbol + "|-|-" + symbol + ") ?[0-9]{1,3}(\\.?[0-9]{3})*(,[0-9]{2})?";
+                    String regex = "-?("+symbol+" )?[0-9]{1,3}(\\.?[0-9]{3})*(,[0-9]{2})?";
                     if (!Pattern.matches(regex, s)) {
                         return null;
                     }
