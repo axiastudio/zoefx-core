@@ -239,8 +239,9 @@ public class FXController extends BaseController implements DataSetEventListener
                 newStore.add(selectedItems.get(i));
             }
             ZSceneBuilder sceneBuilder = SceneBuilders.querySceneBuilder(newStore.get(0).getClass());
-            FXController controller = Controllers.queryController(sceneBuilder);
-            ZScene newScene = sceneBuilder.manager(getDataset().getManager()).store(newStore).controller(controller)
+            ZScene newScene = sceneBuilder
+                    .manager(getDataset().getManager())
+                    .store(newStore)
                     .mode(ZSceneMode.DIALOG).build();
             if (newScene != null) {
                 Stage newStage = new Stage();
@@ -271,8 +272,9 @@ public class FXController extends BaseController implements DataSetEventListener
                 }
             }
             ZSceneBuilder sceneBuilder = SceneBuilders.querySceneBuilder(newStore.get(0).getClass());
-            FXController controller = Controllers.queryController(sceneBuilder);
-            ZScene newScene = sceneBuilder.manager(getDataset().getManager()).store(newStore).controller(controller)
+            ZScene newScene = sceneBuilder
+                    .manager(getDataset().getManager())
+                    .store(newStore)
                     .mode(ZSceneMode.WINDOW).build();
             if (newScene != null) {
                 Stage newStage = new Stage();
@@ -298,17 +300,14 @@ public class FXController extends BaseController implements DataSetEventListener
                     Class<?> referenceReturnType = (new BeanClassAccess(collectionGenericReturnType, referenceName)).getReturnType();
                     String className = referenceReturnType.getName();
                     classToSearch = Class.forName(className);
-                    Callback callback = new Callback<List, Boolean>() {
-                        @Override
-                        public Boolean call(List items) {
-                            for( Object item: items ){
-                                Object entity = dataset.createRow(collectionName);
-                                BeanAccess<Object> ba = new BeanAccess<>(entity, referenceName);
-                                ba.setValue(item);
-                                refresh();
-                            }
-                            return true;
+                    Callback<List, Boolean> callback = items -> {
+                        for( Object item: items ){
+                            Object entity = dataset.createRow(collectionName);
+                            BeanAccess<Object> ba = new BeanAccess<>(entity, referenceName);
+                            ba.setValue(item);
+                            refresh();
                         }
+                        return true;
                     };
                     Stage stage = searchStage(classToSearch, searchcolumns, callback);
                     stage.show();
@@ -320,8 +319,9 @@ public class FXController extends BaseController implements DataSetEventListener
                 List newStore = new ArrayList<>();
                 newStore.add(entity);
                 ZSceneBuilder sceneBuilder = SceneBuilders.querySceneBuilder(newStore.get(0).getClass());
-                FXController controller = Controllers.queryController(sceneBuilder);
-                ZScene newScene = sceneBuilder.manager(getDataset().getManager()).store(newStore).controller(controller)
+                ZScene newScene = sceneBuilder
+                        .manager(getDataset().getManager())
+                        .store(newStore)
                         .mode(ZSceneMode.DIALOG).build();
                 if (newScene != null) {
                     Stage newStage = new Stage();
@@ -540,16 +540,13 @@ public class FXController extends BaseController implements DataSetEventListener
         String searchcolumns = behavior.getProperties().getProperty("searchcolumns");
         String searchcriteria = behavior.getProperties().getProperty("searchcriteria");
 
-        Callback callback = new Callback<List, Boolean>() {
-            @Override
-            public Boolean call(List items) {
-                List store = new ArrayList();
-                for( Object item: items ){
-                    store.add(item);
-                }
-                dataset.setStore(store);
-                return true;
+        Callback<List, Boolean> callback = items -> {
+            List store = new ArrayList();
+            for( Object item: items ){
+                store.add(item);
             }
+            dataset.setStore(store);
+            return true;
         };
         Stage stage = searchStage(classToSearch, searchcolumns, callback, searchcriteria);
         stage.show();

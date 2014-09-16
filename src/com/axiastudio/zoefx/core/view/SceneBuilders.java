@@ -1,7 +1,5 @@
 package com.axiastudio.zoefx.core.view;
 
-import com.axiastudio.zoefx.core.controller.Controllers;
-import com.axiastudio.zoefx.core.controller.FXController;
 import com.axiastudio.zoefx.core.db.DataSet;
 
 import java.util.HashMap;
@@ -63,8 +61,6 @@ public class SceneBuilders {
     public static ZScene queryZScene(DataSet<Object> dataSet, ZSceneMode mode) {
         ZSceneBuilder zsb = SceneBuilders.querySceneBuilder(dataSet);
         if( zsb != null ){
-            FXController controller = Controllers.queryController(zsb);
-            zsb = zsb.controller(controller);
             zsb.mode(mode);
             ZScene zScene = zsb.build();
             return zScene;

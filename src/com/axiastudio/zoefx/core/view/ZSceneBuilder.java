@@ -13,7 +13,6 @@ import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
 
 import java.io.IOException;
-import java.io.InputStream;
 import java.net.URL;
 import java.util.EnumSet;
 import java.util.List;
@@ -131,9 +130,10 @@ public class ZSceneBuilder<E> {
         loader.setResources(bundle);
         loader.setLocation(fxmlUrl);
         loader.setBuilderFactory(new JavaFXBuilderFactory());
-        if( controller != null ) {
-            loader.setController(controller);
+        if( controller == null ){
+            controller = new FXController();
         }
+        loader.setController(controller);
         Parent root=null;
         try {
             root = loader.load();
