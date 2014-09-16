@@ -1,5 +1,6 @@
 package com.axiastudio.zoefx.core.view;
 
+import com.axiastudio.zoefx.core.Utilities;
 import com.axiastudio.zoefx.core.controller.BaseController;
 import com.axiastudio.zoefx.core.controller.FXController;
 import com.axiastudio.zoefx.core.db.*;
@@ -169,7 +170,11 @@ public class ZSceneBuilder<E> {
             }
             TimeMachine timeMachine = new TimeMachine();
             fxController.setTimeMachine(timeMachine);
-            if( store == null && manager != null ) {
+            if( manager == null ){
+                Database database = Utilities.queryUtility(Database.class);
+                manager = database.createManager(entityClass);
+            }
+            if( store == null ) {
                 store = manager.getAll();
             }
             DataSet<E> dataset =  DataSetBuilder.create(entityClass).store(store).manager(manager).build();
