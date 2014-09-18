@@ -119,7 +119,7 @@ public class FXController extends BaseController implements DataSetEventListener
         Model model = dataset.getCurrentModel();
         Parent root = getScene().getRoot();
         Pane container = (Pane) root;
-        List<Node> nodes = findNodes(container, new ArrayList<Node>());
+        List<Node> nodes = findNodes(container, new ArrayList<>());
         for( Node node: nodes ){
             if( node instanceof ChoiceBox){
                 String name = node.getId();
