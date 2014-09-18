@@ -9,7 +9,7 @@ import java.util.HashMap;
  */
 public class Utilities {
 
-    private static HashMap<Class, HashMap<String, Object>> utilities = new HashMap<>();
+    private static HashMap<String, HashMap<String, Object>> utilities = new HashMap<>();
 
     /**
      * Registers the unnamed utility for the given interface.
@@ -32,12 +32,12 @@ public class Utilities {
      *
      */
     public static synchronized void registerUtility(Object utility, Class iface, String name){
-        HashMap<String, Object> hm = Utilities.utilities.get(iface);
+        HashMap<String, Object> hm = Utilities.utilities.get(iface.getSimpleName());
         if( hm == null ){
-            hm = new HashMap<String, Object>();
+            hm = new HashMap<>();
         }
         hm.put(name, utility);
-        Utilities.utilities.put(iface, hm);
+        Utilities.utilities.put(iface.getSimpleName(), hm);
     }
 
     /**
@@ -61,7 +61,7 @@ public class Utilities {
      */
     public static <T> T queryUtility(Class<T> iface, String name){
         T utility = null;
-        HashMap<String, Object> hm = Utilities.utilities.get(iface);
+        HashMap<String, Object> hm = Utilities.utilities.get(iface.getSimpleName());
         if( hm != null ){
             utility = (T) hm.get(name);
         }

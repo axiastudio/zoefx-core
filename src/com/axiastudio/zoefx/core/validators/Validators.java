@@ -10,7 +10,7 @@ import java.util.Map;
  */
 public class Validators {
 
-    private static Map<Class, Map<String, Validator>> validators = new HashMap<>();
+    private static Map<String, Map<String, Validator>> validators = new HashMap<>();
 
     public static synchronized void bindValidator(Class klass, String name, Validator validator){
         Map<String, Validator> map = getClassMap(klass);
@@ -24,11 +24,11 @@ public class Validators {
 
     private static synchronized Map<String, Validator> getClassMap(Class klass){
         Map<String, Validator> map;
-        if( validators.keySet().contains(klass) ){
-            map = validators.get(klass);
+        if( validators.keySet().contains(klass.getSimpleName()) ){
+            map = validators.get(klass.getSimpleName());
         } else {
-            map = new HashMap<String, Validator>();
-            validators.put(klass, map);
+            map = new HashMap<>();
+            validators.put(klass.getSimpleName(), map);
         }
         return map;
     }

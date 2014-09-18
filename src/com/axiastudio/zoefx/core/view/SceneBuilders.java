@@ -11,7 +11,7 @@ import java.util.HashMap;
  */
 public class SceneBuilders {
 
-    private static HashMap<Class, ZSceneBuilder> scenebuilders = new HashMap<>();
+    private static HashMap<String, ZSceneBuilder> scenebuilders = new HashMap<>();
 
     /**
      * Registers the scene builder for the given entity class.
@@ -21,7 +21,7 @@ public class SceneBuilders {
      *
      */
     public static void registerSceneBuilder(Class entityClass, ZSceneBuilder builder){
-        SceneBuilders.scenebuilders.put(entityClass, builder);
+        SceneBuilders.scenebuilders.put(entityClass.getSimpleName(), builder);
     }
 
     /**
@@ -32,7 +32,7 @@ public class SceneBuilders {
      *
      */
     public static ZSceneBuilder querySceneBuilder(Class entityClass){
-        return SceneBuilders.scenebuilders.get(entityClass);
+        return SceneBuilders.scenebuilders.get(entityClass.getSimpleName());
     }
 
     /**
