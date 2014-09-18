@@ -16,7 +16,7 @@ public class Skins {
     private static String activeSkinName=null;
     private static List<String> skins = new ArrayList<>();
 
-    public static void registerSkin(ZSkin skin){
+    public static synchronized void registerSkin(ZSkin skin){
         Utilities.registerUtility(skin, ZSkin.class, skin.getName());
         skins.add(skin.getName());
         if( activeSkinName == null ){
@@ -28,14 +28,14 @@ public class Skins {
         return Utilities.queryUtility(ZSkin.class, name);
     }
 
-    public static ZSkin getActiveSkin(){
+    public static synchronized ZSkin getActiveSkin(){
         if( activeSkinName == null ){
             registerSkin(new Black());
         }
         return querySkin(activeSkinName);
     }
 
-    public static void activateSkin(String name){
+    public static synchronized void activateSkin(String name){
         if( Utilities.queryUtility(ZSkin.class, name) != null ){
             activeSkinName = name;
         }

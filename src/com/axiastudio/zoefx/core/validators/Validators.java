@@ -12,7 +12,7 @@ public class Validators {
 
     private static Map<Class, Map<String, Validator>> validators = new HashMap<>();
 
-    public static void bindValidator(Class klass, String name, Validator validator){
+    public static synchronized void bindValidator(Class klass, String name, Validator validator){
         Map<String, Validator> map = getClassMap(klass);
         map.put(name, validator);
     }
@@ -22,7 +22,7 @@ public class Validators {
         return map.get(name);
     }
 
-    private static Map<String, Validator> getClassMap(Class klass){
+    private static synchronized Map<String, Validator> getClassMap(Class klass){
         Map<String, Validator> map;
         if( validators.keySet().contains(klass) ){
             map = validators.get(klass);

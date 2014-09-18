@@ -14,7 +14,7 @@ public class Reports {
 
     private static Map<Class, ArrayList<ReportTemplate>> templates = new HashMap<>();
 
-    public static void addReportTemplate(Class klass, ReportTemplate template){
+    public static synchronized void addReportTemplate(Class klass, ReportTemplate template){
         if( !templates.keySet().contains(klass) ){
             templates.put(klass, new ArrayList<>());
         }

@@ -18,7 +18,7 @@ public class Utilities {
      * @param iface The interface implemented by the utility
      *
      */
-    public static void registerUtility(Object utility, Class iface){
+    public static synchronized void registerUtility(Object utility, Class iface){
         Utilities.registerUtility(utility, iface, ".");
 
     }
@@ -31,7 +31,7 @@ public class Utilities {
      * @param name The string name
      *
      */
-    public static void registerUtility(Object utility, Class iface, String name){
+    public static synchronized void registerUtility(Object utility, Class iface, String name){
         HashMap<String, Object> hm = Utilities.utilities.get(iface);
         if( hm == null ){
             hm = new HashMap<String, Object>();
