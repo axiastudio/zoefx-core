@@ -28,7 +28,9 @@ public class NoPersistenceDatabaseManagerImpl<E> implements Manager<E> {
 
     @Override
     public E commit(E entity) {
-        store.add(entity);
+        if( !store.contains(entity) ) {
+            store.add(entity);
+        }
         return entity;
     }
 
