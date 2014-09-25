@@ -14,6 +14,7 @@ import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
+import javafx.geometry.Insets;
 import javafx.scene.Node;
 import javafx.scene.control.*;
 import javafx.scene.layout.HBox;
@@ -38,7 +39,13 @@ public class SearchController<T> implements Initializable {
     private TableView results;
 
     @FXML
+    private Button searchSearchForm;
+
+    @FXML
     private VBox filterbox;
+
+    @FXML
+    private Button applySearchForm;
 
     @FXML
     private TitledPane filters;
@@ -52,6 +59,8 @@ public class SearchController<T> implements Initializable {
     public void initialize(URL url, ResourceBundle resourceBundle) {
         results.getSelectionModel().setSelectionMode(SelectionMode.MULTIPLE);
         filters.setText(resourceBundle.getString("search.filters"));
+        searchSearchForm.setText(resourceBundle.getString("search.search"));
+        applySearchForm.setText(resourceBundle.getString("search.apply"));
     }
 
     public void setEntityClass(Class<? extends T> entityClass) {
@@ -88,8 +97,9 @@ public class SearchController<T> implements Initializable {
     public void setCriteria(List<String> criteria){
         for( String property: criteria ){
             HBox hBox = new HBox();
+            hBox.setSpacing(10);
             Label label = new Label(property);
-            label.setMinWidth(100.0);
+            label.setMinWidth(120.0);
             Node node=null;
             BeanClassAccess beanClassAccess = new BeanClassAccess(entityClass, property);
             Class<?> returnType = beanClassAccess.getReturnType();

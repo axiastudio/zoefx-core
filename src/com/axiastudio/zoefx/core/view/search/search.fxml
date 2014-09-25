@@ -13,15 +13,15 @@
         <panes>
           <TitledPane fx:id="filters" animated="false" text="filters">
                <content>
-                  <VBox fx:id="filterbox" prefHeight="200.0" prefWidth="100.0" />
+                  <VBox fx:id="filterbox" prefHeight="200.0" prefWidth="100.0" spacing="10.0" />
                </content>
           </TitledPane>
         </panes>
       </Accordion>
       <ToolBar prefHeight="40.0" prefWidth="200.0">
         <items>
-          <Button fx:id="search" mnemonicParsing="false" onAction="#search" text="Search" />
-            <Button fx:id="apply" mnemonicParsing="false" onAction="#apply" text="Apply" />
+          <Button fx:id="searchSearchForm" mnemonicParsing="false" onAction="#search" text="Search" />
+            <Button fx:id="applySearchForm" mnemonicParsing="false" onAction="#apply" text="Apply" />
         </items>
       </ToolBar>
    </items>

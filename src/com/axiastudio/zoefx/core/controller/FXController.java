@@ -11,6 +11,7 @@ import com.axiastudio.zoefx.core.events.DataSetEvent;
 import com.axiastudio.zoefx.core.events.DataSetEventListener;
 import com.axiastudio.zoefx.core.db.DataSet;
 import com.axiastudio.zoefx.core.report.ReportEngine;
+import com.axiastudio.zoefx.core.skins.Skins;
 import com.axiastudio.zoefx.core.view.*;
 import com.axiastudio.zoefx.core.console.ConsoleController;
 import com.axiastudio.zoefx.core.view.report.ReportController;
@@ -489,7 +490,9 @@ public class FXController extends BaseController implements DataSetEventListener
 
         Stage stage = new Stage();
         stage.setTitle("Search");
-        stage.setScene(new Scene(root, 450, 450));
+        Scene scene = new Scene(root, 800, 600);
+        Skins.getActiveSkin().getStyle().ifPresent(s -> scene.getStylesheets().add(s));
+        stage.setScene(scene);
         return stage;
     }
 

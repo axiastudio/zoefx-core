@@ -42,6 +42,14 @@
     -fx-graphic: url("console.png");
 }
 
+/* Search form icons */
+#searchSearchForm {
+    -fx-graphic: url("search.png");
+}
+#applySearchForm {
+    -fx-graphic: url("accept.png");
+}
+
 /* Contex menu icons */
 .context-menu {
     /*-fx-padding: 0 0 0 8;*/
