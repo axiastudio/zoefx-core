@@ -18,6 +18,7 @@ import javafx.scene.Node;
 import javafx.scene.control.*;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
+import javafx.stage.Stage;
 import javafx.util.Callback;
 
 import java.net.URL;
@@ -219,6 +220,8 @@ public class SearchController<T> implements Initializable {
     private void apply(ActionEvent event){
         ObservableList<T> items = results.getSelectionModel().getSelectedItems();
         callback.call(items);
+        Stage stage = (Stage) filterbox.getScene().getWindow();
+        stage.close();
     }
 
     private Date localDateToDate(LocalDate localDate){
