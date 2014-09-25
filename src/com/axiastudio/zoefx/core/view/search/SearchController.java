@@ -39,6 +39,9 @@ public class SearchController<T> implements Initializable {
     @FXML
     private VBox filterbox;
 
+    @FXML
+    private TitledPane filters;
+
     private Class entityClass;
     private Behavior behavior;
     private Callback<List<T>, Boolean> callback=null;
@@ -47,6 +50,7 @@ public class SearchController<T> implements Initializable {
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
         results.getSelectionModel().setSelectionMode(SelectionMode.MULTIPLE);
+        filters.setText(resourceBundle.getString("search.filters"));
     }
 
     public void setEntityClass(Class<? extends T> entityClass) {

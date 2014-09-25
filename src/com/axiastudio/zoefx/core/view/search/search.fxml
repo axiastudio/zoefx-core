@@ -11,7 +11,7 @@
       <TableView fx:id="results" prefHeight="200.0" prefWidth="200.0" />
       <Accordion>
         <panes>
-          <TitledPane animated="false" text="filters">
+          <TitledPane fx:id="filters" animated="false" text="filters">
                <content>
                   <VBox fx:id="filterbox" prefHeight="200.0" prefWidth="100.0" />
                </content>

@@ -449,6 +449,7 @@ public class FXController extends BaseController implements DataSetEventListener
     private Stage searchStage(Class classToSearch, String searchcolumns, Callback callback, String searchcriteria) {
         URL url = getClass().getResource("/com/axiastudio/zoefx/core/view/search/search.fxml");
         FXMLLoader loader = new FXMLLoader();
+        loader.setResources(resourceBundle);
         loader.setLocation(url);
         loader.setBuilderFactory(new JavaFXBuilderFactory());
         Parent root = null;
