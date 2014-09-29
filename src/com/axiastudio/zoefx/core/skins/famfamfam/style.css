@@ -50,6 +50,20 @@
     -fx-graphic: url("accept.png");
 }
 
+/* message box icons*/
+#iconQuestionMessageBox {
+    -fx-background-image: url("info.png");
+    -fx-background-repeat: no-repeat;
+    -fx-background-position: center;
+}
+#okMsgBox {
+    -fx-graphic: url("accept.png");
+}
+#cancelMsgBox {
+    -fx-graphic: url("cancel.png");
+}
+
+
 /* Contex menu icons */
 .context-menu {
     /*-fx-padding: 0 0 0 8;*/

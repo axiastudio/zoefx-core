@@ -14,6 +14,8 @@ import com.axiastudio.zoefx.core.report.ReportEngine;
 import com.axiastudio.zoefx.core.skins.Skins;
 import com.axiastudio.zoefx.core.view.*;
 import com.axiastudio.zoefx.core.console.ConsoleController;
+import com.axiastudio.zoefx.core.view.msgbox.MsgBoxBuilder;
+import com.axiastudio.zoefx.core.view.msgbox.MsgBoxResponse;
 import com.axiastudio.zoefx.core.view.report.ReportController;
 import com.axiastudio.zoefx.core.view.search.SearchController;
 import javafx.beans.*;
@@ -556,9 +558,16 @@ public class FXController extends BaseController implements DataSetEventListener
         stage.show();
     };
     public EventHandler<ActionEvent> handlerDelete = e -> {
-        dataset.delete();
-        unsetModel();
-        setModel(dataset.newModel());
+        MsgBoxResponse response = MsgBoxBuilder.create()
+                .title("Confirm deletion")
+                .message("Delete the current entity?")
+                .masthead("Delete the current entity?")
+                .showConfirm();
+        if( response.equals(MsgBoxResponse.OK) ) {
+            dataset.delete();
+            unsetModel();
+            setModel(dataset.newModel());
+        }
     };
     public EventHandler<ActionEvent> handlerPrint = e -> {
         ReportEngine reportEngine = Utilities.queryUtility(ReportEngine.class);
