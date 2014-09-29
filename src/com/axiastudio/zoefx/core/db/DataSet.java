@@ -253,6 +253,7 @@ public class DataSet<E> implements DataSetEventGenerator {
     }
 
     public void delete() {
+        fireDataSetEvent(new DataSetEvent(DataSetEvent.BEFORE_DELETE));
         Manager<E> manager = getManager();
         if( manager != null ) {
             E entity = getStore().get(currentIndex);
@@ -275,7 +276,7 @@ public class DataSet<E> implements DataSetEventGenerator {
         if( db != null ) {
             getManager().deleteRow(row);
         }
-        fireDataSetEvent(new DataSetEvent(DataSetEvent.ROWS_DETETED));
+        fireDataSetEvent(new DataSetEvent(DataSetEvent.ROWS_DELETED));
         fireDataSetEvent(new DataSetEvent(DataSetEvent.GET_DIRTY));
     }
 

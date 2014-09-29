@@ -612,10 +612,14 @@ public class FXController extends BaseController implements DataSetEventListener
             storeChanged();
             unsetModel();
             setModel();
+        } else if( event.getEventType().equals(DataSetEvent.BEFORE_DELETE) ){
+            beforeDelete();
+        } else if( event.getEventType().equals(DataSetEvent.DELETED) ){
+            deleted();
         } else if( event.getEventType().equals(DataSetEvent.ROWS_CREATED) ){
             rowsCreated();
             refresh();
-        } else if( event.getEventType().equals(DataSetEvent.ROWS_DETETED) ){
+        } else if( event.getEventType().equals(DataSetEvent.ROWS_DELETED) ){
             rowsDeleted();
             refresh();
         } else if( event.getEventType().equals(DataSetEvent.GET_DIRTY) ){
@@ -639,4 +643,7 @@ public class FXController extends BaseController implements DataSetEventListener
     protected void beforeCommit(){}
     protected void committed(){}
     protected void indexChanged(){}
+    protected void beforeDelete(){}
+    protected void deleted(){}
+
 }

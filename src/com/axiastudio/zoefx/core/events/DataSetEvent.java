@@ -24,11 +24,13 @@ public class DataSetEvent extends Event {
 
     public static final EventType<DataSetEvent> CREATED = new EventType(ANY, "CREATE");
 
+    public static final EventType<DataSetEvent> BEFORE_DELETE = new EventType(ANY, "BEFORE_DELETE");
+
     public static final EventType<DataSetEvent> DELETED = new EventType(ANY, "DELETED");
 
     public static final EventType<DataSetEvent> ROWS_CREATED = new EventType(ANY, "ROWS_CREATED");
 
-    public static final EventType<DataSetEvent> ROWS_DETETED = new EventType(ANY, "ROWS_DETETED");
+    public static final EventType<DataSetEvent> ROWS_DELETED = new EventType(ANY, "ROWS_DELETED");
 
     public static final EventType<DataSetEvent> STORE_CHANGED = new EventType(ANY, "STORE_CHANGED");
 
