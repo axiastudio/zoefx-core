@@ -257,10 +257,10 @@ public class DataSet<E> implements DataSetEventGenerator {
         if( manager != null ) {
             E entity = getStore().get(currentIndex);
             manager.delete(entity);
-            getStore().remove(currentIndex);
+            getStore().remove(currentIndex.intValue());
             currentIndex = getStore().size()-1;
         } else {
-            getStore().remove(currentIndex);
+            getStore().remove(currentIndex.intValue());
             currentIndex = getStore().size()-1;
         }
         fireDataSetEvent(new DataSetEvent(DataSetEvent.DELETED));
