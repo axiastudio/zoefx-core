@@ -11,6 +11,8 @@ import com.axiastudio.zoefx.core.events.DataSetEvent;
 import com.axiastudio.zoefx.core.events.DataSetEventListener;
 import com.axiastudio.zoefx.core.db.DataSet;
 import com.axiastudio.zoefx.core.report.ReportEngine;
+import com.axiastudio.zoefx.core.report.ReportTemplate;
+import com.axiastudio.zoefx.core.report.Reports;
 import com.axiastudio.zoefx.core.skins.Skins;
 import com.axiastudio.zoefx.core.view.*;
 import com.axiastudio.zoefx.core.console.ConsoleController;
@@ -560,8 +562,8 @@ public class FXController extends BaseController implements DataSetEventListener
     public EventHandler<ActionEvent> handlerDelete = e -> {
         MsgBoxResponse response = MsgBoxBuilder.create()
                 .title("Confirm deletion")
-                .message("Delete the current entity?")
                 .masthead("Delete the current entity?")
+                .message("Delete the current entity?")
                 .showConfirm();
         if( response.equals(MsgBoxResponse.OK) ) {
             dataset.delete();
@@ -573,8 +575,22 @@ public class FXController extends BaseController implements DataSetEventListener
         ReportEngine reportEngine = Utilities.queryUtility(ReportEngine.class);
         if( reportEngine!=null ){
             Class classToReport = dataset.getCurrentModel().getEntityClass();
-            Stage stage = reportStage(classToReport);
-            stage.show();
+            if( Reports.getTemplates(classToReport).isPresent() ) {
+                Stage stage = reportStage(classToReport);
+                stage.show();
+            } else {
+                MsgBoxBuilder.create()
+                    .title("Information")
+                    .masthead("No reports avaiable for this entity.")
+                    .message("No reports avaiable for this entity.")
+                    .showInfo();
+            }
+        } else {
+            MsgBoxBuilder.create()
+                .title("Information")
+                .masthead("No report engine configured.")
+                .message("No report engine configured.")
+                .showInfo();
         }
     };
     public EventHandler<ActionEvent> handlerRefresh = e -> refresh();

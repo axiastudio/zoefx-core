@@ -51,7 +51,8 @@ public class ReportController<T> extends BaseController {
 
     public void setEntityClass(Class entityClass) {
         this.entityClass = entityClass;
-        ObservableList<ReportTemplate> choices = FXCollections.observableArrayList(Reports.getTemplates(entityClass));
+        // XXX: use ifPresent
+        ObservableList<ReportTemplate> choices = FXCollections.observableArrayList(Reports.getTemplates(entityClass).get());
         templates.setConverter(new LookupStringConverter<>("title"));
         templates.setItems(choices);
         templates.setValue(choices.get(0));

@@ -1,9 +1,6 @@
 package com.axiastudio.zoefx.core.report;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 /**
  * User: tiziano
@@ -21,8 +18,11 @@ public class Reports {
         templates.get(klass).add(template);
     }
 
-    public static List<ReportTemplate> getTemplates(Class klass){
-        return templates.get(klass);
+    public static Optional<List<ReportTemplate>> getTemplates(Class klass){
+        if( templates.containsKey(klass) ) {
+            return Optional.of(templates.get(klass));
+        }
+        return Optional.empty();
     }
 
 }
