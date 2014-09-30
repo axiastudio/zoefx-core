@@ -3,9 +3,7 @@ package com.axiastudio.zoefx.core.view.msgbox;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
-import javafx.scene.control.Button;
-import javafx.scene.control.Label;
-import javafx.scene.control.TitledPane;
+import javafx.scene.control.*;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 
@@ -37,12 +35,22 @@ public class MsgBoxController implements Initializable {
     private Label messageLabel;
 
     @FXML
+    private Label mastheadLabel;
+
+    @FXML
+    private TextArea detailsTextArea;
+
+    @FXML
     private TitledPane detailsTitledPane;
+
+    @FXML
+    private Accordion detailsAccordion;
 
     public MsgBoxResponse response = MsgBoxResponse.CANCEL;
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
+        detailsAccordion.setVisible(Boolean.FALSE);
         detailsTitledPane.expandedProperty().addListener((observable, oldValue, newValue) -> {
             Stage stage = (Stage) messageLabel.getScene().getWindow();
             if( newValue ) {
@@ -55,8 +63,34 @@ public class MsgBoxController implements Initializable {
         });
     }
 
+    public void config(MsgBoxType type){
+        switch(type){
+            case CONFIRM:
+                break;
+            case INFO:
+                cancelMsgBox.setVisible(Boolean.FALSE);
+                break;
+            default:
+                break;
+        }
+    }
+
     public void setMessage(String message) {
         messageLabel.setText(message);
+    }
+
+    public void setTitle(String title) {
+        Stage stage = (Stage) messageLabel.getScene().getWindow();
+        stage.setTitle(title);
+    }
+
+    public void setMasthead(String masthead) {
+        mastheadLabel.setText(masthead);
+    }
+
+    public void setDetails(String details) {
+        detailsTextArea.setText(details);
+        detailsAccordion.setVisible(details.length()>0);
     }
 
     public MsgBoxResponse getResponse() {

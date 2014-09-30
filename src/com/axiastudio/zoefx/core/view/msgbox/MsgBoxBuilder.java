@@ -21,6 +21,7 @@ public class MsgBoxBuilder {
     private String title="";
     private String masthead="";
     private String message="";
+    private String details="";
 
 
     public static MsgBoxBuilder create(){
@@ -42,11 +43,20 @@ public class MsgBoxBuilder {
         return this;
     }
 
-    public MsgBoxResponse showConfirm(){
-        return showDialog();
+    public MsgBoxBuilder details(String details){
+        this.details = details;
+        return this;
     }
 
-    private MsgBoxResponse showDialog() {
+    public MsgBoxResponse showConfirm(){
+        return showDialog(MsgBoxType.CONFIRM);
+    }
+
+    public MsgBoxResponse showInfo(){
+        return showDialog(MsgBoxType.INFO);
+    }
+
+    private MsgBoxResponse showDialog(MsgBoxType type) {
         ResourceBundle bundle = ResourceBundle.getBundle("com.axiastudio.zoefx.core.resources.i18n");
         URL url = getClass().getResource("/com/axiastudio/zoefx/core/view/msgbox/msgbox.fxml");
         FXMLLoader loader = new FXMLLoader(url, bundle);
@@ -62,6 +72,9 @@ public class MsgBoxBuilder {
             e.printStackTrace();
         }
         controller.setMessage(message);
+        controller.setMasthead(masthead);
+        controller.setDetails(details);
+        controller.config(type);
         Scene scene = new Scene(root);
         Skins.getActiveSkin().getStyle().ifPresent(s -> scene.getStylesheets().add(s));
         Stage stage = new Stage();

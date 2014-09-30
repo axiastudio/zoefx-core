@@ -14,11 +14,11 @@
             <Label fx:id="messageLabel" layoutX="14.0" layoutY="93.0" prefHeight="58.0" prefWidth="372.0" text="message" />
          </children>
       </AnchorPane>
-      <Accordion>
+      <Accordion fx:id="detailsAccordion">
         <panes>
           <TitledPane fx:id="detailsTitledPane" animated="false" expanded="false" text="details">
                <content>
-                  <TextArea editable="false" prefHeight="100.0" prefWidth="200.0" />
+                  <TextArea fx:id="detailsTextArea" editable="false" prefHeight="100.0" prefWidth="200.0" />
                </content>
             </TitledPane>
         </panes>
