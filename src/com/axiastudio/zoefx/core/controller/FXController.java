@@ -11,7 +11,6 @@ import com.axiastudio.zoefx.core.events.DataSetEvent;
 import com.axiastudio.zoefx.core.events.DataSetEventListener;
 import com.axiastudio.zoefx.core.db.DataSet;
 import com.axiastudio.zoefx.core.report.ReportEngine;
-import com.axiastudio.zoefx.core.report.ReportTemplate;
 import com.axiastudio.zoefx.core.report.Reports;
 import com.axiastudio.zoefx.core.skins.Skins;
 import com.axiastudio.zoefx.core.view.*;
@@ -413,7 +412,7 @@ public class FXController extends BaseController implements DataSetEventListener
         unsetModel();
         Model model = dataset.newModel();
         setModel(model);
-        timeMachine.resetAndcreateSnapshot(fxProperties.values());
+        timeMachine.resetAndCreateSnapshot(fxProperties.values());
         for( TableView tableView: tableViews.values() ){
             // XXX: workaround for https://javafx-jira.kenai.com/browse/RT-22599
             ObservableList items = tableView.getItems();
@@ -508,35 +507,35 @@ public class FXController extends BaseController implements DataSetEventListener
         unsetModel();
         dataset.goFirst();
         setModel(dataset.newModel());
-        timeMachine.resetAndcreateSnapshot(fxProperties.values());
+        timeMachine.resetAndCreateSnapshot(fxProperties.values());
     };
     public EventHandler<ActionEvent> handlerGoPrevious = e -> {
         unsetModel();
         dataset.goPrevious();
         setModel(dataset.newModel());
-        timeMachine.resetAndcreateSnapshot(fxProperties.values());
+        timeMachine.resetAndCreateSnapshot(fxProperties.values());
     };
     public EventHandler<ActionEvent> handlerGoNext = e -> {
         unsetModel();
         dataset.goNext();
         setModel(dataset.newModel());
-        timeMachine.resetAndcreateSnapshot(fxProperties.values());
+        timeMachine.resetAndCreateSnapshot(fxProperties.values());
     };
     public EventHandler<ActionEvent> handlerGoLast = e -> {
         unsetModel();
         dataset.goLast();
         setModel(dataset.newModel());
-        timeMachine.resetAndcreateSnapshot(fxProperties.values());
+        timeMachine.resetAndCreateSnapshot(fxProperties.values());
     };
     public EventHandler<ActionEvent> handlerSave = e -> {
         dataset.commit();
-        timeMachine.resetAndcreateSnapshot(fxProperties.values());
+        timeMachine.resetAndCreateSnapshot(fxProperties.values());
     };
     public EventHandler<ActionEvent> handlerConfirm = e -> ((Stage) getScene().getWindow()).close();
     public EventHandler<ActionEvent> handlerCancel = e -> {
         timeMachine.rollback();
         dataset.revert();
-        timeMachine.resetAndcreateSnapshot(fxProperties.values());
+        timeMachine.resetAndCreateSnapshot(fxProperties.values());
     };
     public EventHandler<ActionEvent> handlerAdd = e -> {
         dataset.create();

@@ -13,7 +13,7 @@ public class TimeMachine {
 
     private List<Map<Property, Object>> snapshots = new ArrayList<>();
 
-    public void resetAndcreateSnapshot(Collection<Property> properties){
+    public void resetAndCreateSnapshot(Collection<Property> properties){
         reset();
         createSnapshot(properties);
     }
