@@ -1,4 +1,4 @@
-package com.axiastudio.zoefx.core.beans;
+package com.axiastudio.zoefx.core.model;
 
 import com.axiastudio.zoefx.demo.Book;
 import com.axiastudio.zoefx.demo.Genre;

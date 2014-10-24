@@ -1,15 +1,14 @@
 package com.axiastudio.zoefx.demo;
 
 import com.axiastudio.zoefx.core.Utilities;
-import com.axiastudio.zoefx.core.beans.EntityBuilder;
-import com.axiastudio.zoefx.core.controller.FXController;
+import com.axiastudio.zoefx.core.model.EntityBuilder;
+import com.axiastudio.zoefx.core.controller.Controller;
 import com.axiastudio.zoefx.core.db.Database;
 import com.axiastudio.zoefx.core.db.NoPersistenceDatabaseImpl;
 import com.axiastudio.zoefx.core.skins.*;
 import com.axiastudio.zoefx.core.validators.ValidatorBuilder;
 import com.axiastudio.zoefx.core.validators.Validators;
 import com.axiastudio.zoefx.core.view.SceneBuilders;
-import com.axiastudio.zoefx.core.view.ZScene;
 import com.axiastudio.zoefx.core.view.ZSceneBuilder;
 import javafx.application.Application;
 import javafx.stage.Stage;
@@ -41,25 +40,25 @@ public class StartDemo extends Application {
 
         ZSceneBuilder zsbBook = ZSceneBuilder.create()
                 .url(StartDemo.class.getResource("/com/axiastudio/zoefx/demo/books.fxml"))
-                .controller(new FXController())
+                .controller(new Controller())
                 .manager(database.createManager(Book.class));
         zsbBook = zsbBook.properties(StartDemo.class.getResource("/com/axiastudio/zoefx/demo/book.properties"));
         SceneBuilders.registerSceneBuilder(Book.class, zsbBook);
 
         ZSceneBuilder zsbPerson = ZSceneBuilder.create().url(StartDemo.class.getResource("/com/axiastudio/zoefx/demo/persons.fxml"))
                 .properties(StartDemo.class.getResource("/com/axiastudio/zoefx/demo/person.properties"))
-                .controller(new FXController()).manager(database.createManager(Person.class));
+                .controller(new Controller()).manager(database.createManager(Person.class));
         SceneBuilders.registerSceneBuilder(Person.class, zsbPerson);
 
 
         ZSceneBuilder zsbAuthor = ZSceneBuilder.create().url(StartDemo.class.getResource("/com/axiastudio/zoefx/demo/authors.fxml"))
-                .controller(new FXController()).manager(database.createManager(Author.class));
+                .controller(new Controller()).manager(database.createManager(Author.class));
         SceneBuilders.registerSceneBuilder(Author.class, zsbAuthor);
 
         primaryStage.setTitle("Zoe FX Framework - Authors");
-        //primaryStage.setScene(zsbPerson.build().getScene());
+        primaryStage.setScene(zsbPerson.build().getScene());
         //primaryStage.setScene(zsbAuthor.build().getScene());
-        primaryStage.setScene(zsbBook.build().getScene());
+        //primaryStage.setScene(zsbBook.build().getScene());
         primaryStage.show();
 
     }

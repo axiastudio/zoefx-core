@@ -1,4 +1,4 @@
-package com.axiastudio.zoefx.core.beans.property;
+package com.axiastudio.zoefx.core.model.property;
 
 import com.axiastudio.zoefx.demo.Book;
 import javafx.beans.property.Property;

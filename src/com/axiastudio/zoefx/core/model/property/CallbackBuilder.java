@@ -1,6 +1,6 @@
-package com.axiastudio.zoefx.core.beans.property;
+package com.axiastudio.zoefx.core.model.property;
 
-import com.axiastudio.zoefx.core.beans.BeanClassAccess;
+import com.axiastudio.zoefx.core.model.BeanClassAccess;
 import javafx.beans.value.ObservableValue;
 import javafx.scene.control.TableColumn;
 import javafx.util.Callback;

@@ -1,6 +1,6 @@
 package com.axiastudio.zoefx.core.db;
 
-import com.axiastudio.zoefx.core.view.Model;
+import com.axiastudio.zoefx.core.model.Model;
 import org.junit.Test;
 
 /**

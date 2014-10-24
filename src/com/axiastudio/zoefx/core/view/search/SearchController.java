@@ -1,9 +1,9 @@
 package com.axiastudio.zoefx.core.view.search;
 
 import com.axiastudio.zoefx.core.Utilities;
-import com.axiastudio.zoefx.core.beans.BeanClassAccess;
-import com.axiastudio.zoefx.core.beans.LookupStringConverter;
-import com.axiastudio.zoefx.core.beans.property.CallbackBuilder;
+import com.axiastudio.zoefx.core.model.BeanClassAccess;
+import com.axiastudio.zoefx.core.model.LookupStringConverter;
+import com.axiastudio.zoefx.core.model.property.CallbackBuilder;
 import com.axiastudio.zoefx.core.db.DataSet;
 import com.axiastudio.zoefx.core.db.DataSetBuilder;
 import com.axiastudio.zoefx.core.db.Database;
@@ -14,7 +14,6 @@ import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
-import javafx.geometry.Insets;
 import javafx.scene.Node;
 import javafx.scene.control.*;
 import javafx.scene.layout.HBox;

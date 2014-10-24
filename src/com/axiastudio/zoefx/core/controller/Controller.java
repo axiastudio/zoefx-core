@@ -1,11 +1,12 @@
 package com.axiastudio.zoefx.core.controller;
 
 import com.axiastudio.zoefx.core.Utilities;
-import com.axiastudio.zoefx.core.beans.BeanAccess;
-import com.axiastudio.zoefx.core.beans.BeanClassAccess;
-import com.axiastudio.zoefx.core.beans.LookupStringConverter;
-import com.axiastudio.zoefx.core.beans.property.ItemObjectProperty;
-import com.axiastudio.zoefx.core.beans.property.ZoeFXProperty;
+import com.axiastudio.zoefx.core.model.BeanAccess;
+import com.axiastudio.zoefx.core.model.BeanClassAccess;
+import com.axiastudio.zoefx.core.model.LookupStringConverter;
+import com.axiastudio.zoefx.core.model.Model;
+import com.axiastudio.zoefx.core.model.property.ItemObjectProperty;
+import com.axiastudio.zoefx.core.model.property.ZoeFXProperty;
 import com.axiastudio.zoefx.core.db.TimeMachine;
 import com.axiastudio.zoefx.core.events.DataSetEvent;
 import com.axiastudio.zoefx.core.events.DataSetEventListener;

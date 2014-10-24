@@ -1,6 +1,6 @@
-package com.axiastudio.zoefx.core.view;
+package com.axiastudio.zoefx.core.model;
 
-import com.axiastudio.zoefx.core.beans.property.*;
+import com.axiastudio.zoefx.core.model.property.*;
 import javafx.beans.property.Property;
 import javafx.util.Callback;
 
