@@ -1,6 +1,6 @@
 package com.axiastudio.zoefx.core.db;
 
-import com.axiastudio.zoefx.core.model.BeanClassAccess;
+import com.axiastudio.zoefx.core.model.beans.BeanClassAccess;
 
 import java.util.ArrayList;
 import java.util.List;

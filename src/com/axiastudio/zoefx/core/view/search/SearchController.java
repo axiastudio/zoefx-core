@@ -1,8 +1,8 @@
 package com.axiastudio.zoefx.core.view.search;
 
 import com.axiastudio.zoefx.core.Utilities;
-import com.axiastudio.zoefx.core.model.BeanClassAccess;
-import com.axiastudio.zoefx.core.model.LookupStringConverter;
+import com.axiastudio.zoefx.core.model.beans.BeanClassAccess;
+import com.axiastudio.zoefx.core.model.beans.LookupStringConverter;
 import com.axiastudio.zoefx.core.model.property.CallbackBuilder;
 import com.axiastudio.zoefx.core.db.DataSet;
 import com.axiastudio.zoefx.core.db.DataSetBuilder;

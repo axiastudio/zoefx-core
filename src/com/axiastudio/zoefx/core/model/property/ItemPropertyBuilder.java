@@ -1,6 +1,6 @@
 package com.axiastudio.zoefx.core.model.property;
 
-import com.axiastudio.zoefx.core.model.BeanAccess;
+import com.axiastudio.zoefx.core.model.beans.BeanAccess;
 
 import java.math.BigDecimal;
 import java.text.DateFormat;

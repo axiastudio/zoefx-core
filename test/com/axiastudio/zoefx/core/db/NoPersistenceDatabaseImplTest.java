@@ -1,7 +1,7 @@
 package com.axiastudio.zoefx.core.db;
 
 import com.axiastudio.zoefx.core.Utilities;
-import com.axiastudio.zoefx.core.model.EntityBuilder;
+import com.axiastudio.zoefx.core.model.beans.EntityBuilder;
 import com.axiastudio.zoefx.demo.Author;
 import org.junit.BeforeClass;
 import org.junit.Test;

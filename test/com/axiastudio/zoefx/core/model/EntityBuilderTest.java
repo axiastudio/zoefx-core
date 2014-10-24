@@ -1,5 +1,6 @@
 package com.axiastudio.zoefx.core.model;
 
+import com.axiastudio.zoefx.core.model.beans.EntityBuilder;
 import com.axiastudio.zoefx.demo.Book;
 import com.axiastudio.zoefx.demo.Genre;
 import org.junit.Test;

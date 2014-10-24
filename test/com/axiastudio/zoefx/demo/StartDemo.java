@@ -1,7 +1,7 @@
 package com.axiastudio.zoefx.demo;
 
 import com.axiastudio.zoefx.core.Utilities;
-import com.axiastudio.zoefx.core.model.EntityBuilder;
+import com.axiastudio.zoefx.core.model.beans.EntityBuilder;
 import com.axiastudio.zoefx.core.controller.Controller;
 import com.axiastudio.zoefx.core.db.Database;
 import com.axiastudio.zoefx.core.db.NoPersistenceDatabaseImpl;

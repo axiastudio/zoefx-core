@@ -1,7 +1,7 @@
 package com.axiastudio.zoefx.core.db;
 
 import com.axiastudio.zoefx.core.Utilities;
-import com.axiastudio.zoefx.core.model.BeanAccess;
+import com.axiastudio.zoefx.core.model.beans.BeanAccess;
 import com.axiastudio.zoefx.core.events.DataSetEvent;
 import com.axiastudio.zoefx.core.events.DataSetEventGenerator;
 import com.axiastudio.zoefx.core.events.DataSetEventListener;

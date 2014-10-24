@@ -1,9 +1,9 @@
 package com.axiastudio.zoefx.core.controller;
 
 import com.axiastudio.zoefx.core.Utilities;
-import com.axiastudio.zoefx.core.model.BeanAccess;
-import com.axiastudio.zoefx.core.model.BeanClassAccess;
-import com.axiastudio.zoefx.core.model.LookupStringConverter;
+import com.axiastudio.zoefx.core.model.beans.BeanAccess;
+import com.axiastudio.zoefx.core.model.beans.BeanClassAccess;
+import com.axiastudio.zoefx.core.model.beans.LookupStringConverter;
 import com.axiastudio.zoefx.core.model.Model;
 import com.axiastudio.zoefx.core.model.property.ItemObjectProperty;
 import com.axiastudio.zoefx.core.model.property.ZoeFXProperty;

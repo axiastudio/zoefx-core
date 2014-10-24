@@ -1,6 +1,6 @@
 package com.axiastudio.zoefx.core.model.property;
 
-import com.axiastudio.zoefx.core.model.BeanAccess;
+import com.axiastudio.zoefx.core.model.beans.BeanAccess;
 import javafx.beans.property.ListPropertyBase;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;

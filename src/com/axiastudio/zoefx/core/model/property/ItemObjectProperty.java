@@ -1,7 +1,7 @@
 package com.axiastudio.zoefx.core.model.property;
 
 import com.axiastudio.zoefx.core.Utilities;
-import com.axiastudio.zoefx.core.model.BeanAccess;
+import com.axiastudio.zoefx.core.model.beans.BeanAccess;
 import com.axiastudio.zoefx.core.db.Database;
 import com.axiastudio.zoefx.core.db.Manager;
 import javafx.beans.property.ObjectPropertyBase;

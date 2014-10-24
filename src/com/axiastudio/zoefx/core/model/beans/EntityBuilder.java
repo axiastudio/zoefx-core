@@ -1,4 +1,4 @@
-package com.axiastudio.zoefx.core.model;
+package com.axiastudio.zoefx.core.model.beans;
 
 import java.util.HashMap;
 import java.util.Map;

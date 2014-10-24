@@ -1,7 +1,7 @@
 package com.axiastudio.zoefx.core.view.report;
 
 import com.axiastudio.zoefx.core.Utilities;
-import com.axiastudio.zoefx.core.model.LookupStringConverter;
+import com.axiastudio.zoefx.core.model.beans.LookupStringConverter;
 import com.axiastudio.zoefx.core.controller.BaseController;
 import com.axiastudio.zoefx.core.report.ReportEngine;
 import com.axiastudio.zoefx.core.report.ReportTemplate;
