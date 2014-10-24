@@ -47,7 +47,7 @@ import java.util.logging.Logger;
  * Date: 20/03/14
  * Time: 23:04
  */
-public class FXController extends BaseController implements DataSetEventListener {
+public class Controller extends BaseController implements DataSetEventListener {
 
     private DataSet dataset = null;
     private ZSceneMode mode;
@@ -388,7 +388,7 @@ public class FXController extends BaseController implements DataSetEventListener
         return behavior;
     }
 
-    private FXController self(){
+    private Controller self(){
         return this;
     }
 

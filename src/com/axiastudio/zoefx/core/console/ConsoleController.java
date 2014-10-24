@@ -1,10 +1,9 @@
 package com.axiastudio.zoefx.core.console;
 
 import com.axiastudio.zoefx.core.Utilities;
-import com.axiastudio.zoefx.core.controller.FXController;
+import com.axiastudio.zoefx.core.controller.Controller;
 import com.axiastudio.zoefx.core.script.ScriptEngine;
 import com.axiastudio.zoefx.core.script.JSEngineImpl;
-import com.axiastudio.zoefx.core.skins.Skins;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
@@ -12,8 +11,6 @@ import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.ToolBar;
-import javafx.scene.image.Image;
-import javafx.scene.image.ImageView;
 
 import java.net.URL;
 import java.util.HashMap;
@@ -27,7 +24,7 @@ import java.util.ResourceBundle;
  */
 public class ConsoleController implements Initializable {
 
-    private FXController controller;
+    private Controller controller;
 
     @FXML private ToolBar toolBar;
     @FXML private TextArea source;
@@ -43,7 +40,7 @@ public class ConsoleController implements Initializable {
 
     }
 
-    public void setController(FXController controller) {
+    public void setController(Controller controller) {
         this.controller = controller;
     }
 

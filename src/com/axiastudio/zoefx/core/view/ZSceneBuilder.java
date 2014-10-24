@@ -2,7 +2,7 @@ package com.axiastudio.zoefx.core.view;
 
 import com.axiastudio.zoefx.core.Utilities;
 import com.axiastudio.zoefx.core.controller.BaseController;
-import com.axiastudio.zoefx.core.controller.FXController;
+import com.axiastudio.zoefx.core.controller.Controller;
 import com.axiastudio.zoefx.core.db.*;
 import com.axiastudio.zoefx.core.skins.Skins;
 import javafx.fxml.FXMLLoader;
@@ -132,7 +132,7 @@ public class ZSceneBuilder<E> {
         loader.setLocation(fxmlUrl);
         loader.setBuilderFactory(new JavaFXBuilderFactory());
         if( controller == null ){
-            controller = new FXController();
+            controller = new Controller();
         }
         loader.setController(controller);
         Parent root=null;
@@ -146,9 +146,9 @@ public class ZSceneBuilder<E> {
         ZScene zScene = new ZScene();
         zScene.setScene(scene);
         controller.setScene(scene);
-        if( controller instanceof FXController ) {
-            FXController fxController = (FXController) controller;
-            fxController.setMode(mode);
+        if( controller instanceof Controller) {
+            Controller controller = (Controller) this.controller;
+            controller.setMode(mode);
             ZToolBar toolBar = new ZToolBar(bundle);
             if( root instanceof VBox ){
                 if( ((VBox) root).getChildren().get(0) instanceof MenuBar) {
@@ -160,16 +160,16 @@ public class ZSceneBuilder<E> {
                 ((Pane) root).getChildren().add(toolBar);
             }
 
-            toolBar.setController(fxController);
+            toolBar.setController(controller);
             if( propertiesUrl != null ){
                 try {
-                    fxController.setBehavior(new Behavior(propertiesUrl.openStream()));
+                    controller.setBehavior(new Behavior(propertiesUrl.openStream()));
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
             }
             TimeMachine timeMachine = new TimeMachine();
-            fxController.setTimeMachine(timeMachine);
+            controller.setTimeMachine(timeMachine);
             if( manager == null ){
                 Database database = Utilities.queryUtility(Database.class);
                 manager = database.createManager(entityClass);
@@ -179,11 +179,11 @@ public class ZSceneBuilder<E> {
             }
             DataSet<E> dataset =  DataSetBuilder.create(entityClass).store(store).manager(manager).build();
             dataset.addDataSetEventListener(toolBar);
-            dataset.addDataSetEventListener(fxController);
+            dataset.addDataSetEventListener(controller);
             if( listener!= null ){
                 dataset.setListener(listener);
             }
-            fxController.bindDataSet(dataset);
+            controller.bindDataSet(dataset);
 
             if( permissions!=null ){
                 dataset.setCanSelect(permissions.contains(Permission.SELECT));

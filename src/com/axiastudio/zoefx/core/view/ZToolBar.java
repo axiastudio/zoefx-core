@@ -1,6 +1,6 @@
 package com.axiastudio.zoefx.core.view;
 
-import com.axiastudio.zoefx.core.controller.FXController;
+import com.axiastudio.zoefx.core.controller.Controller;
 import com.axiastudio.zoefx.core.events.DataSetEvent;
 import com.axiastudio.zoefx.core.events.DataSetEventListener;
 import com.axiastudio.zoefx.core.skins.Skins;
@@ -24,7 +24,7 @@ import java.util.logging.Logger;
  */
 public class ZToolBar extends ToolBar implements DataSetEventListener {
 
-    private FXController controller;
+    private Controller controller;
     private Map<String, Button> buttons = new HashMap<String, Button>();
     private String[] buttonNames = {"first", "previous", "COUNTER", "next", "last", "add", "delete", "save", "cancel", "print", "refresh", "search", "info"}; //, "console"};
     private Label counterLabel;
@@ -107,7 +107,7 @@ public class ZToolBar extends ToolBar implements DataSetEventListener {
         return canDelete;
     }
 
-    public void setController(FXController controller){
+    public void setController(Controller controller){
 
         this.controller = controller;
 
