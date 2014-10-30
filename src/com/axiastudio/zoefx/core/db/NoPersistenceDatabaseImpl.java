@@ -32,6 +32,11 @@ public class NoPersistenceDatabaseImpl implements Database {
         return managers.get(klass);
     }
 
+    @Override
+    public <E> Manager<E> createManager(Class<E> klass, Manager<?> manager) {
+        return createManager(klass);
+    }
+
     /*
      *  Without Database store
      */

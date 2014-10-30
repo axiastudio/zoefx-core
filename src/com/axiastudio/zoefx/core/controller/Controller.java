@@ -129,7 +129,7 @@ public class Controller extends BaseController implements DataSetEventListener {
             if( node instanceof ChoiceBox){
                 String name = node.getId();
                 Property property = model.getProperty(name, Object.class);
-                List superset = ((ItemObjectProperty) property).getSuperset();
+                List superset = ((ItemObjectProperty) property).getSuperset(getDataset().getManager());
                 ObservableList choices = FXCollections.observableArrayList(superset);
                 ChoiceBox choiceBox = (ChoiceBox) node;
                 choiceBox.setItems(choices);

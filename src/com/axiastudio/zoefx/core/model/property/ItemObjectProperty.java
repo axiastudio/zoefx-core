@@ -43,7 +43,7 @@ public class ItemObjectProperty<P> extends ObjectPropertyBase implements ZoeFXPr
         beanAccess.setValue(e);
     }
 
-    public List<P> getSuperset() {
+    public List<P> getSuperset(Manager<?> parentManager) {
         List<P> superset = new ArrayList();
         Class<?> returnType = beanAccess.getReturnType();
         if( returnType.isEnum() ) {
@@ -53,7 +53,7 @@ public class ItemObjectProperty<P> extends ObjectPropertyBase implements ZoeFXPr
         } else {
             Database database = Utilities.queryUtility(Database.class);
             if( database != null ) {
-                Manager<?> manager = database.createManager(returnType);
+                Manager<?> manager = database.createManager(returnType, parentManager);
                 for (Object obj : manager.getAll()) {
                     superset.add((P) obj);
                 }
