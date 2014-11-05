@@ -26,8 +26,8 @@ public class StartDemo extends Application {
     @Override
     public void start(Stage primaryStage) throws Exception{
 
-        ZSkin skin = new Black();
-        //ZSkin skin = new FamFamFam();
+        //ZSkin skin = new Black();
+        ZSkin skin = new FamFamFam();
         //ZSkin skin = new NoIcons();
         Skins.registerSkin(skin);
 
@@ -55,11 +55,21 @@ public class StartDemo extends Application {
                 .controller(new Controller()).manager(database.createManager(Author.class));
         SceneBuilders.registerSceneBuilder(Author.class, zsbAuthor);
 
-        primaryStage.setTitle("Zoe FX Framework - Authors");
-        primaryStage.setScene(zsbPerson.build().getScene());
-        //primaryStage.setScene(zsbAuthor.build().getScene());
-        //primaryStage.setScene(zsbBook.build().getScene());
+        primaryStage.setTitle("Zoe FX Framework - Books");
+        primaryStage.setScene(zsbBook.build().getScene());
         primaryStage.show();
+
+
+        Stage authorStage = new Stage();
+        authorStage.setTitle("Zoe FX Framework - Authors");
+        authorStage.setScene(zsbAuthor.build().getScene());
+        authorStage.show();
+
+        Stage personStage = new Stage();
+        personStage.setTitle("Zoe FX Framework - Loans");
+        personStage.setScene(zsbPerson.build().getScene());
+        personStage.show();
+
 
     }
 
