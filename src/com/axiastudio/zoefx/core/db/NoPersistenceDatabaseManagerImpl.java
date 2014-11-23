@@ -54,7 +54,7 @@ public class NoPersistenceDatabaseManagerImpl<E> implements Manager<E> {
     }
 
     @Override
-    public E commit(E entity) {
+    public E save(E entity) {
         if( !store.contains(entity) ) {
             store.add(entity);
         }
@@ -62,7 +62,7 @@ public class NoPersistenceDatabaseManagerImpl<E> implements Manager<E> {
     }
 
     @Override
-    public void commit(List<E> entities) {
+    public void save(List<E> entities) {
         for( E entity: entities ){
             store.add(entity);
         }

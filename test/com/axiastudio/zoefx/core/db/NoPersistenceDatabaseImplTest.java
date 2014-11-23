@@ -48,8 +48,8 @@ public class NoPersistenceDatabaseImplTest {
         Author lev = EntityBuilder.create(Author.class).set("name", "Lev").set("surname", "Tolstoj").build();
         Author marquez = EntityBuilder.create(Author.class).set("name", "Gabriel García").set("surname", "Márquez").build();
 
-        manager.commit(lev);
-        manager.commit(marquez);
+        manager.save(lev);
+        manager.save(marquez);
 
     }
 

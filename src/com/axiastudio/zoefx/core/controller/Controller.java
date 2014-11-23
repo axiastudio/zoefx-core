@@ -556,7 +556,7 @@ public class Controller extends BaseController implements DataSetEventListener {
         timeMachine.resetAndCreateSnapshot(fxProperties.values());
     };
     public EventHandler<ActionEvent> handlerSave = e -> {
-        dataset.commit();
+        dataset.save();
         timeMachine.resetAndCreateSnapshot(fxProperties.values());
     };
     public EventHandler<ActionEvent> handlerConfirm = e -> ((Stage) getScene().getWindow()).close();

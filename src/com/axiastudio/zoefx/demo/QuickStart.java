@@ -23,10 +23,10 @@ public class QuickStart extends Application {
         Utilities.registerUtility(database, Database.class);
         Manager<Book> manager = database.createManager(Book.class);
 
-        manager.commit(EntityBuilder.create(Book.class).set("title", "Anna Karenina")
+        manager.save(EntityBuilder.create(Book.class).set("title", "Anna Karenina")
                 .set("description", "A very long book...").build());
 
-        manager.commit(EntityBuilder.create(Book.class).set("title", "War and peace")
+        manager.save(EntityBuilder.create(Book.class).set("title", "War and peace")
                 .set("description", "Another long book...").build());
 
         String fxml = "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n" +

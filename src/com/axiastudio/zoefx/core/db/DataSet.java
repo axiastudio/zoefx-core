@@ -182,12 +182,12 @@ public class DataSet<E> implements DataSetEventGenerator {
         fireDataSetEvent(new DataSetEvent(DataSetEvent.REVERTED));
     }
 
-    public void commit() {
+    public void save() {
         fireDataSetEvent(new DataSetEvent(DataSetEvent.BEFORE_COMMIT));
         Manager<E> manager = getManager();
         if( manager != null ) {
             E entity = getStore().get(currentIndex);
-            E merged = manager.commit(entity);
+            E merged = manager.save(entity);
             getStore().set(currentIndex, merged);
         }
         dirty = Boolean.FALSE;

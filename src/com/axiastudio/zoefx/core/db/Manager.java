@@ -37,9 +37,9 @@ import java.util.Map;
  */
 public interface Manager<E> {
 
-    E commit(E entity);
+    E save(E entity);
 
-    void commit(List<E> entities);
+    void save(List<E> entities);
 
     void delete(E entity);
 
