@@ -11,10 +11,7 @@ import javafx.stage.Stage;
 
 public class QuickStart extends Application {
 
-    public static class Book {
-        public String title;
-        public String description;
-    }
+    public static class Book { public String title; public String description; }
 
     @Override
     public void start(Stage primaryStage) throws Exception {
@@ -25,7 +22,6 @@ public class QuickStart extends Application {
 
         manager.save(EntityBuilder.create(Book.class).set("title", "Anna Karenina")
                 .set("description", "A very long book...").build());
-
         manager.save(EntityBuilder.create(Book.class).set("title", "War and peace")
                 .set("description", "Another long book...").build());
 
@@ -33,23 +29,19 @@ public class QuickStart extends Application {
                 "<?import javafx.scene.control.*?>\n" +
                 "<?import java.lang.*?>\n" +
                 "<?import javafx.scene.layout.*?>\n" +
-                "<AnchorPane id=\"AnchorPane\" maxHeight=\"-Infinity\" maxWidth=\"-Infinity\" minHeight=\"400.0\" \n" +
-                "    minWidth=\"400.0\" xmlns=\"http://javafx.com/javafx/8\" xmlns:fx=\"http://javafx.com/fxml/1\">\n" +
-                "  <children>\n" +
+                "<AnchorPane xmlns=\"http://javafx.com/javafx/8\" xmlns:fx=\"http://javafx.com/fxml/1\">\n" +
+                "  <children>" +
                 "    <TextField fx:id=\"title\" layoutX=\"14.0\" layoutY=\"69.0\" prefWidth=\"200.0\" />\n" +
-                "    <TextArea fx:id=\"description\" layoutX=\"14.0\" layoutY=\"104.0\" prefWidth=\"200.0\" wrapText=\"true\" />\n" +
-                "  </children>\n" +
+                "    <TextArea fx:id=\"description\" layoutX=\"14.0\" layoutY=\"104.0\" prefWidth=\"200.0\" />\n" +
+                "  </children>" +
                 "</AnchorPane>";
 
-        Scene scene = ZSceneBuilder.create()
+        primaryStage.setScene(ZSceneBuilder.create()
                 .source(fxml)
                 .controller(new Controller())
                 .manager(database.createManager(Book.class))
-                .build()
-                .getScene();
-
+                .build().getScene());
         primaryStage.setTitle("Zoe FX Framework - Quick start Books");
-        primaryStage.setScene(scene);
         primaryStage.show();
     }
 
