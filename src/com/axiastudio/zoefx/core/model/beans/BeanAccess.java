@@ -47,6 +47,7 @@ public class BeanAccess<T> extends BeanClassAccess {
         return bean;
     }
 
+    @SuppressWarnings("unchecked")
     public T getValue() {
         if( accessType.equals(AccessType.FIELD) ){
             try {
