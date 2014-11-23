@@ -40,6 +40,7 @@ import javafx.scene.control.MenuBar;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
 
+import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.net.URL;
 import java.util.EnumSet;
@@ -58,6 +59,7 @@ public class ZSceneBuilder<E> {
     private EntityListener<E> listener=null;
     private List<E> store=null;
     private Class entityClass=null;
+    private String source=null;
     private URL fxmlUrl;
     private URL propertiesUrl=null;
     private String title;
@@ -127,6 +129,11 @@ public class ZSceneBuilder<E> {
         return this;
     }
 
+    public ZSceneBuilder source(String source){
+        this.source = source;
+        return this;
+    }
+
     public ZSceneBuilder width(Integer width){
         this.width = width;
         return this;
@@ -156,7 +163,6 @@ public class ZSceneBuilder<E> {
         ResourceBundle bundle = ResourceBundle.getBundle("com.axiastudio.zoefx.core.resources.i18n");
         FXMLLoader loader = new FXMLLoader(fxmlUrl, bundle);
         loader.setResources(bundle);
-        loader.setLocation(fxmlUrl);
         loader.setBuilderFactory(new JavaFXBuilderFactory());
         if( controller == null ){
             controller = new Controller();
@@ -164,7 +170,12 @@ public class ZSceneBuilder<E> {
         loader.setController(controller);
         Parent root=null;
         try {
-            root = loader.load();
+            if( source == null ) {
+                loader.setLocation(fxmlUrl);
+                root = loader.load();
+            } else {
+                root = loader.load(new ByteArrayInputStream(source.getBytes()));
+            }
         } catch (IOException e) {
             e.printStackTrace();
         }
