@@ -83,18 +83,18 @@ public class StartDemo extends Application {
         SceneBuilders.registerSceneBuilder(Author.class, zsbAuthor);
 
         primaryStage.setTitle("Zoe FX Framework - Books");
-        primaryStage.setScene(zsbBook.build().getScene());
+        primaryStage.setScene(zsbBook.build());
         primaryStage.show();
 
 
         Stage authorStage = new Stage();
         authorStage.setTitle("Zoe FX Framework - Authors");
-        authorStage.setScene(zsbAuthor.build().getScene());
+        authorStage.setScene(zsbAuthor.build());
         authorStage.show();
 
         Stage personStage = new Stage();
         personStage.setTitle("Zoe FX Framework - Loans");
-        personStage.setScene(zsbPerson.build().getScene());
+        personStage.setScene(zsbPerson.build());
         personStage.show();
 
 

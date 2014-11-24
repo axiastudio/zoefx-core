@@ -271,13 +271,13 @@ public class Controller extends BaseController implements DataSetEventListener {
                 newStore.add(selectedItems.get(i));
             }
             ZSceneBuilder sceneBuilder = SceneBuilders.querySceneBuilder(newStore.get(0).getClass());
-            ZScene newScene = sceneBuilder
+            Scene newScene = sceneBuilder
                     .manager(getDataset().getManager())
                     .store(newStore)
                     .mode(ZSceneMode.DIALOG).build();
             if (newScene != null) {
                 Stage newStage = new Stage();
-                newStage.setScene(newScene.getScene());
+                newStage.setScene(newScene);
                 newStage.show();
                 newStage.requestFocus();
             }
@@ -304,13 +304,13 @@ public class Controller extends BaseController implements DataSetEventListener {
                 }
             }
             ZSceneBuilder sceneBuilder = SceneBuilders.querySceneBuilder(newStore.get(0).getClass());
-            ZScene newScene = sceneBuilder
+            Scene newScene = sceneBuilder
                     .manager(getDataset().getManager())
                     .store(newStore)
                     .mode(ZSceneMode.WINDOW).build();
             if (newScene != null) {
                 Stage newStage = new Stage();
-                newStage.setScene(newScene.getScene());
+                newStage.setScene(newScene);
                 newStage.show();
                 newStage.requestFocus();
             }
@@ -351,13 +351,13 @@ public class Controller extends BaseController implements DataSetEventListener {
                 List newStore = new ArrayList<>();
                 newStore.add(entity);
                 ZSceneBuilder sceneBuilder = SceneBuilders.querySceneBuilder(newStore.get(0).getClass());
-                ZScene newScene = sceneBuilder
+                Scene newScene = sceneBuilder
                         .manager(getDataset().getManager())
                         .store(newStore)
                         .mode(ZSceneMode.DIALOG).build();
                 if (newScene != null) {
                     Stage newStage = new Stage();
-                    newStage.setScene(newScene.getScene());
+                    newStage.setScene(newScene);
                     newStage.show();
                     newStage.requestFocus();
                 }

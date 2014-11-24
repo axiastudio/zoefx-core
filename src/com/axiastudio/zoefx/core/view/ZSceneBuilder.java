@@ -159,7 +159,7 @@ public class ZSceneBuilder<E> {
         return this;
     }
 
-    public ZScene build(){
+    public Scene build(){
         ResourceBundle bundle = ResourceBundle.getBundle("com.axiastudio.zoefx.core.resources.i18n");
         FXMLLoader loader = new FXMLLoader(fxmlUrl, bundle);
         loader.setResources(bundle);
@@ -181,8 +181,6 @@ public class ZSceneBuilder<E> {
         }
         Scene scene = new Scene(root, width, height);
         Skins.getActiveSkin().getStyle().ifPresent(s -> scene.getStylesheets().add(s));
-        ZScene zScene = new ZScene();
-        zScene.setScene(scene);
         controller.setScene(scene);
         if( controller instanceof Controller) {
             Controller controller = (Controller) this.controller;
@@ -234,7 +232,7 @@ public class ZSceneBuilder<E> {
             toolBar.canUpdateProperty().bind(dataset.canUpdateProperty());
             toolBar.canDeleteProperty().bind(dataset.canDeleteProperty());
         }
-        return zScene;
+        return scene;
     }
 
 }

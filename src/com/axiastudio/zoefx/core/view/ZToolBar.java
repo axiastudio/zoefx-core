@@ -165,7 +165,7 @@ public class ZToolBar extends ToolBar implements DataSetEventListener {
         buttons.get("save").disableProperty().bind(isDirty.not().or(canUpdateProperty().not()));
         buttons.get("search").disableProperty().bind(canSelectProperty().not());
 
-        // ZScene mode customs
+        // Scene mode customs
         if( controller.getMode().equals(ZSceneMode.WINDOW) ){
             buttons.get("add").disableProperty().bind(isDirty.or(canInsertProperty().not()));
             buttons.get("delete").disableProperty().bind(isDirty.or(canDeleteProperty().not()));

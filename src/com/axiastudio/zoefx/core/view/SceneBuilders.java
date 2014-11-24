@@ -28,6 +28,7 @@
 package com.axiastudio.zoefx.core.view;
 
 import com.axiastudio.zoefx.core.db.DataSet;
+import javafx.scene.Scene;
 
 import java.util.HashMap;
 
@@ -78,23 +79,22 @@ public class SceneBuilders {
 
 
     /**
-     * Query the ZScene for the given dataSet.
+     * Query the Scene for the given dataSet.
      *
      * @param dataSet The DataSet
-     * @param mode is the ZScene mode (Window or dialog)
-     * @return  The ZScene
+     * @param mode is the Scene mode (Window or dialog)
+     * @return  The Scene
      *
      */
-    public static ZScene queryZScene(DataSet<Object> dataSet, ZSceneMode mode) {
+    public static Scene queryZScene(DataSet<Object> dataSet, ZSceneMode mode) {
         ZSceneBuilder zsb = SceneBuilders.querySceneBuilder(dataSet);
         if( zsb != null ){
             zsb.mode(mode);
-            ZScene zScene = zsb.build();
-            return zScene;
+            return zsb.build();
         }
         return null;
     }
-    public static ZScene queryZScene(DataSet<Object> dataSet) {
+    public static Scene queryZScene(DataSet<Object> dataSet) {
         return queryZScene(dataSet, ZSceneMode.WINDOW);
     }
 
