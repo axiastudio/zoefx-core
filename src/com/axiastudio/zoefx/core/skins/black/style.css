@@ -1,0 +1,183 @@
+/*
+ * Copyright (c) 2014, AXIA Studio (Tiziano Lattisi) - http://www.axiastudio.com
+ * All rights reserved.
+ *
+ * Redistribution and use in source and binary forms, with or without
+ * modification, are permitted provided that the following conditions are met:
+ * 1. Redistributions of source code must retain the above copyright
+ *    notice, this list of conditions and the following disclaimer.
+ * 2. Redistributions in binary form must reproduce the above copyright
+ *    notice, this list of conditions and the following disclaimer in the
+ *    documentation and/or other materials provided with the distribution.
+ * 3. Neither the name of the AXIA Studio nor the
+ *    names of its contributors may be used to endorse or promote products
+ *    derived from this software without specific prior written permission.
+ *
+ * THIS SOFTWARE IS PROVIDED BY AXIA STUDIO ''AS IS'' AND ANY
+ * EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED
+ * WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
+ * DISCLAIMED. IN NO EVENT SHALL AXIA STUDIO BE LIABLE FOR ANY
+ * DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES
+ * (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES;
+ * LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND
+ * ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
+ * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
+ * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+ */
+
+/* Toolbar icons */
+#firstNavButton {
+    -fx-graphic: url("first.png");
+}
+#previousNavButton {
+    -fx-graphic: url("previous.png");
+}
+#nextNavButton {
+    -fx-graphic: url("next.png");
+}
+#lastNavButton {
+    -fx-graphic: url("last.png");
+}
+#addNavButton {
+    -fx-graphic: url("add.png");
+}
+#deleteNavButton {
+    -fx-graphic: url("delete.png");
+}
+#saveNavButton {
+    -fx-graphic: url("save.png");
+}
+#acceptNavButton {
+    -fx-graphic: url("accept.png");
+}
+#cancelNavButton {
+    -fx-graphic: url("cancel.png");
+}
+#printNavButton {
+    -fx-graphic: url("print.png");
+}
+#refreshNavButton {
+    -fx-graphic: url("refresh.png");
+}
+#searchNavButton {
+    -fx-graphic: url("search.png");
+}
+#infoNavButton {
+    -fx-graphic: url("info.png");
+}
+#consoleNavButton {
+    -fx-graphic: url("console.png");
+}
+
+/* Search form icons */
+#searchSearchForm {
+    -fx-graphic: url("search.png");
+}
+#applySearchForm {
+    -fx-graphic: url("accept.png");
+}
+
+/* message box icons*/
+#iconQuestionMessageBox {
+    -fx-background-image: url("info.png");
+    -fx-background-repeat: no-repeat;
+    -fx-background-position: center;
+}
+#okMsgBox {
+    -fx-graphic: url("accept.png");
+}
+#cancelMsgBox {
+    -fx-graphic: url("cancel.png");
+}
+
+/* Contex menu icons */
+.context-menu {
+    /*-fx-padding: 0 0 0 8;*/
+}
+.menu-item {
+    -fx-background-repeat: no-repeat;
+    -fx-background-position: left;
+}
+#tableViewContextMenu .menu-item .label {
+    -fx-padding: 0 0 0 20;
+}
+.menu-item .graphic {
+    -fx-graphic: url("info.png");
+}
+#infoContextMenu {
+    -fx-background-image: url("info.png");
+}
+#openContextMenu {
+    -fx-background-image: url("open.png");
+}
+#addContextMenu {
+    -fx-background-image: url("add.png");
+}
+#delContextMenu {
+    -fx-background-image: url("delete.png");
+}
+
+
+#executeConsoleButton {
+    -fx-graphic: url("cogs.png");
+}
+
+.button, .tool-bar {
+    -fx-padding: 7;
+    -fx-border-color: transparent;
+    -fx-background-color: transparent;
+    -fx-spacing: 3;
+    -fx-border-radius: 18;
+}
+
+.button:hover {
+    -fx-border-color: gray;
+}
+
+.text-field {
+    -fx-border-radius: 18;
+    -fx-background-radius: 18;
+    -fx-background-color: white;
+    -fx-border-color: transparent;
+}
+
+.text-field:focused {
+    -fx-border-color: gray;
+    -fx-border-width: 1;
+}
+
+.check-box {
+    -fx-border-radius: 0;
+}
+
+.tooltip {
+    -fx-border-radius: 18;
+    -fx-background-radius: 18;
+}
+
+.choice-box {
+    -fx-background-image: url("arrow-down2.png");
+    -fx-background-insets: 0.0 -8.0 0.0 0.0;
+    -fx-background-color: gainsboro;
+    -fx-background-repeat: no-repeat;
+    -fx-background-position: right;
+    -fx-border-radius: 18;
+    -fx-background-radius: 18;
+}
+
+.choice-box .arrow {
+    -fx-background-color: transparent;
+}
+
+.combo-box-base {
+    -fx-background-color: transparent;
+}
+
+.combo-box-base > .arrow-button {
+    -fx-border-color: transparent;
+    -fx-background-color: transparent;
+}
+
+.combo-box-base > .arrow-button > .arrow {
+    /*-fx-background-color: transparent;*/
+}
