@@ -40,7 +40,7 @@ public class QuickStart extends Application {
                 .source(fxml)
                 .controller(new Controller())
                 .manager(database.createManager(Book.class))
-                .build().getScene());
+                .build());
         primaryStage.setTitle("Zoe FX Framework - Quick start Books");
         primaryStage.show();
     }
