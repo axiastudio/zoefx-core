@@ -38,6 +38,7 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.MenuBar;
 import javafx.scene.layout.Pane;
+import javafx.scene.layout.Region;
 import javafx.scene.layout.VBox;
 
 import java.io.ByteArrayInputStream;
@@ -64,8 +65,8 @@ public class ZSceneBuilder<E> {
     private URL propertiesUrl=null;
     private String title;
     private BaseController controller=null;
-    private Integer width=500;
-    private Integer height=375;
+    private Double width=null;
+    private Double height=null;
     private ZSceneMode mode=ZSceneMode.WINDOW;
 
     public ZSceneBuilder() {
@@ -135,11 +136,21 @@ public class ZSceneBuilder<E> {
     }
 
     public ZSceneBuilder width(Integer width){
+        this.width = width.doubleValue();
+        return this;
+    }
+
+    public ZSceneBuilder width(Double width){
         this.width = width;
         return this;
     }
 
     public ZSceneBuilder height(Integer height){
+        this.height = height.doubleValue();
+        return this;
+    }
+
+    public ZSceneBuilder height(Double height){
         this.height = height;
         return this;
     }
@@ -178,6 +189,14 @@ public class ZSceneBuilder<E> {
             }
         } catch (IOException e) {
             e.printStackTrace();
+        }
+        if( root instanceof Region ){
+            if( width==null ){
+                width = ((Region) root).getPrefWidth();
+            }
+            if( height==null ){
+                height = ((Region) root).getPrefHeight();
+            }
         }
         Scene scene = new Scene(root, width, height);
         Skins.getActiveSkin().getStyle().ifPresent(s -> scene.getStylesheets().add(s));
