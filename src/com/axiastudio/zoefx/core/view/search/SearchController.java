@@ -30,6 +30,7 @@ package com.axiastudio.zoefx.core.view.search;
 import com.axiastudio.zoefx.core.Utilities;
 import com.axiastudio.zoefx.core.model.beans.BeanClassAccess;
 import com.axiastudio.zoefx.core.model.beans.LookupStringConverter;
+import com.axiastudio.zoefx.core.model.converters.String2BigDecimal;
 import com.axiastudio.zoefx.core.model.property.CallbackBuilder;
 import com.axiastudio.zoefx.core.db.DataSet;
 import com.axiastudio.zoefx.core.db.DataSetBuilder;
@@ -226,6 +227,13 @@ public class SearchController<T> implements Initializable {
                     if (value != null) {
                         map.put(fieldName, value);
                     }
+                }
+            } else if( criterion.getCriterionClass() == BigDecimal.class ){
+                TextField criteriaField = (TextField) criterion.getNodes().get(0);
+                String fieldName = criteriaField.getId();
+                BigDecimal value = (new String2BigDecimal()).call(criteriaField.getText());
+                if (value != null) {
+                    map.put(fieldName, value);
                 }
             } else if( criterion.getCriterionClass() == Date.class ){
                 DatePicker firstDateNode = (DatePicker) criterion.getNodes().get(0);
