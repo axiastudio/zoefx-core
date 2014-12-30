@@ -78,7 +78,10 @@ public class SearchController<T> implements Initializable {
         for( String property: columns ) {
             TableColumn column = new TableColumn();
             column.setText(property);
-            Callback callback = CallbackBuilder.create().beanClass(entityClass).field(property).build(); /// XXX
+            Callback callback = CallbackBuilder.create().beanClass(entityClass)
+                    .field(property)
+                    .lookup(behavior.getProperties().getProperty(property+".lookup"))
+                    .build();
             column.setCellValueFactory(callback);
             // custom date order
             BeanClassAccess beanClassAccess = new BeanClassAccess(entityClass, property);
