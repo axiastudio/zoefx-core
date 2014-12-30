@@ -99,6 +99,12 @@ public class ItemPropertyBuilder<T> {
                 item.setToStringFunction(Object::toString);
                 item.setFromStringFunction(new String2Integer());
                 return item;
+            } else if( Long.class.isAssignableFrom(fieldType) ) {
+                // Long field -> String property
+                ItemStringProperty<Long> item = new ItemStringProperty(beanAccess);
+                item.setToStringFunction(Object::toString);
+                item.setFromStringFunction(new String2Long());
+                return item;
             } else if( Double.class.isAssignableFrom(fieldType) ) {
                 // Double field -> String property
                 ItemStringProperty<Double> item = new ItemStringProperty(beanAccess);
