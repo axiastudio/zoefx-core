@@ -1,3 +1,30 @@
+/*
+ * Copyright (c) 2014, AXIA Studio (Tiziano Lattisi) - http://www.axiastudio.com
+ * All rights reserved.
+ *
+ * Redistribution and use in source and binary forms, with or without
+ * modification, are permitted provided that the following conditions are met:
+ * 1. Redistributions of source code must retain the above copyright
+ *    notice, this list of conditions and the following disclaimer.
+ * 2. Redistributions in binary form must reproduce the above copyright
+ *    notice, this list of conditions and the following disclaimer in the
+ *    documentation and/or other materials provided with the distribution.
+ * 3. Neither the name of the AXIA Studio nor the
+ *    names of its contributors may be used to endorse or promote products
+ *    derived from this software without specific prior written permission.
+ *
+ * THIS SOFTWARE IS PROVIDED BY AXIA STUDIO ''AS IS'' AND ANY
+ * EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED
+ * WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
+ * DISCLAIMED. IN NO EVENT SHALL AXIA STUDIO BE LIABLE FOR ANY
+ * DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES
+ * (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES;
+ * LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND
+ * ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
+ * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
+ * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+ */
+
 package com.axiastudio.zoefx.core.controller;
 
 import com.axiastudio.zoefx.core.Utilities;
@@ -83,7 +110,7 @@ public class Controller extends BaseController implements DataSetEventListener {
         Model model = dataset.getCurrentModel();
         Parent root = getScene().getRoot();
         Pane container = (Pane) root;
-        List<Node> nodes = findNodes(container, new ArrayList<Node>());
+        List<Node> nodes = findNodes(container, new ArrayList<>());
         tableViews = new HashMap<>();
         for( Node node: nodes ){
             if( node instanceof TableView){
@@ -129,7 +156,7 @@ public class Controller extends BaseController implements DataSetEventListener {
             if( node instanceof ChoiceBox){
                 String name = node.getId();
                 Property property = model.getProperty(name, Object.class);
-                List superset = ((ItemObjectProperty) property).getSuperset();
+                List superset = ((ItemObjectProperty) property).getSuperset(getDataset().getManager());
                 ObservableList choices = FXCollections.observableArrayList(superset);
                 ChoiceBox choiceBox = (ChoiceBox) node;
                 choiceBox.setItems(choices);
@@ -244,13 +271,13 @@ public class Controller extends BaseController implements DataSetEventListener {
                 newStore.add(selectedItems.get(i));
             }
             ZSceneBuilder sceneBuilder = SceneBuilders.querySceneBuilder(newStore.get(0).getClass());
-            ZScene newScene = sceneBuilder
+            Scene newScene = sceneBuilder
                     .manager(getDataset().getManager())
                     .store(newStore)
                     .mode(ZSceneMode.DIALOG).build();
             if (newScene != null) {
                 Stage newStage = new Stage();
-                newStage.setScene(newScene.getScene());
+                newStage.setScene(newScene);
                 newStage.show();
                 newStage.requestFocus();
             }
@@ -277,13 +304,13 @@ public class Controller extends BaseController implements DataSetEventListener {
                 }
             }
             ZSceneBuilder sceneBuilder = SceneBuilders.querySceneBuilder(newStore.get(0).getClass());
-            ZScene newScene = sceneBuilder
+            Scene newScene = sceneBuilder
                     .manager(getDataset().getManager())
                     .store(newStore)
                     .mode(ZSceneMode.WINDOW).build();
             if (newScene != null) {
                 Stage newStage = new Stage();
-                newStage.setScene(newScene.getScene());
+                newStage.setScene(newScene);
                 newStage.show();
                 newStage.requestFocus();
             }
@@ -324,13 +351,13 @@ public class Controller extends BaseController implements DataSetEventListener {
                 List newStore = new ArrayList<>();
                 newStore.add(entity);
                 ZSceneBuilder sceneBuilder = SceneBuilders.querySceneBuilder(newStore.get(0).getClass());
-                ZScene newScene = sceneBuilder
+                Scene newScene = sceneBuilder
                         .manager(getDataset().getManager())
                         .store(newStore)
                         .mode(ZSceneMode.DIALOG).build();
                 if (newScene != null) {
                     Stage newStage = new Stage();
-                    newStage.setScene(newScene.getScene());
+                    newStage.setScene(newScene);
                     newStage.show();
                     newStage.requestFocus();
                 }
@@ -529,7 +556,7 @@ public class Controller extends BaseController implements DataSetEventListener {
         timeMachine.resetAndCreateSnapshot(fxProperties.values());
     };
     public EventHandler<ActionEvent> handlerSave = e -> {
-        dataset.commit();
+        dataset.save();
         timeMachine.resetAndCreateSnapshot(fxProperties.values());
     };
     public EventHandler<ActionEvent> handlerConfirm = e -> ((Stage) getScene().getWindow()).close();

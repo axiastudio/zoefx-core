@@ -1,3 +1,30 @@
+/*
+ * Copyright (c) 2014, AXIA Studio (Tiziano Lattisi) - http://www.axiastudio.com
+ * All rights reserved.
+ *
+ * Redistribution and use in source and binary forms, with or without
+ * modification, are permitted provided that the following conditions are met:
+ * 1. Redistributions of source code must retain the above copyright
+ *    notice, this list of conditions and the following disclaimer.
+ * 2. Redistributions in binary form must reproduce the above copyright
+ *    notice, this list of conditions and the following disclaimer in the
+ *    documentation and/or other materials provided with the distribution.
+ * 3. Neither the name of the AXIA Studio nor the
+ *    names of its contributors may be used to endorse or promote products
+ *    derived from this software without specific prior written permission.
+ *
+ * THIS SOFTWARE IS PROVIDED BY AXIA STUDIO ''AS IS'' AND ANY
+ * EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED
+ * WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
+ * DISCLAIMED. IN NO EVENT SHALL AXIA STUDIO BE LIABLE FOR ANY
+ * DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES
+ * (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES;
+ * LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND
+ * ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
+ * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
+ * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+ */
+
 package com.axiastudio.zoefx.core.view;
 
 import com.axiastudio.zoefx.core.Utilities;
@@ -11,8 +38,10 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.MenuBar;
 import javafx.scene.layout.Pane;
+import javafx.scene.layout.Region;
 import javafx.scene.layout.VBox;
 
+import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.net.URL;
 import java.util.EnumSet;
@@ -31,12 +60,13 @@ public class ZSceneBuilder<E> {
     private EntityListener<E> listener=null;
     private List<E> store=null;
     private Class entityClass=null;
+    private String source=null;
     private URL fxmlUrl;
     private URL propertiesUrl=null;
     private String title;
     private BaseController controller=null;
-    private Integer width=500;
-    private Integer height=375;
+    private Double width=null;
+    private Double height=null;
     private ZSceneMode mode=ZSceneMode.WINDOW;
 
     public ZSceneBuilder() {
@@ -100,12 +130,27 @@ public class ZSceneBuilder<E> {
         return this;
     }
 
+    public ZSceneBuilder source(String source){
+        this.source = source;
+        return this;
+    }
+
     public ZSceneBuilder width(Integer width){
+        this.width = width.doubleValue();
+        return this;
+    }
+
+    public ZSceneBuilder width(Double width){
         this.width = width;
         return this;
     }
 
     public ZSceneBuilder height(Integer height){
+        this.height = height.doubleValue();
+        return this;
+    }
+
+    public ZSceneBuilder height(Double height){
         this.height = height;
         return this;
     }
@@ -125,11 +170,10 @@ public class ZSceneBuilder<E> {
         return this;
     }
 
-    public ZScene build(){
+    public Scene build(){
         ResourceBundle bundle = ResourceBundle.getBundle("com.axiastudio.zoefx.core.resources.i18n");
         FXMLLoader loader = new FXMLLoader(fxmlUrl, bundle);
         loader.setResources(bundle);
-        loader.setLocation(fxmlUrl);
         loader.setBuilderFactory(new JavaFXBuilderFactory());
         if( controller == null ){
             controller = new Controller();
@@ -137,14 +181,25 @@ public class ZSceneBuilder<E> {
         loader.setController(controller);
         Parent root=null;
         try {
-            root = loader.load();
+            if( source == null ) {
+                loader.setLocation(fxmlUrl);
+                root = loader.load();
+            } else {
+                root = loader.load(new ByteArrayInputStream(source.getBytes()));
+            }
         } catch (IOException e) {
             e.printStackTrace();
         }
+        if( root instanceof Region ){
+            if( width==null ){
+                width = ((Region) root).getPrefWidth();
+            }
+            if( height==null ){
+                height = ((Region) root).getPrefHeight();
+            }
+        }
         Scene scene = new Scene(root, width, height);
         Skins.getActiveSkin().getStyle().ifPresent(s -> scene.getStylesheets().add(s));
-        ZScene zScene = new ZScene();
-        zScene.setScene(scene);
         controller.setScene(scene);
         if( controller instanceof Controller) {
             Controller controller = (Controller) this.controller;
@@ -196,7 +251,7 @@ public class ZSceneBuilder<E> {
             toolBar.canUpdateProperty().bind(dataset.canUpdateProperty());
             toolBar.canDeleteProperty().bind(dataset.canDeleteProperty());
         }
-        return zScene;
+        return scene;
     }
 
 }
