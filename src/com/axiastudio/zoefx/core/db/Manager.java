@@ -51,7 +51,45 @@ public interface Manager<E> {
 
     List<E> getAll();
 
+    List<E> query();
+
+    List<E> query(Long limit);
+
+    List<E> query(String orderby);
+
+    List<E> query(String orderby, Boolean reverse);
+
+    List<E> query(List<String> orderby);
+
+    List<E> query(List<String> orderby, Boolean reverse);
+
+    List<E> query(String orderby, Long limit);
+
+    List<E> query(List<String> orderby, Long limit);
+
+    List<E> query(String orderby, Boolean reverse, Long limit);
+
+    List<E> query(List<String> orderby, Boolean reverse, Long limit);
+
     List<E> query(Map<String, Object> map);
+
+    List<E> query(Map<String, Object> map, Long limit);
+
+    List<E> query(Map<String, Object> map, String orderby);
+
+    List<E> query(Map<String, Object> map, String orderby, Boolean reverse);
+
+    List<E> query(Map<String, Object> map, List<String> orderby);
+
+    List<E> query(Map<String, Object> map, List<String> orderby, Boolean reverse);
+
+    List<E> query(Map<String, Object> map, String orderby, Long limit);
+
+    List<E> query(Map<String, Object> map, List<String> orderby, Long limit);
+
+    List<E> query(Map<String, Object> map, String orderby, Boolean reverse, Long limit);
+
+    List<E> query(Map<String, Object> map, List<String> orderby, Boolean reverse, Long limit);
 
     E create();
 
