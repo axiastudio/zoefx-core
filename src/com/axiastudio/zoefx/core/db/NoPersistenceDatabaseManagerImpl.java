@@ -38,7 +38,7 @@ import java.util.Map;
  * Date: 27/06/14
  * Time: 10:33
  */
-public class NoPersistenceDatabaseManagerImpl<E> implements Manager<E> {
+public class NoPersistenceDatabaseManagerImpl<E> extends  AbstractManager<E> implements Manager<E> {
 
     private List<E> store;
     private Class<E> entityClass;
@@ -90,14 +90,14 @@ public class NoPersistenceDatabaseManagerImpl<E> implements Manager<E> {
     }
 
     @Override
-    public List<E> getAll() {
+    public List<E> query() {
         return store;
     }
 
     @Override
-    public List<E> query(Map<String, Object> map) {
+    public List<E> query(Map<String, Object> map, List<String> orderby, List<Boolean> reverse, Integer limit) {
         // not implemented
-        return getAll();
+        return query();
     }
 
     @Override
