@@ -53,7 +53,7 @@ public interface Manager<E> {
 
     List<E> query();
 
-    List<E> query(Long limit);
+    List<E> query(Integer limit);
 
     List<E> query(String orderby);
 
@@ -63,17 +63,17 @@ public interface Manager<E> {
 
     List<E> query(List<String> orderby, List<Boolean> reverse);
 
-    List<E> query(String orderby, Long limit);
+    List<E> query(String orderby, Integer limit);
 
-    List<E> query(List<String> orderby, Long limit);
+    List<E> query(List<String> orderby, Integer limit);
 
-    List<E> query(String orderby, Boolean reverse, Long limit);
+    List<E> query(String orderby, Boolean reverse, Integer limit);
 
-    List<E> query(List<String> orderby, List<Boolean> reverse, Long limit);
+    List<E> query(List<String> orderby, List<Boolean> reverse, Integer limit);
 
     List<E> query(Map<String, Object> map);
 
-    List<E> query(Map<String, Object> map, Long limit);
+    List<E> query(Map<String, Object> map, Integer limit);
 
     List<E> query(Map<String, Object> map, String orderby);
 
@@ -83,13 +83,13 @@ public interface Manager<E> {
 
     List<E> query(Map<String, Object> map, List<String> orderby, List<Boolean> reverse);
 
-    List<E> query(Map<String, Object> map, String orderby, Long limit);
+    List<E> query(Map<String, Object> map, String orderby, Integer limit);
 
-    List<E> query(Map<String, Object> map, List<String> orderby, Long limit);
+    List<E> query(Map<String, Object> map, List<String> orderby, Integer limit);
 
-    List<E> query(Map<String, Object> map, String orderby, Boolean reverse, Long limit);
+    List<E> query(Map<String, Object> map, String orderby, Boolean reverse, Integer limit);
 
-    List<E> query(Map<String, Object> map, List<String> orderby, List<Boolean> reverse, Long limit);
+    List<E> query(Map<String, Object> map, List<String> orderby, List<Boolean> reverse, Integer limit);
 
     E create();
 

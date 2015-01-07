@@ -95,7 +95,7 @@ public class NoPersistenceDatabaseManagerImpl<E> extends  AbstractManager<E> imp
     }
 
     @Override
-    public List<E> query(Map<String, Object> map, List<String> orderby, List<Boolean> reverse, Long limit) {
+    public List<E> query(Map<String, Object> map, List<String> orderby, List<Boolean> reverse, Integer limit) {
         // not implemented
         return query();
     }
