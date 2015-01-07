@@ -46,92 +46,92 @@ public abstract class AbstractManager<E> implements Manager<E>{
 
     @Override
     public List<E> query(Long limit) {
-        return null;
+        return query(new HashMap<>(), new ArrayList<>(), new ArrayList<>(), limit);
     }
 
     @Override
     public List<E> query(String orderby) {
-        return query(new HashMap<>(), orderByList(orderby), Boolean.FALSE, null);
+        return query(new HashMap<>(), orderByList(orderby), reverseList(Boolean.FALSE), null);
     }
 
     @Override
     public List<E> query(String orderby, Boolean reverse) {
-        return query(new HashMap<>(), orderByList(orderby), reverse, null);
+        return query(new HashMap<>(), orderByList(orderby), reverseList(reverse), null);
     }
 
     @Override
     public List<E> query(List<String> orderby) {
-        return query(new HashMap<>(), orderby, Boolean.FALSE, null);
+        return query(new HashMap<>(), orderby, reverseList(Boolean.FALSE), null);
     }
 
     @Override
-    public List<E> query(List<String> orderby, Boolean reverse) {
+    public List<E> query(List<String> orderby, List<Boolean> reverse) {
         return query(new HashMap<>(), orderby, reverse, null);
     }
 
     @Override
     public List<E> query(String orderby, Long limit) {
-        return query(new HashMap<>(), orderByList(orderby), Boolean.FALSE, limit);
+        return query(new HashMap<>(), orderByList(orderby), reverseList(Boolean.FALSE), limit);
     }
 
     @Override
     public List<E> query(List<String> orderby, Long limit) {
-        return query(new HashMap<>(), orderby, Boolean.FALSE, limit);
+        return query(new HashMap<>(), orderby, reverseList(Boolean.FALSE), limit);
     }
 
     @Override
     public List<E> query(String orderby, Boolean reverse, Long limit) {
-        return query(new HashMap<>(), orderByList(orderby), reverse, limit);
+        return query(new HashMap<>(), orderByList(orderby), reverseList(reverse), limit);
     }
 
     @Override
-    public List<E> query(List<String> orderby, Boolean reverse, Long limit) {
+    public List<E> query(List<String> orderby, List<Boolean> reverse, Long limit) {
         return query(new HashMap<>(), orderby, reverse, limit);
     }
 
     @Override
     public List<E> query(Map<String, Object> map) {
-        return query(map, new ArrayList<>(), Boolean.FALSE, null);
+        return query(map, new ArrayList<>(), reverseList(Boolean.FALSE), null);
     }
 
     @Override
     public List<E> query(Map<String, Object> map, Long limit) {
-        return query(map, new ArrayList<>(), Boolean.FALSE, limit);
+        return query(map, new ArrayList<>(), reverseList(Boolean.FALSE), limit);
     }
 
     @Override
     public List<E> query(Map<String, Object> map, String orderby) {
-        return query(map, orderByList(orderby), Boolean.FALSE, null);
+        return query(map, orderByList(orderby), reverseList(Boolean.FALSE), null);
     }
 
     @Override
     public List<E> query(Map<String, Object> map, String orderby, Boolean reverse) {
-        return query(map, orderByList(orderby), reverse, null);
+        return query(map, orderByList(orderby), reverseList(reverse), null);
     }
 
     @Override
     public List<E> query(Map<String, Object> map, List<String> orderby) {
-        return query(map, orderby, Boolean.FALSE, null);
+        return query(map, orderby, reverseList(Boolean.FALSE), null);
     }
 
     @Override
-    public List<E> query(Map<String, Object> map, List<String> orderby, Boolean reverse) {
+    public List<E> query(Map<String, Object> map, List<String> orderby, List<Boolean> reverse) {
         return query(map, orderby, reverse, null);
     }
 
     @Override
     public List<E> query(Map<String, Object> map, String orderby, Long limit) {
-        return query(map, orderByList(orderby), Boolean.FALSE, limit);
+        return query(map, orderByList(orderby), reverseList(Boolean.FALSE), limit);
     }
 
     @Override
     public List<E> query(Map<String, Object> map, List<String> orderby, Long limit) {
-        return query(map, orderby, Boolean.FALSE, limit);
+        return query(map, orderby, reverseList(Boolean.FALSE), limit);
     }
 
     @Override
     public List<E> query(Map<String, Object> map, String orderby, Boolean reverse, Long limit) {
-        return query(map, orderByList(orderby), reverse, limit);
+        return query(map, orderByList(orderby), reverseList(reverse), limit);
     }
 
     /*
@@ -142,6 +142,12 @@ public abstract class AbstractManager<E> implements Manager<E>{
     private List<String> orderByList(String orderby) {
         List<String> orderbys = new ArrayList<>();
         orderbys.add(orderby);
+        return orderbys;
+    }
+
+    private List<Boolean> reverseList(Boolean reverse) {
+        List<Boolean> orderbys = new ArrayList<>();
+        orderbys.add(reverse);
         return orderbys;
     }
 
