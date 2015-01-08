@@ -45,8 +45,8 @@ public abstract class AbstractManager<E> implements Manager<E>{
     }
 
     @Override
-    public List<E> query(Integer limit) {
-        return query(new HashMap<>(), new ArrayList<>(), new ArrayList<>(), limit);
+    public List<E> query(Integer size) {
+        return query(new HashMap<>(), new ArrayList<>(), new ArrayList<>(), size);
     }
 
     @Override
@@ -70,23 +70,23 @@ public abstract class AbstractManager<E> implements Manager<E>{
     }
 
     @Override
-    public List<E> query(String orderby, Integer limit) {
-        return query(new HashMap<>(), orderByList(orderby), reverseList(Boolean.FALSE), limit);
+    public List<E> query(String orderby, Integer size) {
+        return query(new HashMap<>(), orderByList(orderby), reverseList(Boolean.FALSE), size);
     }
 
     @Override
-    public List<E> query(List<String> orderby, Integer limit) {
-        return query(new HashMap<>(), orderby, reverseList(Boolean.FALSE), limit);
+    public List<E> query(List<String> orderby, Integer size) {
+        return query(new HashMap<>(), orderby, reverseList(Boolean.FALSE), size);
     }
 
     @Override
-    public List<E> query(String orderby, Boolean reverse, Integer limit) {
-        return query(new HashMap<>(), orderByList(orderby), reverseList(reverse), limit);
+    public List<E> query(String orderby, Boolean reverse, Integer size) {
+        return query(new HashMap<>(), orderByList(orderby), reverseList(reverse), size);
     }
 
     @Override
-    public List<E> query(List<String> orderby, List<Boolean> reverse, Integer limit) {
-        return query(new HashMap<>(), orderby, reverse, limit);
+    public List<E> query(List<String> orderby, List<Boolean> reverse, Integer size) {
+        return query(new HashMap<>(), orderby, reverse, size);
     }
 
     @Override
@@ -95,8 +95,8 @@ public abstract class AbstractManager<E> implements Manager<E>{
     }
 
     @Override
-    public List<E> query(Map<String, Object> map, Integer limit) {
-        return query(map, new ArrayList<>(), reverseList(Boolean.FALSE), limit);
+    public List<E> query(Map<String, Object> map, Integer size) {
+        return query(map, new ArrayList<>(), reverseList(Boolean.FALSE), size);
     }
 
     @Override
@@ -120,18 +120,18 @@ public abstract class AbstractManager<E> implements Manager<E>{
     }
 
     @Override
-    public List<E> query(Map<String, Object> map, String orderby, Integer limit) {
-        return query(map, orderByList(orderby), reverseList(Boolean.FALSE), limit);
+    public List<E> query(Map<String, Object> map, String orderby, Integer size) {
+        return query(map, orderByList(orderby), reverseList(Boolean.FALSE), size);
     }
 
     @Override
-    public List<E> query(Map<String, Object> map, List<String> orderby, Integer limit) {
-        return query(map, orderby, reverseList(Boolean.FALSE), limit);
+    public List<E> query(Map<String, Object> map, List<String> orderby, Integer size) {
+        return query(map, orderby, reverseList(Boolean.FALSE), size);
     }
 
     @Override
-    public List<E> query(Map<String, Object> map, String orderby, Boolean reverse, Integer limit) {
-        return query(map, orderByList(orderby), reverseList(reverse), limit);
+    public List<E> query(Map<String, Object> map, String orderby, Boolean reverse, Integer size) {
+        return query(map, orderByList(orderby), reverseList(reverse), size);
     }
 
     /*
