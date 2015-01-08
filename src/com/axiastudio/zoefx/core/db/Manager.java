@@ -55,6 +55,8 @@ public interface Manager<E> {
 
     List<E> query(Integer size);
 
+    List<E> query(Integer size, Integer startindex);
+
     List<E> query(String orderby);
 
     List<E> query(String orderby, Boolean reverse);
@@ -71,9 +73,19 @@ public interface Manager<E> {
 
     List<E> query(List<String> orderby, List<Boolean> reverse, Integer size);
 
+    List<E> query(String orderby, Integer size, Integer startindex);
+
+    List<E> query(List<String> orderby, Integer size, Integer startindex);
+
+    List<E> query(String orderby, Boolean reverse, Integer size, Integer startindex);
+
+    List<E> query(List<String> orderby, List<Boolean> reverse, Integer size, Integer startindex);
+
     List<E> query(Map<String, Object> map);
 
     List<E> query(Map<String, Object> map, Integer size);
+
+    List<E> query(Map<String, Object> map, Integer size, Integer startindex);
 
     List<E> query(Map<String, Object> map, String orderby);
 
@@ -90,6 +102,14 @@ public interface Manager<E> {
     List<E> query(Map<String, Object> map, String orderby, Boolean reverse, Integer size);
 
     List<E> query(Map<String, Object> map, List<String> orderby, List<Boolean> reverse, Integer size);
+
+    List<E> query(Map<String, Object> map, String orderby, Integer size, Integer startindex);
+
+    List<E> query(Map<String, Object> map, List<String> orderby, Integer size, Integer startindex);
+
+    List<E> query(Map<String, Object> map, String orderby, Boolean reverse, Integer size, Integer startindex);
+
+    List<E> query(Map<String, Object> map, List<String> orderby, List<Boolean> reverse, Integer size, Integer startindex);
 
     E create();
 
