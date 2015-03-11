@@ -30,6 +30,7 @@ package com.axiastudio.zoefx.core.view.search;
 import com.axiastudio.zoefx.core.Utilities;
 import com.axiastudio.zoefx.core.model.beans.BeanClassAccess;
 import com.axiastudio.zoefx.core.model.beans.LookupStringConverter;
+import com.axiastudio.zoefx.core.model.converters.String2BigDecimal;
 import com.axiastudio.zoefx.core.model.property.CallbackBuilder;
 import com.axiastudio.zoefx.core.db.DataSet;
 import com.axiastudio.zoefx.core.db.DataSetBuilder;
@@ -48,9 +49,11 @@ import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 import javafx.util.Callback;
 
+import java.math.BigDecimal;
 import java.net.URL;
 import java.time.LocalDate;
 import java.util.*;
+import java.util.function.BooleanSupplier;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -79,7 +82,7 @@ public class SearchController<T> implements Initializable {
     private Class entityClass;
     private Behavior behavior;
     private Callback<List<T>, Boolean> callback=null;
-    private List<String> criteria = new ArrayList<>();
+    private List<Criterion> criteria = new ArrayList<>();
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
@@ -105,7 +108,10 @@ public class SearchController<T> implements Initializable {
         for( String property: columns ) {
             TableColumn column = new TableColumn();
             column.setText(property);
-            Callback callback = CallbackBuilder.create().beanClass(entityClass).field(property).build(); /// XXX
+            Callback callback = CallbackBuilder.create().beanClass(entityClass)
+                    .field(property)
+                    .lookup(behavior.getProperties().getProperty(property+".lookup"))
+                    .build();
             column.setCellValueFactory(callback);
             // custom date order
             BeanClassAccess beanClassAccess = new BeanClassAccess(entityClass, property);
@@ -120,13 +126,13 @@ public class SearchController<T> implements Initializable {
         }
     }
 
-    public void setCriteria(List<String> criteria){
-        for( String property: criteria ){
+    public void setCriteria(List<String> fields){
+        for( String property: fields){
             HBox hBox = new HBox();
             hBox.setSpacing(10);
             Label label = new Label(property);
             label.setMinWidth(120.0);
-            Node node=null;
+            Node criterionNode=null;
             BeanClassAccess beanClassAccess = new BeanClassAccess(entityClass, property);
             Class<?> returnType = beanClassAccess.getReturnType();
             if( beanClassAccess.getReturnType() == null ){
@@ -137,21 +143,30 @@ public class SearchController<T> implements Initializable {
                 TextField textField = new TextField();
                 textField.setMinWidth(200.0);
                 textField.setId(property);
-                node = textField;
+                criterionNode = textField;
+                criteria.add(new Criterion<String>(String.class, textField));
+            } else if( BigDecimal.class.isAssignableFrom(beanClassAccess.getReturnType()) ) {
+                TextField textField = new TextField();
+                textField.setMinWidth(200.0);
+                textField.setId(property);
+                criterionNode = textField;
+                criteria.add(new Criterion<BigDecimal>(BigDecimal.class, textField));
             } else if( Boolean.class.isAssignableFrom(beanClassAccess.getReturnType()) ) {
                 CheckBox checkBox = new CheckBox();
                 checkBox.setAllowIndeterminate(true);
                 checkBox.setIndeterminate(true);
                 checkBox.setMinWidth(200.0);
                 checkBox.setId(property);
-                node = checkBox;
+                criterionNode = checkBox;
+                criteria.add(new Criterion<Boolean>(Boolean.class, checkBox));
             } else if( Date.class.isAssignableFrom(beanClassAccess.getReturnType()) ) {
                 HBox dateHBox = new HBox();
-                dateHBox.setId(property);
                 DatePicker fromDatePicker = new DatePicker();
+                fromDatePicker.setId(property);
                 DatePicker toDatePicker = new DatePicker();
                 dateHBox.getChildren().addAll(fromDatePicker, toDatePicker);
-                node = dateHBox;
+                criterionNode = dateHBox;
+                criteria.add(new Criterion<Date>(Date.class, fromDatePicker, toDatePicker));
             } else if( Object.class.isAssignableFrom(beanClassAccess.getReturnType()) ) {
                 List superset = new ArrayList();
                 if( returnType.isEnum() ) {
@@ -178,10 +193,11 @@ public class SearchController<T> implements Initializable {
                 }
                 ObservableList choices = FXCollections.observableArrayList(superset);
                 choiceBox.setItems(choices);
-                node = choiceBox;
+                criterionNode = choiceBox;
+                criteria.add(new Criterion(Object.class, choiceBox));
             }
-            if( node != null ) {
-                hBox.getChildren().addAll(label, node);
+            if( criterionNode != null ) {
+                hBox.getChildren().addAll(label, criterionNode);
                 filterbox.getChildren().add(hBox);
             }
         }
@@ -192,23 +208,22 @@ public class SearchController<T> implements Initializable {
         Database db = Utilities.queryUtility(Database.class);
         Manager<T> manager = db.createManager(entityClass);
         Map<String, Object> map = new HashMap<>();
-        for( Node node: filterbox.getChildren() ){
-            HBox hBox = (HBox) node;
-            Node criteriaNode = hBox.getChildren().get(1);
-            if( criteriaNode instanceof TextField ){
-                TextField criteriaField = (TextField) criteriaNode;
+        for( int i=0; i<criteria.size(); i++){
+            Criterion criterion = criteria.get(i);
+            if( criterion.getCriterionClass() == String.class ){
+                TextField criteriaField = (TextField) criterion.getNodes().get(0);
                 String fieldName = criteriaField.getId();
                 String value = criteriaField.getText();
                 if( value.length()>0 ) {
                     map.put(fieldName, value);
                 }
-            } else if( criteriaNode instanceof ChoiceBox ){
-                ChoiceBox choiceBox = (ChoiceBox) criteriaNode;
+            } else if( criterion.getCriterionClass() == Object.class ){
+                ChoiceBox choiceBox = (ChoiceBox) criterion.getNodes().get(0);
                 String fieldName = choiceBox.getId();
                 Object value = choiceBox.getSelectionModel().getSelectedItem();
                 map.put(fieldName, value);
-            } else if( criteriaNode instanceof CheckBox ){
-                CheckBox criteriaField = (CheckBox) criteriaNode;
+            } else if( criterion.getCriterionClass() == Boolean.class ){
+                CheckBox criteriaField = (CheckBox) criterion.getNodes().get(0);
                 String fieldName = criteriaField.getId();
                 if( !criteriaField.isIndeterminate() ) {
                     Boolean value = criteriaField.isSelected();
@@ -216,24 +231,28 @@ public class SearchController<T> implements Initializable {
                         map.put(fieldName, value);
                     }
                 }
-            } else if( criteriaNode instanceof HBox ){
-                String fieldName = criteriaNode.getId();
-                HBox criteriaHBox = (HBox) criteriaNode;
-                Node firstCriteriaNode = criteriaHBox.getChildren().get(0);
-                if( firstCriteriaNode instanceof DatePicker ){
-                    Node secondCriteriaNode = criteriaHBox.getChildren().get(1);
-                    List<Date> value = new ArrayList<>();
-                    LocalDate fromLocalDate = ((DatePicker) firstCriteriaNode).getValue();
-                    if( fromLocalDate != null ) {
+            } else if( criterion.getCriterionClass() == BigDecimal.class ){
+                TextField criteriaField = (TextField) criterion.getNodes().get(0);
+                String fieldName = criteriaField.getId();
+                BigDecimal value = (new String2BigDecimal()).call(criteriaField.getText());
+                if (value != null) {
+                    map.put(fieldName, value);
+                }
+            } else if( criterion.getCriterionClass() == Date.class ){
+                DatePicker firstDateNode = (DatePicker) criterion.getNodes().get(0);
+                String fieldName = firstDateNode.getId();
+                DatePicker secondDateNode = (DatePicker) criterion.getNodes().get(1);
+                List<Date> value = new ArrayList<>();
+                LocalDate fromLocalDate = firstDateNode.getValue();
+                if( fromLocalDate != null ) {
+                    value.add(localDateToDate(fromLocalDate));
+                    LocalDate toLocalDate = secondDateNode.getValue();
+                    if( toLocalDate != null ) {
+                        value.add(localDateToDate(toLocalDate));
+                    } else {
                         value.add(localDateToDate(fromLocalDate));
-                        LocalDate toLocalDate = ((DatePicker) secondCriteriaNode).getValue();
-                        if( toLocalDate != null ) {
-                            value.add(localDateToDate(toLocalDate));
-                        } else {
-                            value.add(localDateToDate(fromLocalDate));
-                        }
-                        map.put(fieldName, value);
                     }
+                    map.put(fieldName, value);
                 }
             }
         }

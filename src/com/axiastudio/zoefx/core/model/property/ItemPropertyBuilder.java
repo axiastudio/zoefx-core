@@ -28,6 +28,7 @@
 package com.axiastudio.zoefx.core.model.property;
 
 import com.axiastudio.zoefx.core.model.beans.BeanAccess;
+import com.axiastudio.zoefx.core.model.converters.*;
 
 import java.math.BigDecimal;
 import java.text.DateFormat;
@@ -96,63 +97,30 @@ public class ItemPropertyBuilder<T> {
                 // Integer field -> String property
                 ItemStringProperty<Integer> item = new ItemStringProperty(beanAccess);
                 item.setToStringFunction(Object::toString);
-                item.setFromStringFunction(s -> {
-                    if( s == null ){
-                        return null;
-                    }
-                    return Integer.parseInt(s);
-                });
+                item.setFromStringFunction(new String2Integer());
+                return item;
+            } else if( Long.class.isAssignableFrom(fieldType) ) {
+                // Long field -> String property
+                ItemStringProperty<Long> item = new ItemStringProperty(beanAccess);
+                item.setToStringFunction(Object::toString);
+                item.setFromStringFunction(new String2Long());
                 return item;
             } else if( Double.class.isAssignableFrom(fieldType) ) {
                 // Double field -> String property
                 ItemStringProperty<Double> item = new ItemStringProperty(beanAccess);
                 item.setToStringFunction(Object::toString);
-                item.setFromStringFunction(s -> {
-                    if( s == null ){
-                        return null;
-                    }
-                    return Double.parseDouble(s);
-                });
+                item.setFromStringFunction(new String2Double());
                 return item;
             } else if( BigDecimal.class.isAssignableFrom(fieldType) ) {
                 // BigDecimal field -> String property
                 ItemStringProperty<BigDecimal> item = new ItemStringProperty(beanAccess);
-                item.setToStringFunction(i -> {
-                    NumberFormat numberFormat = NumberFormat.getCurrencyInstance();
-                    return numberFormat.format(i);
-                });
-                item.setFromStringFunction(s -> {
-                    NumberFormat numberFormat = NumberFormat.getCurrencyInstance();
-                    String symbol = numberFormat.getCurrency().getSymbol();
-                    String regex = "-?("+symbol+" )?[0-9]{1,3}(\\.?[0-9]{3})*(,[0-9]{2})?";
-                    if (!Pattern.matches(regex, s)) {
-                        return null;
-                    }
-                    try {
-                        Number number = numberFormat.parse(s);
-                        if (number instanceof Double) {
-                            // es. "€ 12,99"
-                            return new BigDecimal((Double) number);
-                        } else if (number instanceof Long) {
-                            // es. "€ 12"
-                            return new BigDecimal((Long) number);
-                        }
-                    } catch (ParseException e) {
-                        // es. "12,0"
-                        return new BigDecimal(Double.parseDouble(s.replace(",", ".")));
-                    } catch (ClassCastException e) {
-                        return null;
-                    }
-                    return null;
-                });
+                item.setToStringFunction(new BigDecimal2String());
+                item.setFromStringFunction(new String2BigDecimal());
                 return item;
             } else if( Date.class.isAssignableFrom(fieldType) ){
                 // Date field -> String property
                 ItemStringProperty<Date> item = new ItemStringProperty(beanAccess);
-                item.setToStringFunction(date -> {
-                    DateFormat dateFormat = DateFormat.getDateInstance(DateFormat.SHORT, Locale.getDefault());
-                    return dateFormat.format(date);
-                });
+                item.setToStringFunction(new Date2String());
                 return item;
             } else if( Object.class.isAssignableFrom(fieldType) ){
                 // Object field -> String property
