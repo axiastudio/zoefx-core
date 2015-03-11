@@ -394,7 +394,11 @@ public class Controller extends BaseController implements DataSetEventListener {
                 nodes = findNodes((Pane) node, nodes);
             } else if( node instanceof TabPane ){
                 for( Tab tab: ((TabPane) node).getTabs() ) {
-                    nodes = findNodes((Pane) tab.getContent(), nodes);
+                    if( tab.getContent() instanceof Pane ) {
+                        nodes = findNodes((Pane) tab.getContent(), nodes);
+                    } else {
+                        nodes.add(tab.getContent());
+                    }
                 }
             }
             else if( node.getId() != null && node.getId() != "" ){
