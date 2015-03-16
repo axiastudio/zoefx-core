@@ -27,7 +27,7 @@
 
 package com.axiastudio.zoefx.core.view;
 
-import com.axiastudio.zoefx.core.Utilities;
+import com.axiastudio.zoefx.core.IOC;
 import com.axiastudio.zoefx.core.controller.BaseController;
 import com.axiastudio.zoefx.core.controller.Controller;
 import com.axiastudio.zoefx.core.db.*;
@@ -226,7 +226,7 @@ public class ZSceneBuilder<E> {
             TimeMachine timeMachine = new TimeMachine();
             controller.setTimeMachine(timeMachine);
             if( manager == null ){
-                Database database = Utilities.queryUtility(Database.class);
+                Database database = IOC.queryUtility(Database.class);
                 manager = database.createManager(entityClass);
             }
             if( store == null ) {

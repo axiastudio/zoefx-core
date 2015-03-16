@@ -27,7 +27,7 @@
 
 package com.axiastudio.zoefx.core.console;
 
-import com.axiastudio.zoefx.core.Utilities;
+import com.axiastudio.zoefx.core.IOC;
 import com.axiastudio.zoefx.core.controller.Controller;
 import com.axiastudio.zoefx.core.script.ScriptEngine;
 import com.axiastudio.zoefx.core.script.JSEngineImpl;
@@ -76,7 +76,7 @@ public class ConsoleController implements Initializable {
         public void handle(ActionEvent e) {
 
             // there's a script engine?
-            ScriptEngine engine = Utilities.queryUtility(ScriptEngine.class);
+            ScriptEngine engine = IOC.queryUtility(ScriptEngine.class);
             if( engine == null ){
                 engine = new JSEngineImpl();
             }

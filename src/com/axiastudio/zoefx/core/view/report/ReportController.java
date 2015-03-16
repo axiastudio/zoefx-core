@@ -27,7 +27,7 @@
 
 package com.axiastudio.zoefx.core.view.report;
 
-import com.axiastudio.zoefx.core.Utilities;
+import com.axiastudio.zoefx.core.IOC;
 import com.axiastudio.zoefx.core.model.beans.LookupStringConverter;
 import com.axiastudio.zoefx.core.controller.BaseController;
 import com.axiastudio.zoefx.core.report.ReportEngine;
@@ -68,7 +68,7 @@ public class ReportController<T> extends BaseController {
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
-        ReportEngine reportEngine = Utilities.queryUtility(ReportEngine.class);
+        ReportEngine reportEngine = IOC.queryUtility(ReportEngine.class);
         printButton.setDisable(!reportEngine.canPrint());
         printButton.setText(resources.getString("report.print_button"));
         exportButton.setDisable(!reportEngine.canExportToPdf());
@@ -97,7 +97,7 @@ public class ReportController<T> extends BaseController {
         File file = fileChooser.showSaveDialog(null);
 
         ReportTemplate reportTemplate = templates.getValue();
-        ReportEngine reportEngine = Utilities.queryUtility(ReportEngine.class);
+        ReportEngine reportEngine = IOC.queryUtility(ReportEngine.class);
         reportEngine.toPdf(reportTemplate, store, file);
         ((Stage) getScene().getWindow()).close();
     }
@@ -105,7 +105,7 @@ public class ReportController<T> extends BaseController {
     @FXML
     void print(ActionEvent event) {
         ReportTemplate reportTemplate = templates.getValue();
-        ReportEngine reportEngine = Utilities.queryUtility(ReportEngine.class);
+        ReportEngine reportEngine = IOC.queryUtility(ReportEngine.class);
         reportEngine.toPrinter(reportTemplate, store);
         ((Stage) getScene().getWindow()).close();
     }

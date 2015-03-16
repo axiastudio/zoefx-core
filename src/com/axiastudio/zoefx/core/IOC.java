@@ -34,7 +34,7 @@ import java.util.HashMap;
  * Date: 18/03/14
  * Time: 20:46
  */
-public class Utilities {
+public class IOC {
 
     private static HashMap<String, HashMap<String, Object>> utilities = new HashMap<>();
 
@@ -46,7 +46,7 @@ public class Utilities {
      *
      */
     public static synchronized void registerUtility(Object utility, Class iface){
-        Utilities.registerUtility(utility, iface, ".");
+        IOC.registerUtility(utility, iface, ".");
 
     }
 
@@ -59,12 +59,12 @@ public class Utilities {
      *
      */
     public static synchronized void registerUtility(Object utility, Class iface, String name){
-        HashMap<String, Object> hm = Utilities.utilities.get(iface.getSimpleName());
+        HashMap<String, Object> hm = IOC.utilities.get(iface.getSimpleName());
         if( hm == null ){
             hm = new HashMap<>();
         }
         hm.put(name, utility);
-        Utilities.utilities.put(iface.getSimpleName(), hm);
+        IOC.utilities.put(iface.getSimpleName(), hm);
     }
 
     /**
@@ -75,7 +75,7 @@ public class Utilities {
      *
      */
     public static <T> T queryUtility(Class<T> iface){
-        return Utilities.queryUtility(iface, ".");
+        return IOC.queryUtility(iface, ".");
     }
 
     /**
@@ -88,7 +88,7 @@ public class Utilities {
      */
     public static <T> T queryUtility(Class<T> iface, String name){
         T utility = null;
-        HashMap<String, Object> hm = Utilities.utilities.get(iface.getSimpleName());
+        HashMap<String, Object> hm = IOC.utilities.get(iface.getSimpleName());
         if( hm != null ){
             utility = (T) hm.get(name);
         }

@@ -27,7 +27,7 @@
 
 package com.axiastudio.zoefx.core.skins;
 
-import com.axiastudio.zoefx.core.Utilities;
+import com.axiastudio.zoefx.core.IOC;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -44,7 +44,7 @@ public class Skins {
     private static List<String> skins = new ArrayList<>();
 
     public static synchronized void registerSkin(ZSkin skin){
-        Utilities.registerUtility(skin, ZSkin.class, skin.getName());
+        IOC.registerUtility(skin, ZSkin.class, skin.getName());
         skins.add(skin.getName());
         if( activeSkinName == null ){
             activeSkinName = skin.getName();
@@ -52,7 +52,7 @@ public class Skins {
     }
 
     public static ZSkin querySkin(String name){
-        return Utilities.queryUtility(ZSkin.class, name);
+        return IOC.queryUtility(ZSkin.class, name);
     }
 
     public static synchronized ZSkin getActiveSkin(){
@@ -63,13 +63,13 @@ public class Skins {
     }
 
     public static synchronized void activateSkin(String name){
-        if( Utilities.queryUtility(ZSkin.class, name) != null ){
+        if( IOC.queryUtility(ZSkin.class, name) != null ){
             activeSkinName = name;
         }
     }
 
     public static List<ZSkin> getSkins(){
-        return skins.stream().map(name -> Utilities.queryUtility(ZSkin.class, name)).collect(Collectors.toList());
+        return skins.stream().map(name -> IOC.queryUtility(ZSkin.class, name)).collect(Collectors.toList());
     }
 
 }

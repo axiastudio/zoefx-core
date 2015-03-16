@@ -27,7 +27,7 @@
 
 package com.axiastudio.zoefx.core.script;
 
-import com.axiastudio.zoefx.core.Utilities;
+import com.axiastudio.zoefx.core.IOC;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
@@ -41,12 +41,12 @@ public class JSScriptEngineImplTest {
     @BeforeClass
     public static void setUpClass() {
         JSEngineImpl engine = new JSEngineImpl();
-        Utilities.registerUtility(engine, ScriptEngine.class);
+        IOC.registerUtility(engine, ScriptEngine.class);
     }
 
     @Test
     public void testEval() throws Exception {
-        ScriptEngine engine = Utilities.queryUtility(ScriptEngine.class);
+        ScriptEngine engine = IOC.queryUtility(ScriptEngine.class);
         String script = "return \"ciao\";";
         Object eval = engine.eval(script);
         assert eval.toString().equals("ciao");

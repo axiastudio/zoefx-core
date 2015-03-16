@@ -27,7 +27,7 @@
 
 package com.axiastudio.zoefx.core.db;
 
-import com.axiastudio.zoefx.core.Utilities;
+import com.axiastudio.zoefx.core.IOC;
 import com.axiastudio.zoefx.core.model.beans.EntityBuilder;
 import com.axiastudio.zoefx.demo.Author;
 import org.junit.BeforeClass;
@@ -42,7 +42,7 @@ public class NoPersistenceDatabaseImplTest {
     public static void setUpClass() throws Exception {
 
         Database database = new NoPersistenceDatabaseImpl();
-        Utilities.registerUtility(database, Database.class);
+        IOC.registerUtility(database, Database.class);
         Manager<Author> manager = database.createManager(Author.class);
 
         Author lev = EntityBuilder.create(Author.class).set("name", "Lev").set("surname", "Tolstoj").build();
@@ -56,7 +56,7 @@ public class NoPersistenceDatabaseImplTest {
     @Test
     public void testCreateManager() throws Exception {
 
-        Database db = Utilities.queryUtility(Database.class);
+        Database db = IOC.queryUtility(Database.class);
         Manager<Author> manager = db.createManager(Author.class);
 
         List<Author> authors = manager.getAll();

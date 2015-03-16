@@ -1,12 +1,11 @@
 package com.axiastudio.zoefx.demo;
 
-import com.axiastudio.zoefx.core.Utilities;
+import com.axiastudio.zoefx.core.IOC;
 import com.axiastudio.zoefx.core.controller.Controller;
 import com.axiastudio.zoefx.core.db.*;
 import com.axiastudio.zoefx.core.model.beans.EntityBuilder;
 import com.axiastudio.zoefx.core.view.ZSceneBuilder;
 import javafx.application.Application;
-import javafx.scene.Scene;
 import javafx.stage.Stage;
 
 public class QuickStart extends Application {
@@ -17,7 +16,7 @@ public class QuickStart extends Application {
     public void start(Stage primaryStage) throws Exception {
 
         NoPersistenceDatabaseImpl database = new NoPersistenceDatabaseImpl();
-        Utilities.registerUtility(database, Database.class);
+        IOC.registerUtility(database, Database.class);
         Manager<Book> manager = database.createManager(Book.class);
 
         manager.save(EntityBuilder.create(Book.class).set("title", "Anna Karenina")
