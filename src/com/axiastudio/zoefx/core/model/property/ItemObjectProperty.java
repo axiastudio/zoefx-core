@@ -27,7 +27,7 @@
 
 package com.axiastudio.zoefx.core.model.property;
 
-import com.axiastudio.zoefx.core.Utilities;
+import com.axiastudio.zoefx.core.IOC;
 import com.axiastudio.zoefx.core.model.beans.BeanAccess;
 import com.axiastudio.zoefx.core.db.Database;
 import com.axiastudio.zoefx.core.db.Manager;
@@ -78,7 +78,7 @@ public class ItemObjectProperty<P> extends ObjectPropertyBase implements ZoeFXPr
                 superset.add((P) obj);
             }
         } else {
-            Database database = Utilities.queryUtility(Database.class);
+            Database database = IOC.queryUtility(Database.class);
             if( database != null ) {
                 Manager<?> manager = database.createManager(returnType, parentManager);
                 for (Object obj : manager.getAll()) {

@@ -27,7 +27,7 @@
 
 package com.axiastudio.zoefx.core.validators;
 
-import com.axiastudio.zoefx.core.Utilities;
+import com.axiastudio.zoefx.core.IOC;
 import com.axiastudio.zoefx.core.script.JSEngineImpl;
 import com.axiastudio.zoefx.core.script.ScriptEngine;
 
@@ -62,7 +62,7 @@ public class StringValidator extends AbstractValidator implements Validator<Stri
             return Boolean.FALSE;
         }
         if( code != null ) {
-            ScriptEngine engine = Utilities.queryUtility(ScriptEngine.class);
+            ScriptEngine engine = IOC.queryUtility(ScriptEngine.class);
             if( engine == null ){
                 engine = new JSEngineImpl();
             }

@@ -27,7 +27,7 @@
 
 package com.axiastudio.zoefx.core.controller;
 
-import com.axiastudio.zoefx.core.Utilities;
+import com.axiastudio.zoefx.core.IOC;
 import com.axiastudio.zoefx.core.model.beans.BeanAccess;
 import com.axiastudio.zoefx.core.model.beans.BeanClassAccess;
 import com.axiastudio.zoefx.core.model.beans.LookupStringConverter;
@@ -603,7 +603,7 @@ public class Controller extends BaseController implements DataSetEventListener {
         }
     };
     public EventHandler<ActionEvent> handlerPrint = e -> {
-        ReportEngine reportEngine = Utilities.queryUtility(ReportEngine.class);
+        ReportEngine reportEngine = IOC.queryUtility(ReportEngine.class);
         if( reportEngine!=null ){
             Class classToReport = dataset.getCurrentModel().getEntityClass();
             if( Reports.getTemplates(classToReport).isPresent() ) {

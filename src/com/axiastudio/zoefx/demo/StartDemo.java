@@ -27,7 +27,7 @@
 
 package com.axiastudio.zoefx.demo;
 
-import com.axiastudio.zoefx.core.Utilities;
+import com.axiastudio.zoefx.core.IOC;
 import com.axiastudio.zoefx.core.model.beans.EntityBuilder;
 import com.axiastudio.zoefx.core.controller.Controller;
 import com.axiastudio.zoefx.core.db.Database;
@@ -59,7 +59,7 @@ public class StartDemo extends Application {
         Skins.registerSkin(skin);
 
         NoPersistenceDatabaseImpl database = new NoPersistenceDatabaseImpl();
-        Utilities.registerUtility(database, Database.class);
+        IOC.registerUtility(database, Database.class);
 
         initData();
 
@@ -106,7 +106,7 @@ public class StartDemo extends Application {
 
     private static void initData(){
 
-        NoPersistenceDatabaseImpl database = (NoPersistenceDatabaseImpl) Utilities.queryUtility(Database.class);
+        NoPersistenceDatabaseImpl database = (NoPersistenceDatabaseImpl) IOC.queryUtility(Database.class);
 
 
         Author lev = EntityBuilder.create(Author.class).set("name", "Lev").set("surname", "Tolstoj").build();

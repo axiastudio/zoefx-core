@@ -27,7 +27,7 @@
 
 package com.axiastudio.zoefx.core.db;
 
-import com.axiastudio.zoefx.core.Utilities;
+import com.axiastudio.zoefx.core.IOC;
 import com.axiastudio.zoefx.core.model.beans.BeanAccess;
 import com.axiastudio.zoefx.core.events.DataSetEvent;
 import com.axiastudio.zoefx.core.events.DataSetEventGenerator;
@@ -196,7 +196,7 @@ public class DataSet<E> implements DataSetEventGenerator {
 
     public Manager<E> getManager() {
         if( manager == null ) {
-            Database db = Utilities.queryUtility(Database.class);
+            Database db = IOC.queryUtility(Database.class);
             if (db != null) {
                 manager = db.createManager(getEntityClass());
             }
@@ -252,7 +252,7 @@ public class DataSet<E> implements DataSetEventGenerator {
     }
 
     public Object createRow(String collectionName) {
-        Database db = Utilities.queryUtility(Database.class);
+        Database db = IOC.queryUtility(Database.class);
         E parentEntity = getStore().get(currentIndex);
         BeanAccess<Collection> beanAccess = new BeanAccess<>(parentEntity, collectionName);
         Collection collection = beanAccess.getValue();
@@ -295,7 +295,7 @@ public class DataSet<E> implements DataSetEventGenerator {
     }
 
     public void deleteRow(String collectionName, E row) {
-        Database db = Utilities.queryUtility(Database.class);
+        Database db = IOC.queryUtility(Database.class);
         E parentEntity = getStore().get(currentIndex);
         BeanAccess<Collection> beanAccess = new BeanAccess<>(parentEntity, collectionName);
         Collection collection = beanAccess.getValue();

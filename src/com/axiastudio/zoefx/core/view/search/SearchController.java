@@ -27,7 +27,7 @@
 
 package com.axiastudio.zoefx.core.view.search;
 
-import com.axiastudio.zoefx.core.Utilities;
+import com.axiastudio.zoefx.core.IOC;
 import com.axiastudio.zoefx.core.model.beans.BeanClassAccess;
 import com.axiastudio.zoefx.core.model.beans.LookupStringConverter;
 import com.axiastudio.zoefx.core.model.converters.String2BigDecimal;
@@ -53,7 +53,6 @@ import java.math.BigDecimal;
 import java.net.URL;
 import java.time.LocalDate;
 import java.util.*;
-import java.util.function.BooleanSupplier;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -175,7 +174,7 @@ public class SearchController<T> implements Initializable {
                     }
 
                 } else {
-                    Database database = Utilities.queryUtility(Database.class);
+                    Database database = IOC.queryUtility(Database.class);
                     if( database != null ) {
                         Manager<?> manager = database.createManager(returnType);
                         for (Object obj : manager.getAll()) {
@@ -205,7 +204,7 @@ public class SearchController<T> implements Initializable {
 
     @FXML
     private void search(ActionEvent event){
-        Database db = Utilities.queryUtility(Database.class);
+        Database db = IOC.queryUtility(Database.class);
         Manager<T> manager = db.createManager(entityClass);
         Map<String, Object> map = new HashMap<>();
         for( int i=0; i<criteria.size(); i++){
