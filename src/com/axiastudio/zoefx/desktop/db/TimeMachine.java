@@ -25,47 +25,53 @@
  * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-package com.axiastudio.zoefx.core.db;
+package com.axiastudio.zoefx.desktop.db;
 
-import com.axiastudio.zoefx.desktop.db.DataSet;
+import javafx.beans.property.Property;
 
-import java.util.List;
+import java.util.*;
 
 /**
  * User: tiziano
- * Date: 10/07/14
- * Time: 09:30
+ * Date: 26/05/14
+ * Time: 20:52
  */
-public class DataSetBuilder<E> {
+public class TimeMachine {
 
-    private List<E> store;
-    private Manager<E> manager;
-    private Class<E> entityClass;
+    private List<Map<Property, Object>> snapshots = new ArrayList<>();
 
-    public DataSetBuilder() {
+    public void resetAndCreateSnapshot(Collection<Property> properties){
+        reset();
+        createSnapshot(properties);
     }
 
-    public static <E> DataSetBuilder<E> create(Class<E> klass) {
-        DataSetBuilder builder = new DataSetBuilder();
-        builder.entityClass = klass;
-        return builder;
+    public void createSnapshot(Collection<Property> properties){
+        Map<Property, Object> snapshot = new HashMap<>();
+        for( Property property: properties ){
+            snapshot.put(property, property.getValue());
+        }
+        snapshots.add(snapshot);
     }
 
-    public DataSetBuilder store(List<E> store){
-        this.store = store;
-        return this;
+    public void undo(){
+        int last = snapshots.size() - 1;
+        Map<Property, Object> snapshot = snapshots.get(last);
+        snapshots.remove(last);
+        for(Property property: snapshot.keySet() ){
+            property.setValue(snapshot.get(property));
+        }
     }
 
-    public DataSetBuilder manager(Manager<E> manager){
-        this.manager = manager;
-        return this;
+    public void rollback(){
+        Map<Property, Object> snapshot = snapshots.get(0);
+        for(Property property: snapshot.keySet() ){
+            property.setValue(snapshot.get(property));
+        }
+        snapshots.clear();
     }
 
-    public DataSet build(){
-        DataSet dataSet = new DataSet();
-        dataSet.setStore(store);
-        dataSet.setEntityClass(entityClass);
-        dataSet.setManager(manager);
-        return dataSet;
+    public void reset(){
+        snapshots.clear();
     }
+
 }

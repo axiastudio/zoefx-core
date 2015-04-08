@@ -25,47 +25,38 @@
  * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-package com.axiastudio.zoefx.core.db;
+package com.axiastudio.zoefx.desktop.model.beans;
 
-import com.axiastudio.zoefx.desktop.db.DataSet;
-
-import java.util.List;
+import com.axiastudio.zoefx.core.beans.BeanAccess;
+import javafx.util.StringConverter;
 
 /**
  * User: tiziano
- * Date: 10/07/14
- * Time: 09:30
+ * Date: 03/08/14
+ * Time: 13:06
  */
-public class DataSetBuilder<E> {
+public class LookupStringConverter<T> extends StringConverter<T> {
 
-    private List<E> store;
-    private Manager<E> manager;
-    private Class<E> entityClass;
+    private String name;
 
-    public DataSetBuilder() {
+    public LookupStringConverter(String name) {
+        this.name = name;
     }
 
-    public static <E> DataSetBuilder<E> create(Class<E> klass) {
-        DataSetBuilder builder = new DataSetBuilder();
-        builder.entityClass = klass;
-        return builder;
+    @Override
+    public String toString(T bean) {
+        if( bean.getClass().isEnum() ){
+            return bean.toString();
+        } else {
+            BeanAccess<String> beanAccess = new BeanAccess<>(bean, name);
+            return beanAccess.getValue();
+        }
     }
 
-    public DataSetBuilder store(List<E> store){
-        this.store = store;
-        return this;
+    @Override
+    public T fromString(String string) {
+        // not required for ChoiceBox
+        return null;
     }
-
-    public DataSetBuilder manager(Manager<E> manager){
-        this.manager = manager;
-        return this;
-    }
-
-    public DataSet build(){
-        DataSet dataSet = new DataSet();
-        dataSet.setStore(store);
-        dataSet.setEntityClass(entityClass);
-        dataSet.setManager(manager);
-        return dataSet;
-    }
+    
 }

@@ -28,8 +28,10 @@
 package com.axiastudio.zoefx.core.db;
 
 import com.axiastudio.zoefx.core.IOC;
-import com.axiastudio.zoefx.core.model.beans.EntityBuilder;
+import com.axiastudio.zoefx.core.beans.EntityBuilder;
 import com.axiastudio.zoefx.demo.Author;
+import com.axiastudio.zoefx.desktop.db.DataSet;
+import com.axiastudio.zoefx.desktop.db.NoPersistenceDatabaseImpl;
 import org.junit.BeforeClass;
 import org.junit.Test;
 

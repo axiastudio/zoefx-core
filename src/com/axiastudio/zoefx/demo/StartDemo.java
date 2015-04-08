@@ -28,15 +28,15 @@
 package com.axiastudio.zoefx.demo;
 
 import com.axiastudio.zoefx.core.IOC;
-import com.axiastudio.zoefx.core.model.beans.EntityBuilder;
-import com.axiastudio.zoefx.core.controller.Controller;
+import com.axiastudio.zoefx.core.beans.EntityBuilder;
+import com.axiastudio.zoefx.desktop.controller.Controller;
 import com.axiastudio.zoefx.core.db.Database;
-import com.axiastudio.zoefx.core.db.NoPersistenceDatabaseImpl;
-import com.axiastudio.zoefx.core.skins.*;
+import com.axiastudio.zoefx.desktop.db.NoPersistenceDatabaseImpl;
+import com.axiastudio.zoefx.desktop.skins.*;
 import com.axiastudio.zoefx.core.validators.ValidatorBuilder;
 import com.axiastudio.zoefx.core.validators.Validators;
-import com.axiastudio.zoefx.core.view.SceneBuilders;
-import com.axiastudio.zoefx.core.view.ZSceneBuilder;
+import com.axiastudio.zoefx.desktop.view.SceneBuilders;
+import com.axiastudio.zoefx.desktop.view.ZSceneBuilder;
 import javafx.application.Application;
 import javafx.stage.Stage;
 

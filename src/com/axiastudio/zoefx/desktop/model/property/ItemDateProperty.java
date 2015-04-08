@@ -25,47 +25,69 @@
  * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-package com.axiastudio.zoefx.core.db;
+package com.axiastudio.zoefx.desktop.model.property;
 
-import com.axiastudio.zoefx.desktop.db.DataSet;
+import com.axiastudio.zoefx.core.beans.BeanAccess;
+import javafx.beans.property.ObjectPropertyBase;
 
-import java.util.List;
+import java.time.Instant;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.ZoneId;
+import java.util.Date;
+
 
 /**
  * User: tiziano
- * Date: 10/07/14
- * Time: 09:30
+ * Date: 21/03/14
+ * Time: 12:51
  */
-public class DataSetBuilder<E> {
+public class ItemDateProperty<P> extends ObjectPropertyBase implements ZoeFXProperty {
 
-    private List<E> store;
-    private Manager<E> manager;
-    private Class<E> entityClass;
+    private BeanAccess<P> beanAccess;
 
-    public DataSetBuilder() {
+    public ItemDateProperty(BeanAccess beanAccess){
+        this.beanAccess = beanAccess;
     }
 
-    public static <E> DataSetBuilder<E> create(Class<E> klass) {
-        DataSetBuilder builder = new DataSetBuilder();
-        builder.entityClass = klass;
-        return builder;
+    @Override
+    public Object getBean() {
+        return beanAccess.getBean();
     }
 
-    public DataSetBuilder store(List<E> store){
-        this.store = store;
-        return this;
+    @Override
+    public String getName() {
+        return beanAccess.getName();
     }
 
-    public DataSetBuilder manager(Manager<E> manager){
-        this.manager = manager;
-        return this;
+    @Override
+    public Object get() {
+        P value = beanAccess.getValue();
+        if( value == null ){
+            return null;
+        }
+        if( value instanceof Date ) {
+            Instant instant = Instant.ofEpochMilli(((Date) value).getTime());
+            LocalDate localDate = LocalDateTime.ofInstant(instant, ZoneId.systemDefault()).toLocalDate();
+            return localDate;
+        }
+        return null;
     }
 
-    public DataSet build(){
-        DataSet dataSet = new DataSet();
-        dataSet.setStore(store);
-        dataSet.setEntityClass(entityClass);
-        dataSet.setManager(manager);
-        return dataSet;
+    @Override
+    public void set(Object localDate) {
+        if( localDate == null ){
+            beanAccess.setValue(null);
+            return;
+        }
+        Instant instant = ((LocalDate) localDate).atStartOfDay().atZone(ZoneId.systemDefault()).toInstant();
+        Date date = Date.from(instant);
+        beanAccess.setValue(date);
     }
+
+    @Override
+    public void refresh() {
+        fireValueChangedEvent();
+    }
+
 }

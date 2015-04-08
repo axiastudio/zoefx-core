@@ -25,47 +25,55 @@
  * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-package com.axiastudio.zoefx.core.db;
+package com.axiastudio.zoefx.desktop.db;
 
-import com.axiastudio.zoefx.desktop.db.DataSet;
+import com.axiastudio.zoefx.core.db.Database;
+import com.axiastudio.zoefx.core.db.Manager;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  * User: tiziano
- * Date: 10/07/14
- * Time: 09:30
+ * Date: 27/06/14
+ * Time: 10:33
  */
-public class DataSetBuilder<E> {
+public class NoPersistenceDatabaseImpl implements Database {
 
-    private List<E> store;
-    private Manager<E> manager;
-    private Class<E> entityClass;
+    Map<Class, NoPersistenceDatabaseManagerImpl> managers = new HashMap<>();
 
-    public DataSetBuilder() {
+    @Override
+    public void open(String persistenceUnit) {
+
     }
 
-    public static <E> DataSetBuilder<E> create(Class<E> klass) {
-        DataSetBuilder builder = new DataSetBuilder();
-        builder.entityClass = klass;
-        return builder;
+    @Override
+    public void open(String persistenceUnit, Map<String, String> properties) {
+
     }
 
-    public DataSetBuilder store(List<E> store){
-        this.store = store;
-        return this;
+    @Override
+    public <E> Manager<E> createManager(Class<E> klass) {
+        if( !managers.keySet().contains(klass) ) {
+            NoPersistenceDatabaseManagerImpl<E> manager = new NoPersistenceDatabaseManagerImpl<>(klass);
+            managers.put(klass, manager);
+        }
+        return managers.get(klass);
     }
 
-    public DataSetBuilder manager(Manager<E> manager){
-        this.manager = manager;
-        return this;
+    @Override
+    public <E> Manager<E> createManager(Class<E> klass, Manager<?> manager) {
+        return createManager(klass);
     }
 
-    public DataSet build(){
-        DataSet dataSet = new DataSet();
-        dataSet.setStore(store);
-        dataSet.setEntityClass(entityClass);
-        dataSet.setManager(manager);
-        return dataSet;
+    /*
+     *  Without Database store
+     */
+
+    public <E> void putStore(List<E> store, Class<E> klass){
+        NoPersistenceDatabaseManagerImpl<E> manager = new NoPersistenceDatabaseManagerImpl<>(store);
+        managers.put(klass, manager);
     }
+
 }

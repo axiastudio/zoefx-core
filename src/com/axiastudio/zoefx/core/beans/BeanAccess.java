@@ -25,47 +25,64 @@
  * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-package com.axiastudio.zoefx.core.db;
+package com.axiastudio.zoefx.core.beans;
 
-import com.axiastudio.zoefx.desktop.db.DataSet;
-
-import java.util.List;
+import java.lang.reflect.InvocationTargetException;
 
 /**
  * User: tiziano
- * Date: 10/07/14
- * Time: 09:30
+ * Date: 22/03/14
+ * Time: 22:07
  */
-public class DataSetBuilder<E> {
+public class BeanAccess<T> extends BeanClassAccess {
 
-    private List<E> store;
-    private Manager<E> manager;
-    private Class<E> entityClass;
+    private Object bean;
 
-    public DataSetBuilder() {
+    public BeanAccess(Object bean, String name) {
+        super(bean.getClass(), name);
+        this.bean = bean;
     }
 
-    public static <E> DataSetBuilder<E> create(Class<E> klass) {
-        DataSetBuilder builder = new DataSetBuilder();
-        builder.entityClass = klass;
-        return builder;
+    public Object getBean() {
+        return bean;
     }
 
-    public DataSetBuilder store(List<E> store){
-        this.store = store;
-        return this;
+    @SuppressWarnings("unchecked")
+    public T getValue() {
+        if( accessType.equals(AccessType.FIELD) ){
+            try {
+                return (T) field.get(bean);
+            } catch (IllegalAccessException e) {
+                e.printStackTrace();
+            }
+        } else {
+            try {
+                return (T) getter.invoke(bean);
+            } catch (IllegalAccessException e) {
+                e.printStackTrace();
+            } catch (InvocationTargetException e) {
+                e.printStackTrace();
+            }
+        }
+        return null;
     }
 
-    public DataSetBuilder manager(Manager<E> manager){
-        this.manager = manager;
-        return this;
+    public void setValue(Object value) {
+        if( accessType.equals(AccessType.FIELD) ) {
+            try {
+                field.set(bean, value);
+            } catch (IllegalAccessException e) {
+                e.printStackTrace();
+            }
+        } else {
+            try {
+                setter.invoke(bean, value);
+            } catch (IllegalAccessException e) {
+                e.printStackTrace();
+            } catch (InvocationTargetException e) {
+                e.printStackTrace();
+            }
+        }
     }
 
-    public DataSet build(){
-        DataSet dataSet = new DataSet();
-        dataSet.setStore(store);
-        dataSet.setEntityClass(entityClass);
-        dataSet.setManager(manager);
-        return dataSet;
-    }
 }

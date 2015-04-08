@@ -25,47 +25,50 @@
  * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-package com.axiastudio.zoefx.core.db;
+package com.axiastudio.zoefx.desktop.model.property;
 
-import com.axiastudio.zoefx.desktop.db.DataSet;
+import com.axiastudio.zoefx.core.beans.BeanAccess;
+import javafx.beans.property.ListPropertyBase;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 
-import java.util.List;
+import java.util.Collection;
 
 /**
  * User: tiziano
- * Date: 10/07/14
- * Time: 09:30
+ * Date: 07/04/14
+ * Time: 17:22
  */
-public class DataSetBuilder<E> {
+public class ItemListProperty<E> extends ListPropertyBase<E> implements ZoeFXProperty<ObservableList<E>> {
 
-    private List<E> store;
-    private Manager<E> manager;
-    private Class<E> entityClass;
+    private BeanAccess<E> beanAccess;
 
-    public DataSetBuilder() {
+    public ItemListProperty(BeanAccess beanAccess){
+        this.beanAccess = beanAccess;
     }
 
-    public static <E> DataSetBuilder<E> create(Class<E> klass) {
-        DataSetBuilder builder = new DataSetBuilder();
-        builder.entityClass = klass;
-        return builder;
+    @Override
+    public Object getBean() {
+        return beanAccess.getBean();
     }
 
-    public DataSetBuilder store(List<E> store){
-        this.store = store;
-        return this;
+    @Override
+    public String getName() {
+        return beanAccess.getName();
     }
 
-    public DataSetBuilder manager(Manager<E> manager){
-        this.manager = manager;
-        return this;
+    @Override
+    public ObservableList get() {
+        return FXCollections.observableArrayList((Collection) beanAccess.getValue());
     }
 
-    public DataSet build(){
-        DataSet dataSet = new DataSet();
-        dataSet.setStore(store);
-        dataSet.setEntityClass(entityClass);
-        dataSet.setManager(manager);
-        return dataSet;
+    @Override
+    public void set(ObservableList observableList) {
+        beanAccess.setValue(observableList);
+    }
+
+    @Override
+    public void refresh() {
+        fireValueChangedEvent();
     }
 }

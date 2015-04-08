@@ -25,47 +25,23 @@
  * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-package com.axiastudio.zoefx.core.db;
+package com.axiastudio.zoefx.desktop.model.converters;
 
-import com.axiastudio.zoefx.desktop.db.DataSet;
+import javafx.util.Callback;
 
-import java.util.List;
+import java.text.DateFormat;
+import java.util.Date;
+import java.util.Locale;
 
 /**
  * User: tiziano
- * Date: 10/07/14
- * Time: 09:30
+ * Date: 17/12/14
+ * Time: 16:07
  */
-public class DataSetBuilder<E> {
-
-    private List<E> store;
-    private Manager<E> manager;
-    private Class<E> entityClass;
-
-    public DataSetBuilder() {
-    }
-
-    public static <E> DataSetBuilder<E> create(Class<E> klass) {
-        DataSetBuilder builder = new DataSetBuilder();
-        builder.entityClass = klass;
-        return builder;
-    }
-
-    public DataSetBuilder store(List<E> store){
-        this.store = store;
-        return this;
-    }
-
-    public DataSetBuilder manager(Manager<E> manager){
-        this.manager = manager;
-        return this;
-    }
-
-    public DataSet build(){
-        DataSet dataSet = new DataSet();
-        dataSet.setStore(store);
-        dataSet.setEntityClass(entityClass);
-        dataSet.setManager(manager);
-        return dataSet;
+public class Date2String implements Callback<Date, String> {
+    @Override
+    public String call(Date param) {
+        DateFormat dateFormat = DateFormat.getDateInstance(DateFormat.SHORT, Locale.getDefault());
+        return dateFormat.format(param);
     }
 }

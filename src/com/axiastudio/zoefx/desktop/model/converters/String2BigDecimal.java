@@ -25,47 +25,44 @@
  * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-package com.axiastudio.zoefx.core.db;
+package com.axiastudio.zoefx.desktop.model.converters;
 
-import com.axiastudio.zoefx.desktop.db.DataSet;
+import javafx.util.Callback;
 
-import java.util.List;
+import java.math.BigDecimal;
+import java.text.NumberFormat;
+import java.text.ParseException;
+import java.util.regex.Pattern;
 
 /**
  * User: tiziano
- * Date: 10/07/14
- * Time: 09:30
+ * Date: 17/12/14
+ * Time: 16:07
  */
-public class DataSetBuilder<E> {
-
-    private List<E> store;
-    private Manager<E> manager;
-    private Class<E> entityClass;
-
-    public DataSetBuilder() {
-    }
-
-    public static <E> DataSetBuilder<E> create(Class<E> klass) {
-        DataSetBuilder builder = new DataSetBuilder();
-        builder.entityClass = klass;
-        return builder;
-    }
-
-    public DataSetBuilder store(List<E> store){
-        this.store = store;
-        return this;
-    }
-
-    public DataSetBuilder manager(Manager<E> manager){
-        this.manager = manager;
-        return this;
-    }
-
-    public DataSet build(){
-        DataSet dataSet = new DataSet();
-        dataSet.setStore(store);
-        dataSet.setEntityClass(entityClass);
-        dataSet.setManager(manager);
-        return dataSet;
+public class String2BigDecimal implements Callback<String, BigDecimal> {
+    @Override
+    public BigDecimal call(String param) {
+        NumberFormat numberFormat = NumberFormat.getCurrencyInstance();
+        String symbol = numberFormat.getCurrency().getSymbol();
+        String regex = "-?("+symbol+" )?[0-9]{1,3}(\\.?[0-9]{3})*(,[0-9]{2})?";
+        if (!Pattern.matches(regex, param)) {
+            return null;
+        }
+        try {
+            Number number = numberFormat.parse(param);
+            if (number instanceof Double) {
+                // es. "€ 12,99"
+                return new BigDecimal((Double) number);
+            } else if (number instanceof Long) {
+                // es. "€ 12"
+                return new BigDecimal((Long) number);
+            }
+        } catch (ParseException e) {
+            // es. "12,0"
+            return new BigDecimal(Double.parseDouble(param.replace(",", ".")));
+        } catch (ClassCastException e) {
+            return null;
+        }
+        return null;
     }
 }

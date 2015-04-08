@@ -25,47 +25,38 @@
  * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-package com.axiastudio.zoefx.core.db;
+package com.axiastudio.zoefx.desktop.listeners;
 
-import com.axiastudio.zoefx.desktop.db.DataSet;
-
-import java.util.List;
+import com.axiastudio.zoefx.core.validators.Validator;
+import javafx.beans.property.StringProperty;
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
+import javafx.scene.control.TextField;
 
 /**
  * User: tiziano
- * Date: 10/07/14
- * Time: 09:30
+ * Date: 15/04/14
+ * Time: 15:50
  */
-public class DataSetBuilder<E> {
+public class TextFieldListener implements ChangeListener<String> {
 
-    private List<E> store;
-    private Manager<E> manager;
-    private Class<E> entityClass;
+    private final Validator validator;
 
-    public DataSetBuilder() {
+    public TextFieldListener(Validator validator) {
+        this.validator = validator;
     }
 
-    public static <E> DataSetBuilder<E> create(Class<E> klass) {
-        DataSetBuilder builder = new DataSetBuilder();
-        builder.entityClass = klass;
-        return builder;
-    }
-
-    public DataSetBuilder store(List<E> store){
-        this.store = store;
-        return this;
-    }
-
-    public DataSetBuilder manager(Manager<E> manager){
-        this.manager = manager;
-        return this;
-    }
-
-    public DataSet build(){
-        DataSet dataSet = new DataSet();
-        dataSet.setStore(store);
-        dataSet.setEntityClass(entityClass);
-        dataSet.setManager(manager);
-        return dataSet;
+    @Override
+    public void changed(ObservableValue<? extends String> observable, String oldValue, String newValue) {
+        StringProperty textProperty = (StringProperty) observable;
+        TextField textField = (TextField) textProperty.getBean();
+        Boolean res = validator.validate(newValue);
+        if( res == null ){
+            textField.setStyle("-fx-border-color: yellow");
+        } else if( res ){
+            textField.setStyle("-fx-border-color: null");
+        } else if( !res ){
+            textField.setStyle("-fx-border-color: red");
+        }
     }
 }

@@ -25,47 +25,49 @@
  * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-package com.axiastudio.zoefx.core.db;
+package com.axiastudio.zoefx.core.beans;
 
-import com.axiastudio.zoefx.desktop.db.DataSet;
-
-import java.util.List;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * User: tiziano
- * Date: 10/07/14
- * Time: 09:30
+ * Date: 16/04/14
+ * Time: 11:42
  */
-public class DataSetBuilder<E> {
+public class EntityBuilder<T> {
 
-    private List<E> store;
-    private Manager<E> manager;
-    private Class<E> entityClass;
+    private Class<? extends T> entityClass;
+    private Map<String, Object> attributes = new HashMap<String, Object>();
 
-    public DataSetBuilder() {
+    public EntityBuilder() {
     }
 
-    public static <E> DataSetBuilder<E> create(Class<E> klass) {
-        DataSetBuilder builder = new DataSetBuilder();
-        builder.entityClass = klass;
-        return builder;
+    public static <T> EntityBuilder<T> create(Class<? extends T> klass){
+        EntityBuilder<T> entityBuilder = new EntityBuilder<>();
+        entityBuilder.entityClass = klass;
+        return entityBuilder;
     }
 
-    public DataSetBuilder store(List<E> store){
-        this.store = store;
+    public EntityBuilder<T> set(String name, Object value){
+        attributes.put(name, value);
         return this;
     }
 
-    public DataSetBuilder manager(Manager<E> manager){
-        this.manager = manager;
-        return this;
-    }
-
-    public DataSet build(){
-        DataSet dataSet = new DataSet();
-        dataSet.setStore(store);
-        dataSet.setEntityClass(entityClass);
-        dataSet.setManager(manager);
-        return dataSet;
+    public T build(){
+        try {
+            T bean = entityClass.newInstance();
+            for( String name: attributes.keySet() ){
+                Object value = attributes.get(name);
+                BeanAccess<T> beanAccess = new BeanAccess<T>(bean, name);
+                beanAccess.setValue(value);
+            }
+            return bean;
+        } catch (InstantiationException e) {
+            e.printStackTrace();
+        } catch (IllegalAccessException e) {
+            e.printStackTrace();
+        }
+        return null;
     }
 }

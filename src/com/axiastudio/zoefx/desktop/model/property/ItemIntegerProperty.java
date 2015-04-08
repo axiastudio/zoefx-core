@@ -25,47 +25,47 @@
  * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-package com.axiastudio.zoefx.core.db;
+package com.axiastudio.zoefx.desktop.model.property;
 
-import com.axiastudio.zoefx.desktop.db.DataSet;
+import com.axiastudio.zoefx.core.beans.BeanAccess;
+import javafx.beans.property.StringPropertyBase;
 
-import java.util.List;
 
 /**
  * User: tiziano
- * Date: 10/07/14
- * Time: 09:30
+ * Date: 21/03/14
+ * Time: 12:51
  */
-public class DataSetBuilder<E> {
+public class ItemIntegerProperty extends StringPropertyBase implements ZoeFXProperty<String> {
 
-    private List<E> store;
-    private Manager<E> manager;
-    private Class<E> entityClass;
+    private BeanAccess<Integer> beanAccess;
 
-    public DataSetBuilder() {
+    public ItemIntegerProperty(BeanAccess beanAccess){
+        this.beanAccess = beanAccess;
     }
 
-    public static <E> DataSetBuilder<E> create(Class<E> klass) {
-        DataSetBuilder builder = new DataSetBuilder();
-        builder.entityClass = klass;
-        return builder;
+    @Override
+    public Object getBean() {
+        return beanAccess.getBean();
     }
 
-    public DataSetBuilder store(List<E> store){
-        this.store = store;
-        return this;
+    @Override
+    public String getName() {
+        return beanAccess.getName();
     }
 
-    public DataSetBuilder manager(Manager<E> manager){
-        this.manager = manager;
-        return this;
+    @Override
+    public String get() {
+        return beanAccess.getValue().toString();
     }
 
-    public DataSet build(){
-        DataSet dataSet = new DataSet();
-        dataSet.setStore(store);
-        dataSet.setEntityClass(entityClass);
-        dataSet.setManager(manager);
-        return dataSet;
+    @Override
+    public void set(String s) {
+        beanAccess.setValue(Integer.parseInt(s));
+    }
+
+    @Override
+    public void refresh() {
+        fireValueChangedEvent();
     }
 }

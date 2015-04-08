@@ -25,47 +25,21 @@
  * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-package com.axiastudio.zoefx.core.db;
+package com.axiastudio.zoefx.desktop.skins;
 
-import com.axiastudio.zoefx.desktop.db.DataSet;
-
-import java.util.List;
+import java.util.Optional;
 
 /**
  * User: tiziano
- * Date: 10/07/14
- * Time: 09:30
+ * Date: 23/08/14
+ * Time: 10:34
  */
-public class DataSetBuilder<E> {
+public interface ZSkin {
 
-    private List<E> store;
-    private Manager<E> manager;
-    private Class<E> entityClass;
+    public String getName();
+    public default Boolean noIcons() { return Boolean.FALSE; };
+    public default Optional<String> getStyle(){
+        return Optional.empty();
+    };
 
-    public DataSetBuilder() {
-    }
-
-    public static <E> DataSetBuilder<E> create(Class<E> klass) {
-        DataSetBuilder builder = new DataSetBuilder();
-        builder.entityClass = klass;
-        return builder;
-    }
-
-    public DataSetBuilder store(List<E> store){
-        this.store = store;
-        return this;
-    }
-
-    public DataSetBuilder manager(Manager<E> manager){
-        this.manager = manager;
-        return this;
-    }
-
-    public DataSet build(){
-        DataSet dataSet = new DataSet();
-        dataSet.setStore(store);
-        dataSet.setEntityClass(entityClass);
-        dataSet.setManager(manager);
-        return dataSet;
-    }
 }

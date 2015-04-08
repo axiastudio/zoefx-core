@@ -1,10 +1,11 @@
 package com.axiastudio.zoefx.demo;
 
 import com.axiastudio.zoefx.core.IOC;
-import com.axiastudio.zoefx.core.controller.Controller;
+import com.axiastudio.zoefx.desktop.controller.Controller;
 import com.axiastudio.zoefx.core.db.*;
-import com.axiastudio.zoefx.core.model.beans.EntityBuilder;
-import com.axiastudio.zoefx.core.view.ZSceneBuilder;
+import com.axiastudio.zoefx.core.beans.EntityBuilder;
+import com.axiastudio.zoefx.desktop.view.ZSceneBuilder;
+import com.axiastudio.zoefx.desktop.db.NoPersistenceDatabaseImpl;
 import javafx.application.Application;
 import javafx.stage.Stage;
 

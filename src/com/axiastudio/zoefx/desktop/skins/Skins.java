@@ -25,47 +25,51 @@
  * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-package com.axiastudio.zoefx.core.db;
+package com.axiastudio.zoefx.desktop.skins;
 
-import com.axiastudio.zoefx.desktop.db.DataSet;
+import com.axiastudio.zoefx.core.IOC;
 
+import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  * User: tiziano
- * Date: 10/07/14
- * Time: 09:30
+ * Date: 23/08/14
+ * Time: 14:06
  */
-public class DataSetBuilder<E> {
+public class Skins {
 
-    private List<E> store;
-    private Manager<E> manager;
-    private Class<E> entityClass;
+    private static String activeSkinName=null;
+    private static List<String> skins = new ArrayList<>();
 
-    public DataSetBuilder() {
+    public static synchronized void registerSkin(ZSkin skin){
+        IOC.registerUtility(skin, ZSkin.class, skin.getName());
+        skins.add(skin.getName());
+        if( activeSkinName == null ){
+            activeSkinName = skin.getName();
+        }
     }
 
-    public static <E> DataSetBuilder<E> create(Class<E> klass) {
-        DataSetBuilder builder = new DataSetBuilder();
-        builder.entityClass = klass;
-        return builder;
+    public static ZSkin querySkin(String name){
+        return IOC.queryUtility(ZSkin.class, name);
     }
 
-    public DataSetBuilder store(List<E> store){
-        this.store = store;
-        return this;
+    public static synchronized ZSkin getActiveSkin(){
+        if( activeSkinName == null ){
+            registerSkin(new Black());
+        }
+        return querySkin(activeSkinName);
     }
 
-    public DataSetBuilder manager(Manager<E> manager){
-        this.manager = manager;
-        return this;
+    public static synchronized void activateSkin(String name){
+        if( IOC.queryUtility(ZSkin.class, name) != null ){
+            activeSkinName = name;
+        }
     }
 
-    public DataSet build(){
-        DataSet dataSet = new DataSet();
-        dataSet.setStore(store);
-        dataSet.setEntityClass(entityClass);
-        dataSet.setManager(manager);
-        return dataSet;
+    public static List<ZSkin> getSkins(){
+        return skins.stream().map(name -> IOC.queryUtility(ZSkin.class, name)).collect(Collectors.toList());
     }
+
 }

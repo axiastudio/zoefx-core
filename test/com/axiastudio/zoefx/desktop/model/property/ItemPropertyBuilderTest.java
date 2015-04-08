@@ -25,47 +25,64 @@
  * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-package com.axiastudio.zoefx.core.db;
+package com.axiastudio.zoefx.desktop.model.property;
 
-import com.axiastudio.zoefx.desktop.db.DataSet;
-
-import java.util.List;
+import com.axiastudio.zoefx.demo.Book;
+import javafx.beans.property.Property;
+import javafx.beans.property.SimpleStringProperty;
+import org.junit.Test;
 
 /**
  * User: tiziano
- * Date: 10/07/14
- * Time: 09:30
+ * Date: 14/04/14
+ * Time: 15:08
  */
-public class DataSetBuilder<E> {
+public class ItemPropertyBuilderTest {
 
-    private List<E> store;
-    private Manager<E> manager;
-    private Class<E> entityClass;
 
-    public DataSetBuilder() {
+    /*class Book {
+        String title;
+        String description;
+    }*/
+
+    @Test
+    public void test() throws Exception {
+
+        Book book = new Book();
+        book.title = "to compile";
+
+        Property titleProperty = ItemPropertyBuilder.create(String.class).bean(book).field("title").build();
+
+        String aString="";
+        SimpleStringProperty simpleStringProperty = new SimpleStringProperty(aString);
+
+        titleProperty.bindBidirectional(simpleStringProperty);
+
+        simpleStringProperty.set("Anna Karenina");
+        //titleProperty.setValue("Anna Karenina");
+
+        System.out.println(simpleStringProperty.getValue());
+        System.out.println(book.title);
+
+        assert simpleStringProperty.get().equals(titleProperty.getValue());
+
     }
 
-    public static <E> DataSetBuilder<E> create(Class<E> klass) {
-        DataSetBuilder builder = new DataSetBuilder();
-        builder.entityClass = klass;
-        return builder;
-    }
+    @Test
+    public void testSimpleOnSimple() throws Exception {
+        Book book = new Book();
+        book.title = null;
 
-    public DataSetBuilder store(List<E> store){
-        this.store = store;
-        return this;
-    }
+        SimpleStringProperty leftProperty = new SimpleStringProperty(book.title);
+        SimpleStringProperty rightProperty = new SimpleStringProperty();
 
-    public DataSetBuilder manager(Manager<E> manager){
-        this.manager = manager;
-        return this;
-    }
+        rightProperty.bindBidirectional(leftProperty);
 
-    public DataSet build(){
-        DataSet dataSet = new DataSet();
-        dataSet.setStore(store);
-        dataSet.setEntityClass(entityClass);
-        dataSet.setManager(manager);
-        return dataSet;
+        System.out.println(rightProperty);
+        leftProperty.setValue("setValue");
+        System.out.println(rightProperty);
+        book.title = "book.title";
+        System.out.println(rightProperty);
+
     }
 }

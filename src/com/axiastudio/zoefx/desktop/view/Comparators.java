@@ -25,47 +25,31 @@
  * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-package com.axiastudio.zoefx.core.db;
+package com.axiastudio.zoefx.desktop.view;
 
-import com.axiastudio.zoefx.desktop.db.DataSet;
-
-import java.util.List;
+import java.text.DateFormat;
+import java.text.ParseException;
+import java.util.Comparator;
+import java.util.Date;
+import java.util.Locale;
 
 /**
  * User: tiziano
- * Date: 10/07/14
- * Time: 09:30
+ * Date: 09/06/14
+ * Time: 10:48
  */
-public class DataSetBuilder<E> {
+public class Comparators {
 
-    private List<E> store;
-    private Manager<E> manager;
-    private Class<E> entityClass;
+    public static Comparator<String> DateComparator = (t, t1) -> {
+        try {
+            DateFormat dateFormat = DateFormat.getDateInstance(DateFormat.SHORT, Locale.getDefault());
+            Date d1 = dateFormat.parse(t);
+            Date d2 = dateFormat.parse(t1);
+            return Long.compare(d1.getTime(), d2.getTime());
+        } catch (ParseException p) {
+            p.printStackTrace();
+        }
+        return -1;
+    };
 
-    public DataSetBuilder() {
-    }
-
-    public static <E> DataSetBuilder<E> create(Class<E> klass) {
-        DataSetBuilder builder = new DataSetBuilder();
-        builder.entityClass = klass;
-        return builder;
-    }
-
-    public DataSetBuilder store(List<E> store){
-        this.store = store;
-        return this;
-    }
-
-    public DataSetBuilder manager(Manager<E> manager){
-        this.manager = manager;
-        return this;
-    }
-
-    public DataSet build(){
-        DataSet dataSet = new DataSet();
-        dataSet.setStore(store);
-        dataSet.setEntityClass(entityClass);
-        dataSet.setManager(manager);
-        return dataSet;
-    }
 }
