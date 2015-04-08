@@ -25,21 +25,13 @@
  * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-package com.axiastudio.zoefx.desktop.model.converters;
-
-import javafx.util.Callback;
+package com.axiastudio.zoefx.demoold;
 
 /**
  * User: tiziano
- * Date: 17/12/14
- * Time: 16:07
+ * Date: 22/03/14
+ * Time: 12:33
  */
-public class String2Long implements Callback<String, Long> {
-    @Override
-    public Long call(String param) {
-        if( param == null ){
-            return null;
-        }
-        return Long.parseLong(param);
-    }
+public enum Genre {
+    NOVELS, ROMANCE, HISTORIC, REFERENCE
 }

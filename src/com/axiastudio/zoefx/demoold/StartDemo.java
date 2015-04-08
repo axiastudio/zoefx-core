@@ -25,7 +25,7 @@
  * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-package com.axiastudio.zoefx.demo;
+package com.axiastudio.zoefx.demoold;
 
 import com.axiastudio.zoefx.core.IOC;
 import com.axiastudio.zoefx.core.beans.EntityBuilder;
@@ -66,19 +66,19 @@ public class StartDemo extends Application {
         Validators.bindValidator(Book.class, "title", ValidatorBuilder.create().minLength(2).maxLength(5).build());
 
         ZSceneBuilder zsbBook = ZSceneBuilder.create()
-                .url(StartDemo.class.getResource("/com/axiastudio/zoefx/demo/books.fxml"))
+                .url(StartDemo.class.getResource("/com/axiastudio/zoefx/demoold/books.fxml"))
                 .controller(new Controller())
                 .manager(database.createManager(Book.class));
-        zsbBook = zsbBook.properties(StartDemo.class.getResource("/com/axiastudio/zoefx/demo/book.properties"));
+        zsbBook = zsbBook.properties(StartDemo.class.getResource("/com/axiastudio/zoefx/demoold/book.properties"));
         SceneBuilders.registerSceneBuilder(Book.class, zsbBook);
 
-        ZSceneBuilder zsbPerson = ZSceneBuilder.create().url(StartDemo.class.getResource("/com/axiastudio/zoefx/demo/persons.fxml"))
-                .properties(StartDemo.class.getResource("/com/axiastudio/zoefx/demo/person.properties"))
+        ZSceneBuilder zsbPerson = ZSceneBuilder.create().url(StartDemo.class.getResource("/com/axiastudio/zoefx/demoold/persons.fxml"))
+                .properties(StartDemo.class.getResource("/com/axiastudio/zoefx/demoold/person.properties"))
                 .controller(new Controller()).manager(database.createManager(Person.class));
         SceneBuilders.registerSceneBuilder(Person.class, zsbPerson);
 
 
-        ZSceneBuilder zsbAuthor = ZSceneBuilder.create().url(StartDemo.class.getResource("/com/axiastudio/zoefx/demo/authors.fxml"))
+        ZSceneBuilder zsbAuthor = ZSceneBuilder.create().url(StartDemo.class.getResource("/com/axiastudio/zoefx/demoold/authors.fxml"))
                 .controller(new Controller()).manager(database.createManager(Author.class));
         SceneBuilders.registerSceneBuilder(Author.class, zsbAuthor);
 

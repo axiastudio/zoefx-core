@@ -25,21 +25,18 @@
  * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-package com.axiastudio.zoefx.desktop.skins;
+package com.axiastudio.zoefx.demoold;
 
-import java.util.Optional;
+import java.util.ArrayList;
+import java.util.Collection;
 
 /**
  * User: tiziano
- * Date: 23/08/14
- * Time: 10:34
+ * Date: 11/04/14
+ * Time: 10:53
  */
-public interface ZSkin {
-
-    public String getName();
-    public default Boolean noIcons() { return Boolean.FALSE; };
-    public default Optional<String> getStyle(){
-        return Optional.empty();
-    };
-
+public class Person {
+    public String name;
+    public String surname;
+    public Collection<Loan> loans = new ArrayList<Loan>();
 }

@@ -25,13 +25,18 @@
  * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-package com.axiastudio.zoefx.desktop.view;
+package com.axiastudio.zoefx.demoold;
+
+import java.util.ArrayList;
+import java.util.Collection;
 
 /**
  * User: tiziano
- * Date: 19/05/14
- * Time: 16:17
+ * Date: 04/04/14
+ * Time: 09:23
  */
-public enum ZSceneMode {
-    WINDOW, DIALOG
+public class Author {
+    public String name;
+    public String surname;
+    public Collection<Book> books = new ArrayList<Book>();
 }

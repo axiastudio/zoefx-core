@@ -25,13 +25,15 @@
  * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-package com.axiastudio.zoefx.desktop.view.msgbox;
+package com.axiastudio.zoefx.demoold;
 
 /**
  * User: tiziano
- * Date: 29/09/14
- * Time: 17:18
+ * Date: 11/04/14
+ * Time: 10:54
  */
-public enum MsgBoxResponse {
-    OK, CANCEL
+public class Loan {
+    public Person person;
+    public Book book;
+    public String note;
 }

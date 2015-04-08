@@ -25,50 +25,19 @@
  * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-package com.axiastudio.zoefx.desktop.model.property;
+package com.axiastudio.zoefx.demoold;
 
-import com.axiastudio.zoefx.core.beans.BeanAccess;
-import javafx.beans.property.ListPropertyBase;
-import javafx.collections.FXCollections;
-import javafx.collections.ObservableList;
-
-import java.util.Collection;
 
 /**
  * User: tiziano
- * Date: 07/04/14
- * Time: 17:22
+ * Date: 18/03/14
+ * Time: 20:55
  */
-public class ItemListProperty<E> extends ListPropertyBase<E> implements ZoeFXProperty<ObservableList<E>> {
-
-    private BeanAccess<E> beanAccess;
-
-    public ItemListProperty(BeanAccess beanAccess){
-        this.beanAccess = beanAccess;
-    }
-
-    @Override
-    public Object getBean() {
-        return beanAccess.getBean();
-    }
-
-    @Override
-    public String getName() {
-        return beanAccess.getName();
-    }
-
-    @Override
-    public ObservableList get() {
-        return FXCollections.observableArrayList((Collection) beanAccess.getValue());
-    }
-
-    @Override
-    public void set(ObservableList observableList) {
-        beanAccess.setValue(observableList);
-    }
-
-    @Override
-    public void refresh() {
-        fireValueChangedEvent();
-    }
+public class Book {
+    public String title;
+    public String description;
+    public Boolean finished;
+    public Genre genre;
+    public Author author;
+    public Integer year;
 }

@@ -1,4 +1,4 @@
-package com.axiastudio.zoefx.demo;
+package com.axiastudio.zoefx.demoold;
 
 import com.axiastudio.zoefx.core.IOC;
 import com.axiastudio.zoefx.desktop.controller.Controller;
