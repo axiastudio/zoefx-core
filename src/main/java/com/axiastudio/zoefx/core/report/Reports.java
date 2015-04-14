@@ -36,11 +36,12 @@ import java.util.*;
  */
 public class Reports {
 
-    private static Map<Class, ArrayList<ReportTemplate>> templates = new HashMap<>();
+    private static Map<Class, List<ReportTemplate>> templates = new HashMap<>();
 
     public static synchronized void addReportTemplate(Class klass, ReportTemplate template){
         if( !templates.keySet().contains(klass) ){
-            templates.put(klass, new ArrayList<>());
+            List<ReportTemplate> list = new ArrayList<>();
+            templates.put(klass, list);
         }
         templates.get(klass).add(template);
     }

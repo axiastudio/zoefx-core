@@ -46,86 +46,107 @@ public abstract class AbstractManager<E> implements Manager<E>{
 
     @Override
     public List<E> query(Integer size) {
-        return query(new HashMap<>(), new ArrayList<>(), new ArrayList<>(), size, null);
+        Map<String, Object> map = new HashMap<>();
+        List<String> orderby = new ArrayList<>();
+        List<Boolean> reverse = new ArrayList<>();
+        return query(map, orderby, reverse, size, null);
     }
 
     @Override
     public List<E> query(Integer size, Integer startIndex) {
-        return query(new HashMap<>(), new ArrayList<>(), new ArrayList<>(), size, startIndex);
+        Map<String, Object> map = new HashMap<>();
+        List<String> orderby = new ArrayList<>();
+        List<Boolean> reverse = new ArrayList<>();
+        return query(map, orderby, reverse, size, startIndex);
     }
 
     @Override
     public List<E> query(String orderby) {
-        return query(new HashMap<>(), orderByList(orderby), reverseList(Boolean.FALSE), null, null);
+        Map<String, Object> map = new HashMap<>();
+        return query(map, orderByList(orderby), reverseList(Boolean.FALSE), null, null);
     }
 
     @Override
     public List<E> query(String orderby, Boolean reverse) {
-        return query(new HashMap<>(), orderByList(orderby), reverseList(reverse), null, null);
+        Map<String, Object> map = new HashMap<>();
+        return query(map, orderByList(orderby), reverseList(reverse), null, null);
     }
 
     @Override
     public List<E> query(List<String> orderby) {
-        return query(new HashMap<>(), orderby, reverseList(Boolean.FALSE), null, null);
+        Map<String, Object> map = new HashMap<>();
+        return query(map, orderby, reverseList(Boolean.FALSE), null, null);
     }
 
     @Override
     public List<E> query(List<String> orderby, List<Boolean> reverse) {
-        return query(new HashMap<>(), orderby, reverse, null, null);
+        Map<String, Object> map = new HashMap<>();
+        return query(map, orderby, reverse, null, null);
     }
 
     @Override
     public List<E> query(String orderby, Integer size) {
-        return query(new HashMap<>(), orderByList(orderby), reverseList(Boolean.FALSE), size, null);
+        Map<String, Object> map = new HashMap<>();
+        return query(map, orderByList(orderby), reverseList(Boolean.FALSE), size, null);
     }
 
     @Override
     public List<E> query(List<String> orderby, Integer size) {
-        return query(new HashMap<>(), orderby, reverseList(Boolean.FALSE), size, null);
+        Map<String, Object> map = new HashMap<>();
+        return query(map, orderby, reverseList(Boolean.FALSE), size, null);
     }
 
     @Override
     public List<E> query(String orderby, Boolean reverse, Integer size) {
-        return query(new HashMap<>(), orderByList(orderby), reverseList(reverse), size, null);
+        Map<String, Object> map = new HashMap<>();
+        return query(map, orderByList(orderby), reverseList(reverse), size, null);
     }
 
     @Override
     public List<E> query(List<String> orderby, List<Boolean> reverse, Integer size) {
-        return query(new HashMap<>(), orderby, reverse, size, null);
+        Map<String, Object> map = new HashMap<>();
+        return query(map, orderby, reverse, size, null);
     }
 
     @Override
     public List<E> query(String orderby, Integer size, Integer startIndex) {
-        return query(new HashMap<>(), orderByList(orderby), reverseList(Boolean.FALSE), size, startIndex);
+        Map<String, Object> map = new HashMap<>();
+        return query(map, orderByList(orderby), reverseList(Boolean.FALSE), size, startIndex);
     }
 
     @Override
     public List<E> query(List<String> orderby, Integer size, Integer startIndex) {
-        return query(new HashMap<>(), orderby, reverseList(Boolean.FALSE), size, startIndex);
+        Map<String, Object> map = new HashMap<>();
+        return query(map, orderby, reverseList(Boolean.FALSE), size, startIndex);
     }
 
     @Override
     public List<E> query(String orderby, Boolean reverse, Integer size, Integer startIndex) {
-        return query(new HashMap<>(), orderByList(orderby), reverseList(reverse), size, startIndex);
+        Map<String, Object> map = new HashMap<>();
+        return query(map, orderByList(orderby), reverseList(reverse), size, startIndex);
     }
 
     @Override
     public List<E> query(List<String> orderby, List<Boolean> reverse, Integer size, Integer startIndex) {
-        return query(new HashMap<>(), orderby, reverse, size, startIndex);
+        Map<String, Object> map = new HashMap<>();
+        return query(map, orderby, reverse, size, startIndex);
     }
     @Override
     public List<E> query(Map<String, Object> map) {
-        return query(map, new ArrayList<>(), reverseList(Boolean.FALSE), null, null);
+        List<String> orderby = new ArrayList<>();
+        return query(map, orderby, reverseList(Boolean.FALSE), null, null);
     }
 
     @Override
     public List<E> query(Map<String, Object> map, Integer size) {
-        return query(map, new ArrayList<>(), reverseList(Boolean.FALSE), size, null);
+        List<String> orderby = new ArrayList<>();
+        return query(map, orderby, reverseList(Boolean.FALSE), size, null);
     }
 
     @Override
     public List<E> query(Map<String, Object> map, Integer size, Integer startIndex) {
-        return query(map, new ArrayList<>(), reverseList(Boolean.FALSE), size, startIndex);
+        List<String> orderby = new ArrayList<>();
+        return query(map, orderby, reverseList(Boolean.FALSE), size, startIndex);
     }
 
     @Override

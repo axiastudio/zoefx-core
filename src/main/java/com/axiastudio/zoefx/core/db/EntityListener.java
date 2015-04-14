@@ -35,6 +35,6 @@ package com.axiastudio.zoefx.core.db;
  */
 public interface EntityListener<E> {
 
-    default void beforeCommit(E entity){}
+    void beforeCommit(E entity);
 
 }

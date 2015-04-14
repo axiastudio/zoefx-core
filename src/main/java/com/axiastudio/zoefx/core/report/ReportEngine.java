@@ -37,12 +37,12 @@ import java.util.List;
  */
 public interface ReportEngine {
 
-    public default Boolean canPrint(){ return Boolean.FALSE; };
+    Boolean canPrint();
 
-    public default Boolean canExportToPdf(){ return Boolean.FALSE; }
+    Boolean canExportToPdf();
 
-    public default void toPdf(ReportTemplate template, List store, File file){};
+    void toPdf(ReportTemplate template, List store, File file);
 
-    public default void toPrinter(ReportTemplate template, List store){};
+    void toPrinter(ReportTemplate template, List store);
 
 }
