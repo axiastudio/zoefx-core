@@ -46,11 +46,11 @@ public class Reports {
         templates.get(klass).add(template);
     }
 
-    public static Optional<List<ReportTemplate>> getTemplates(Class klass){
+    public static List<ReportTemplate> getTemplates(Class klass){
         if( templates.containsKey(klass) ) {
-            return Optional.of(templates.get(klass));
+            return templates.get(klass);
         }
-        return Optional.empty();
+        return new ArrayList<>();
     }
 
 }
