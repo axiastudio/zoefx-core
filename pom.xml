@@ -7,6 +7,31 @@
     <groupId>com.axiastudio</groupId>
     <artifactId>zoefx-core</artifactId>
     <version>0.2.0</version>
+    <name>ZoeFX core</name>
+    <description>ZoeFX is a MVC framework based on JavaFX.</description>
+    <url>http://www.zoefx.com</url>
+
+    <licenses>
+        <license>
+            <name>The BSD 3-Clause License</name>
+            <url>http://opensource.org/licenses/BSD-3-Clause</url>
+        </license>
+    </licenses>
+
+    <developers>
+        <developer>
+            <name>Tiziano Lattisi</name>
+            <email>tiziano@axiastudio.it</email>
+            <organization>AXIA Studio</organization>
+            <organizationUrl>http://www.axiastudio.com</organizationUrl>
+        </developer>
+    </developers>
+
+    <scm>
+        <connection>scm:git:git@github.com:axiastudio/zoefx-core.git</connection>
+        <developerConnection>scm:git:git@github.com:axiastudio/zoefx-core.git</developerConnection>
+        <url>https://github.com/axiastudio/zoefx-core</url>
+    </scm>
 
     <build>
         <plugins>
