@@ -6,7 +6,7 @@
 
     <groupId>com.axiastudio</groupId>
     <artifactId>zoefx-core</artifactId>
-    <version>0.2-SNAPSHOT</version>
+    <version>0.2.0</version>
 
     <build>
         <plugins>
@@ -27,6 +27,7 @@
             <groupId>junit</groupId>
             <artifactId>junit</artifactId>
             <version>4.12</version>
+            <scope>test</scope>
         </dependency>
     </dependencies>
 
