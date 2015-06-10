@@ -38,6 +38,6 @@ public interface Database {
 
     void open(String persistenceUnit);
     void open(String persistenceUnit, Map<String, String> properties);
-    public <E> Manager<E> createManager(Class<E> klass);
-    public <E> Manager<E> createManager(Class<E> klass, Manager<?> manager);
+    <E> Manager<E> createManager(Class<E> klass);
+    <E> Manager<E> createManager(Class<E> klass, Manager<?> manager);
 }

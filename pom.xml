@@ -6,7 +6,7 @@
 
     <groupId>com.axiastudio</groupId>
     <artifactId>zoefx-core</artifactId>
-    <version>0.2.0</version>
+    <version>0.2.1</version>
     <name>ZoeFX core</name>
     <description>ZoeFX is a MVC framework based on JavaFX.</description>
     <url>http://www.zoefx.com</url>
